@@ -135,7 +135,7 @@
   </style>
 </head>
 <body>
-  <header class="app">
+  <header id="appHeader" class="app hidden">
     <div class="brand">
       <div class="logo"></div>
       <div>
@@ -147,6 +147,7 @@
       <i class="ti ti-search"></i>
       <input id="search" placeholder="Suche Links, Titel, Tags… (Strg+/)" />
     </div>
+    <div class="chip" id="modeChip"><i class="ti ti-cloud"></i><span id="modeText">Lokal</span></div>
     <div class="chip" id="userChip"><i class="ti ti-user"></i><span id="userEmail">Gast</span></div>
     <button class="btn ghost" id="logoutBtn"><i class="ti ti-logout"></i>&nbsp;Logout</button>
   </header>
@@ -415,7 +416,6 @@
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
     // ===== Supabase Config (optional – für Cloud‑Sync) =====
-    // Trage hier deine Werte ein, um die Online‑Funktionen zu aktivieren
     const SUPABASE_URL = 'https://okycsoofgaddpxbircit.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9reWNzb29mZ2FkZHB4YmlyY2l0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0NTM0NjUsImV4cCI6MjA3MzAyOTQ2NX0.3DTX4GzHRoSSpqsqXQ4v04UVreUHIthukk223uFwxTM';
     const CLOUD = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
@@ -427,7 +427,6 @@
     const fmtMoney = (n) => `€${Number(n||0).toLocaleString('de-DE', {maximumFractionDigits: 2})}`;
     const todayISO = () => new Date().toISOString().slice(0,10);
 
-    // Password hashing (client-side demo only – für lokalen Modus)
     async function sha256Hex(str){
       const enc = new TextEncoder();
       const buf = await crypto.subtle.digest('SHA-256', enc.encode(str));
@@ -448,16 +447,13 @@
     function defaultData(){
       return {
         items: [],
-        templates: {
-          first: $('#tpl1').textContent.trim(),
-          counter: $('#tpl2').textContent.trim()
-        },
+        templates: { first: $('#tpl1').textContent.trim(), counter: $('#tpl2').textContent.trim() },
         settings: { feePct: 11 }
       }
     }
 
     // Auth State
-    let currentUser = null; // email (lokal) oder Supabase-Email
+    let currentUser = null;
     function setSession(email){ if(email){ localStorage.setItem(SESSION_KEY, email); } else { localStorage.removeItem(SESSION_KEY) } }
     function getSession(){ return localStorage.getItem(SESSION_KEY) }
 
@@ -505,10 +501,8 @@
       const fStatus = $('#filterStatus').value;
       const sortBy = $('#sortBy').value;
       let items = [...(data.items||[])];
-      // filter
       if(q){ items = items.filter(i=> (i.title||'').toLowerCase().includes(q) || (i.url||'').toLowerCase().includes(q) || (i.tags||'').toLowerCase().includes(q)) }
       if(fStatus){ items = items.filter(i=> i.status === fStatus) }
-      // sort
       items.sort((a,b)=>{
         switch(sortBy){
           case 'profitDesc': return computeProfit(b, data.settings.feePct) - computeProfit(a, data.settings.feePct);
@@ -548,7 +542,6 @@
       const data = readData(currentUser) || defaultData();
       const it = data.items.find(x=>x.id===id);
       if(!it) return;
-      // Pre-fill the add form for quick editing
       $('#fUrl').value = it.url || '';
       $('#fTitle').value = it.title || '';
       $('#fPlatform').value = ['eBay','Kleinanzeigen','Sonstiges'].includes(it.platform) ? it.platform : 'Automatisch';
@@ -586,10 +579,9 @@
       $('#pmResult').textContent = fmtMoney(p);
     }
 
-    // Events for profit modal
     ['pmBuy','pmSell','pmFeePct','pmShip'].forEach(id=> $('#'+id).addEventListener('input', updateProfitResult));
     $('#profitClose').addEventListener('click', ()=> $('#profitModal').classList.remove('show'));
-    $('#pmApply').addEventListener('click', ()=>{
+    $('#pmApply').addEventListener('click', async ()=>{
       const data = readData(currentUser) || defaultData();
       const it = data.items.find(x=>x.id===profitContextId);
       if(!it) return;
@@ -598,7 +590,7 @@
       it.feePct = Number($('#pmFeePct').value||0);
       it.ship = Number($('#pmShip').value||0);
       writeData(currentUser, data);
-      syncUpOne(it).catch(()=>{});
+      await syncUpOne(it).catch(()=>{});
       $('#profitModal').classList.remove('show');
       renderList();
     });
@@ -612,7 +604,7 @@
     tabLogin.addEventListener('click', ()=>{ registerForm.classList.add('hidden'); loginForm.classList.remove('hidden'); tabLogin.classList.remove('ghost'); tabRegister.classList.add('ghost'); });
     tabRegister.addEventListener('click', ()=>{ loginForm.classList.add('hidden'); registerForm.classList.remove('hidden'); tabRegister.classList.remove('ghost'); tabLogin.classList.add('ghost'); });
 
-    // ===== Local Auth (Fallback) =====
+    // ===== Local Auth (nur im lokalen Modus) =====
     async function attachLocalAuth(){
       registerForm.addEventListener('submit', async (e)=>{
         e.preventDefault();
@@ -641,23 +633,23 @@
         if(!u) return alert('Unbekannte E-Mail. Bitte registrieren.');
         const hash = await sha256Hex(pw + ':' + u.salt);
         if(hash !== u.hash) return alert('Falsches Passwort.');
-        currentUser = email;
-        setSession(email);
+        currentUser = email; setSession(email);
         $('#userEmail').textContent = email;
         $('#authView').classList.add('hidden');
         $('#appView').classList.remove('hidden');
+        $('#appHeader').classList.remove('hidden');
+        $('#modeText').textContent = 'Lokal';
         if(!(readData(email)?.items?.length)) seedSamples();
         renderList();
         recalcStats();
       });
 
-      $('#logoutBtn').addEventListener('click', ()=>{ currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#loginEmail').focus(); });
+      $('#logoutBtn').addEventListener('click', ()=>{ currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#appHeader').classList.add('hidden'); $('#loginEmail').focus(); });
       $('#wipeBtn').addEventListener('click', ()=>{ if(!currentUser) return; if(confirm('Wirklich lokale Daten löschen?')){ const users = readUsers(); delete users[currentUser]; writeUsers(users); localStorage.removeItem(dataKey(currentUser)); setSession(null); currentUser=null; location.reload(); }});
     }
 
-    // ===== Cloud Auth (Supabase) =====
+    // ===== Cloud Auth (nur im Cloud-Modus) =====
     async function attachCloudAuth(){
-      // Registrierung in Supabase (evtl. E-Mail-Bestätigung in Auth-Einstellungen deaktivieren)
       registerForm.addEventListener('submit', async (e)=>{
         e.preventDefault();
         const email = $('#regEmail').value.trim().toLowerCase();
@@ -678,17 +670,18 @@
         const { data, error } = await sb.auth.signInWithPassword({ email, password });
         if(error) return alert(error.message);
         const user = data.user;
-        currentUser = user.email;
-        setSession(currentUser);
+        currentUser = user.email; setSession(currentUser);
         $('#userEmail').textContent = currentUser;
         $('#authView').classList.add('hidden');
         $('#appView').classList.remove('hidden');
+        $('#appHeader').classList.remove('hidden');
+        $('#modeText').textContent = 'Cloud';
         await syncDown();
         renderList();
         recalcStats();
       });
 
-      $('#logoutBtn').addEventListener('click', async ()=>{ await sb.auth.signOut(); currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#loginEmail').focus(); });
+      $('#logoutBtn').addEventListener('click', async ()=>{ await sb.auth.signOut(); currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#appHeader').classList.add('hidden'); $('#loginEmail').focus(); });
       $('#wipeBtn').addEventListener('click', ()=>{ if(!currentUser) return; if(confirm('Nur der lokale Cache wird gelöscht. (Cloud-Daten bleiben bestehen)')){ localStorage.removeItem(dataKey(currentUser)); location.reload(); }});
     }
 
@@ -726,42 +719,13 @@
     }
 
     function toRow(it, userId){
-      return {
-        id: it.id,
-        user_id: userId,
-        created: it.created || Date.now(),
-        url: it.url || null,
-        title: it.title || null,
-        platform: it.platform || null,
-        buy: it.buy ?? null,
-        sell: it.sell ?? null,
-        fee_pct: (typeof it.feePct==='number'? it.feePct : null),
-        ship: it.ship ?? null,
-        status: it.status || null,
-        due: it.due || null,
-        tags: it.tags || null,
-        note: it.note || null
-      };
+      return { id: it.id, user_id: userId, created: it.created || Date.now(), url: it.url || null, title: it.title || null, platform: it.platform || null, buy: it.buy ?? null, sell: it.sell ?? null, fee_pct: (typeof it.feePct==='number'? it.feePct : null), ship: it.ship ?? null, status: it.status || null, due: it.due || null, tags: it.tags || null, note: it.note || null };
     }
     function fromRow(r){
-      return {
-        id: r.id,
-        created: r.created,
-        url: r.url,
-        title: r.title,
-        platform: r.platform||'Sonstiges',
-        buy: Number(r.buy ?? 0),
-        sell: Number(r.sell ?? 0),
-        feePct: typeof r.fee_pct==='number'? r.fee_pct : undefined,
-        ship: Number(r.ship ?? 0),
-        status: r.status||'gesichtet',
-        due: r.due || '',
-        tags: r.tags || '',
-        note: r.note || ''
-      };
+      return { id: r.id, created: r.created, url: r.url, title: r.title, platform: r.platform||'Sonstiges', buy: Number(r.buy ?? 0), sell: Number(r.sell ?? 0), feePct: typeof r.fee_pct==='number'? r.fee_pct : undefined, ship: Number(r.ship ?? 0), status: r.status||'gesichtet', due: r.due || '', tags: r.tags || '', note: r.note || '' };
     }
 
-    // ===== Add / Update item (Form) =====
+    // ===== Add / Update item =====
     $('#addForm').addEventListener('submit', async (e)=>{
       e.preventDefault();
       const data = readData(currentUser) || defaultData();
@@ -769,8 +733,7 @@
 
       const url = $('#fUrl').value.trim();
       const title = $('#fTitle').value.trim();
-      let platform = $('#fPlatform').value;
-      if(platform === 'Automatisch') platform = platformFromUrl(url);
+      let platform = $('#fPlatform').value; if(platform === 'Automatisch') platform = platformFromUrl(url);
       const buy = Number($('#fBuy').value || 0);
       const sell = Number($('#fSell').value || 0);
       const status = $('#fStatus').value;
@@ -779,8 +742,7 @@
       const note = $('#fNote').value.trim();
 
       if(editingId){
-        const it = data.items.find(x=>x.id===editingId);
-        if(!it) return;
+        const it = data.items.find(x=>x.id===editingId); if(!it) return;
         Object.assign(it, { url, title, platform, buy, sell, status, due, tags, note });
         e.currentTarget.dataset.editing = '';
         e.currentTarget.querySelector('button[type="submit"]').innerHTML = '<i class="ti ti-bookmark-plus"></i>&nbsp;Speichern';
@@ -797,21 +759,9 @@
       renderList();
     });
 
-    // Search & filters
-    $('#search').addEventListener('input', renderList);
-    $('#filterStatus').addEventListener('change', renderList);
-    $('#sortBy').addEventListener('change', renderList);
-    window.addEventListener('keydown', (e)=>{ if(e.ctrlKey && e.key === '/') { e.preventDefault(); $('#search').focus() } });
-
-    // Copy templates
-    $('#copyTpl1').addEventListener('click', ()=>copyText($('#tpl1').textContent));
-    $('#copyTpl2').addEventListener('click', ()=>copyText($('#tpl2').textContent));
-    async function copyText(t){ try { await navigator.clipboard.writeText(t); alert('Vorlage kopiert!') } catch { prompt('Kopiere manuell:', t) } }
-
-    // Export / Import (arbeitet auf dem lokalen Cache; in Cloud‑Modus kannst du danach hochladen via Sync)
+    // Export / Import
     $('#exportBtn').addEventListener('click', ()=>{
-      if(!currentUser) return;
-      const data = readData(currentUser) || defaultData();
+      if(!currentUser) return; const data = readData(currentUser) || defaultData();
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `reselldeck_${currentUser.replace(/[^a-z0-9]/gi,'_')}.json`; a.click(); URL.revokeObjectURL(a.href);
     });
@@ -827,14 +777,12 @@
         writeData(currentUser, data);
         renderList();
         alert('Import erfolgreich.');
-        if(CLOUD){ // optional hochladen
-          for(const it of data.items){ await syncUpOne(it); }
-        }
+        if(CLOUD){ for(const it of data.items){ await syncUpOne(it); } }
       } catch(err){ alert('Import fehlgeschlagen: ' + err.message); }
       e.target.value = '';
     });
 
-    // Seed sample data (nur wenn lokal neu)
+    // Seed sample data (nur lokal)
     function seedSamples(){
       const email = currentUser; const data = readData(email) || defaultData(); if((data.items||[]).length) return;
       const now = Date.now();
@@ -846,11 +794,31 @@
       writeData(email, data);
     }
 
-    // ===== Init =====
+    // ===== Init (exklusiv: Cloud ODER Lokal) =====
     (async function init(){
-      if(CLOUD){ await attachCloudAuth(); const { data } = await sb.auth.getSession(); if(data?.session){ const email = data.session.user.email; currentUser = email; setSession(email); $('#userEmail').textContent = email; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); await syncDown(); renderList(); recalcStats(); return; } }
+      if(CLOUD){
+        await attachCloudAuth();
+        const { data } = await sb.auth.getSession();
+        if(data?.session){
+          const email = data.session.user.email;
+          currentUser = email; setSession(email);
+          $('#userEmail').textContent = email;
+          $('#authView').classList.add('hidden');
+          $('#appView').classList.remove('hidden');
+          $('#appHeader').classList.remove('hidden');
+          $('#modeText').textContent = 'Cloud';
+          await syncDown();
+          renderList();
+          recalcStats();
+        }
+        return; // Kein lokaler Fallback
+      }
+      // Lokaler Modus
       await attachLocalAuth();
-      const sess = getSession(); if(sess && readUsers()[sess]){ currentUser = sess; $('#userEmail').textContent = sess; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); if(!(readData(sess)?.items?.length)) seedSamples(); renderList(); }
+      const sess = getSession();
+      if(sess && readUsers()[sess]){
+        currentUser = sess; $('#userEmail').textContent = sess; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent = 'Lokal'; if(!(readData(sess)?.items?.length)) seedSamples(); renderList();
+      }
     })();
   </script>
 </body>
@@ -992,7 +960,7 @@
   </style>
 </head>
 <body>
-  <header class="app">
+  <header id="appHeader" class="app hidden">
     <div class="brand">
       <div class="logo"></div>
       <div>
@@ -1004,6 +972,7 @@
       <i class="ti ti-search"></i>
       <input id="search" placeholder="Suche Links, Titel, Tags… (Strg+/)" />
     </div>
+    <div class="chip" id="modeChip"><i class="ti ti-cloud"></i><span id="modeText">Lokal</span></div>
     <div class="chip" id="userChip"><i class="ti ti-user"></i><span id="userEmail">Gast</span></div>
     <button class="btn ghost" id="logoutBtn"><i class="ti ti-logout"></i>&nbsp;Logout</button>
   </header>
@@ -1272,9 +1241,8 @@
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
     // ===== Supabase Config (optional – für Cloud‑Sync) =====
-    // Trage hier deine Werte ein, um die Online‑Funktionen zu aktivieren
-    const SUPABASE_URL = '';
-    const SUPABASE_ANON_KEY = '';
+    const SUPABASE_URL = 'https://okycsoofgaddpxbircit.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9reWNzb29mZ2FkZHB4YmlyY2l0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0NTM0NjUsImV4cCI6MjA3MzAyOTQ2NX0.3DTX4GzHRoSSpqsqXQ4v04UVreUHIthukk223uFwxTM';
     const CLOUD = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
     const sb = CLOUD ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
@@ -1284,7 +1252,6 @@
     const fmtMoney = (n) => `€${Number(n||0).toLocaleString('de-DE', {maximumFractionDigits: 2})}`;
     const todayISO = () => new Date().toISOString().slice(0,10);
 
-    // Password hashing (client-side demo only – für lokalen Modus)
     async function sha256Hex(str){
       const enc = new TextEncoder();
       const buf = await crypto.subtle.digest('SHA-256', enc.encode(str));
@@ -1305,16 +1272,13 @@
     function defaultData(){
       return {
         items: [],
-        templates: {
-          first: $('#tpl1').textContent.trim(),
-          counter: $('#tpl2').textContent.trim()
-        },
+        templates: { first: $('#tpl1').textContent.trim(), counter: $('#tpl2').textContent.trim() },
         settings: { feePct: 11 }
       }
     }
 
     // Auth State
-    let currentUser = null; // email (lokal) oder Supabase-Email
+    let currentUser = null;
     function setSession(email){ if(email){ localStorage.setItem(SESSION_KEY, email); } else { localStorage.removeItem(SESSION_KEY) } }
     function getSession(){ return localStorage.getItem(SESSION_KEY) }
 
@@ -1362,10 +1326,8 @@
       const fStatus = $('#filterStatus').value;
       const sortBy = $('#sortBy').value;
       let items = [...(data.items||[])];
-      // filter
       if(q){ items = items.filter(i=> (i.title||'').toLowerCase().includes(q) || (i.url||'').toLowerCase().includes(q) || (i.tags||'').toLowerCase().includes(q)) }
       if(fStatus){ items = items.filter(i=> i.status === fStatus) }
-      // sort
       items.sort((a,b)=>{
         switch(sortBy){
           case 'profitDesc': return computeProfit(b, data.settings.feePct) - computeProfit(a, data.settings.feePct);
@@ -1405,7 +1367,6 @@
       const data = readData(currentUser) || defaultData();
       const it = data.items.find(x=>x.id===id);
       if(!it) return;
-      // Pre-fill the add form for quick editing
       $('#fUrl').value = it.url || '';
       $('#fTitle').value = it.title || '';
       $('#fPlatform').value = ['eBay','Kleinanzeigen','Sonstiges'].includes(it.platform) ? it.platform : 'Automatisch';
@@ -1443,10 +1404,9 @@
       $('#pmResult').textContent = fmtMoney(p);
     }
 
-    // Events for profit modal
     ['pmBuy','pmSell','pmFeePct','pmShip'].forEach(id=> $('#'+id).addEventListener('input', updateProfitResult));
     $('#profitClose').addEventListener('click', ()=> $('#profitModal').classList.remove('show'));
-    $('#pmApply').addEventListener('click', ()=>{
+    $('#pmApply').addEventListener('click', async ()=>{
       const data = readData(currentUser) || defaultData();
       const it = data.items.find(x=>x.id===profitContextId);
       if(!it) return;
@@ -1455,7 +1415,7 @@
       it.feePct = Number($('#pmFeePct').value||0);
       it.ship = Number($('#pmShip').value||0);
       writeData(currentUser, data);
-      syncUpOne(it).catch(()=>{});
+      await syncUpOne(it).catch(()=>{});
       $('#profitModal').classList.remove('show');
       renderList();
     });
@@ -1469,7 +1429,7 @@
     tabLogin.addEventListener('click', ()=>{ registerForm.classList.add('hidden'); loginForm.classList.remove('hidden'); tabLogin.classList.remove('ghost'); tabRegister.classList.add('ghost'); });
     tabRegister.addEventListener('click', ()=>{ loginForm.classList.add('hidden'); registerForm.classList.remove('hidden'); tabRegister.classList.remove('ghost'); tabLogin.classList.add('ghost'); });
 
-    // ===== Local Auth (Fallback) =====
+    // ===== Local Auth (nur im lokalen Modus) =====
     async function attachLocalAuth(){
       registerForm.addEventListener('submit', async (e)=>{
         e.preventDefault();
@@ -1498,23 +1458,23 @@
         if(!u) return alert('Unbekannte E-Mail. Bitte registrieren.');
         const hash = await sha256Hex(pw + ':' + u.salt);
         if(hash !== u.hash) return alert('Falsches Passwort.');
-        currentUser = email;
-        setSession(email);
+        currentUser = email; setSession(email);
         $('#userEmail').textContent = email;
         $('#authView').classList.add('hidden');
         $('#appView').classList.remove('hidden');
+        $('#appHeader').classList.remove('hidden');
+        $('#modeText').textContent = 'Lokal';
         if(!(readData(email)?.items?.length)) seedSamples();
         renderList();
         recalcStats();
       });
 
-      $('#logoutBtn').addEventListener('click', ()=>{ currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#loginEmail').focus(); });
+      $('#logoutBtn').addEventListener('click', ()=>{ currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#appHeader').classList.add('hidden'); $('#loginEmail').focus(); });
       $('#wipeBtn').addEventListener('click', ()=>{ if(!currentUser) return; if(confirm('Wirklich lokale Daten löschen?')){ const users = readUsers(); delete users[currentUser]; writeUsers(users); localStorage.removeItem(dataKey(currentUser)); setSession(null); currentUser=null; location.reload(); }});
     }
 
-    // ===== Cloud Auth (Supabase) =====
+    // ===== Cloud Auth (nur im Cloud-Modus) =====
     async function attachCloudAuth(){
-      // Registrierung in Supabase (evtl. E-Mail-Bestätigung in Auth-Einstellungen deaktivieren)
       registerForm.addEventListener('submit', async (e)=>{
         e.preventDefault();
         const email = $('#regEmail').value.trim().toLowerCase();
@@ -1535,17 +1495,18 @@
         const { data, error } = await sb.auth.signInWithPassword({ email, password });
         if(error) return alert(error.message);
         const user = data.user;
-        currentUser = user.email;
-        setSession(currentUser);
+        currentUser = user.email; setSession(currentUser);
         $('#userEmail').textContent = currentUser;
         $('#authView').classList.add('hidden');
         $('#appView').classList.remove('hidden');
+        $('#appHeader').classList.remove('hidden');
+        $('#modeText').textContent = 'Cloud';
         await syncDown();
         renderList();
         recalcStats();
       });
 
-      $('#logoutBtn').addEventListener('click', async ()=>{ await sb.auth.signOut(); currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#loginEmail').focus(); });
+      $('#logoutBtn').addEventListener('click', async ()=>{ await sb.auth.signOut(); currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#appHeader').classList.add('hidden'); $('#loginEmail').focus(); });
       $('#wipeBtn').addEventListener('click', ()=>{ if(!currentUser) return; if(confirm('Nur der lokale Cache wird gelöscht. (Cloud-Daten bleiben bestehen)')){ localStorage.removeItem(dataKey(currentUser)); location.reload(); }});
     }
 
@@ -1583,42 +1544,13 @@
     }
 
     function toRow(it, userId){
-      return {
-        id: it.id,
-        user_id: userId,
-        created: it.created || Date.now(),
-        url: it.url || null,
-        title: it.title || null,
-        platform: it.platform || null,
-        buy: it.buy ?? null,
-        sell: it.sell ?? null,
-        fee_pct: (typeof it.feePct==='number'? it.feePct : null),
-        ship: it.ship ?? null,
-        status: it.status || null,
-        due: it.due || null,
-        tags: it.tags || null,
-        note: it.note || null
-      };
+      return { id: it.id, user_id: userId, created: it.created || Date.now(), url: it.url || null, title: it.title || null, platform: it.platform || null, buy: it.buy ?? null, sell: it.sell ?? null, fee_pct: (typeof it.feePct==='number'? it.feePct : null), ship: it.ship ?? null, status: it.status || null, due: it.due || null, tags: it.tags || null, note: it.note || null };
     }
     function fromRow(r){
-      return {
-        id: r.id,
-        created: r.created,
-        url: r.url,
-        title: r.title,
-        platform: r.platform||'Sonstiges',
-        buy: Number(r.buy ?? 0),
-        sell: Number(r.sell ?? 0),
-        feePct: typeof r.fee_pct==='number'? r.fee_pct : undefined,
-        ship: Number(r.ship ?? 0),
-        status: r.status||'gesichtet',
-        due: r.due || '',
-        tags: r.tags || '',
-        note: r.note || ''
-      };
+      return { id: r.id, created: r.created, url: r.url, title: r.title, platform: r.platform||'Sonstiges', buy: Number(r.buy ?? 0), sell: Number(r.sell ?? 0), feePct: typeof r.fee_pct==='number'? r.fee_pct : undefined, ship: Number(r.ship ?? 0), status: r.status||'gesichtet', due: r.due || '', tags: r.tags || '', note: r.note || '' };
     }
 
-    // ===== Add / Update item (Form) =====
+    // ===== Add / Update item =====
     $('#addForm').addEventListener('submit', async (e)=>{
       e.preventDefault();
       const data = readData(currentUser) || defaultData();
@@ -1626,8 +1558,7 @@
 
       const url = $('#fUrl').value.trim();
       const title = $('#fTitle').value.trim();
-      let platform = $('#fPlatform').value;
-      if(platform === 'Automatisch') platform = platformFromUrl(url);
+      let platform = $('#fPlatform').value; if(platform === 'Automatisch') platform = platformFromUrl(url);
       const buy = Number($('#fBuy').value || 0);
       const sell = Number($('#fSell').value || 0);
       const status = $('#fStatus').value;
@@ -1636,8 +1567,7 @@
       const note = $('#fNote').value.trim();
 
       if(editingId){
-        const it = data.items.find(x=>x.id===editingId);
-        if(!it) return;
+        const it = data.items.find(x=>x.id===editingId); if(!it) return;
         Object.assign(it, { url, title, platform, buy, sell, status, due, tags, note });
         e.currentTarget.dataset.editing = '';
         e.currentTarget.querySelector('button[type="submit"]').innerHTML = '<i class="ti ti-bookmark-plus"></i>&nbsp;Speichern';
@@ -1654,21 +1584,9 @@
       renderList();
     });
 
-    // Search & filters
-    $('#search').addEventListener('input', renderList);
-    $('#filterStatus').addEventListener('change', renderList);
-    $('#sortBy').addEventListener('change', renderList);
-    window.addEventListener('keydown', (e)=>{ if(e.ctrlKey && e.key === '/') { e.preventDefault(); $('#search').focus() } });
-
-    // Copy templates
-    $('#copyTpl1').addEventListener('click', ()=>copyText($('#tpl1').textContent));
-    $('#copyTpl2').addEventListener('click', ()=>copyText($('#tpl2').textContent));
-    async function copyText(t){ try { await navigator.clipboard.writeText(t); alert('Vorlage kopiert!') } catch { prompt('Kopiere manuell:', t) } }
-
-    // Export / Import (arbeitet auf dem lokalen Cache; in Cloud‑Modus kannst du danach hochladen via Sync)
+    // Export / Import
     $('#exportBtn').addEventListener('click', ()=>{
-      if(!currentUser) return;
-      const data = readData(currentUser) || defaultData();
+      if(!currentUser) return; const data = readData(currentUser) || defaultData();
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `reselldeck_${currentUser.replace(/[^a-z0-9]/gi,'_')}.json`; a.click(); URL.revokeObjectURL(a.href);
     });
@@ -1684,14 +1602,12 @@
         writeData(currentUser, data);
         renderList();
         alert('Import erfolgreich.');
-        if(CLOUD){ // optional hochladen
-          for(const it of data.items){ await syncUpOne(it); }
-        }
+        if(CLOUD){ for(const it of data.items){ await syncUpOne(it); } }
       } catch(err){ alert('Import fehlgeschlagen: ' + err.message); }
       e.target.value = '';
     });
 
-    // Seed sample data (nur wenn lokal neu)
+    // Seed sample data (nur lokal)
     function seedSamples(){
       const email = currentUser; const data = readData(email) || defaultData(); if((data.items||[]).length) return;
       const now = Date.now();
@@ -1703,11 +1619,31 @@
       writeData(email, data);
     }
 
-    // ===== Init =====
+    // ===== Init (exklusiv: Cloud ODER Lokal) =====
     (async function init(){
-      if(CLOUD){ await attachCloudAuth(); const { data } = await sb.auth.getSession(); if(data?.session){ const email = data.session.user.email; currentUser = email; setSession(email); $('#userEmail').textContent = email; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); await syncDown(); renderList(); recalcStats(); return; } }
+      if(CLOUD){
+        await attachCloudAuth();
+        const { data } = await sb.auth.getSession();
+        if(data?.session){
+          const email = data.session.user.email;
+          currentUser = email; setSession(email);
+          $('#userEmail').textContent = email;
+          $('#authView').classList.add('hidden');
+          $('#appView').classList.remove('hidden');
+          $('#appHeader').classList.remove('hidden');
+          $('#modeText').textContent = 'Cloud';
+          await syncDown();
+          renderList();
+          recalcStats();
+        }
+        return; // Kein lokaler Fallback
+      }
+      // Lokaler Modus
       await attachLocalAuth();
-      const sess = getSession(); if(sess && readUsers()[sess]){ currentUser = sess; $('#userEmail').textContent = sess; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); if(!(readData(sess)?.items?.length)) seedSamples(); renderList(); }
+      const sess = getSession();
+      if(sess && readUsers()[sess]){
+        currentUser = sess; $('#userEmail').textContent = sess; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent = 'Lokal'; if(!(readData(sess)?.items?.length)) seedSamples(); renderList();
+      }
     })();
   </script>
 </body>
