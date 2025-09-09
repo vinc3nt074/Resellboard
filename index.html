@@ -3,141 +3,108 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ResellDeck — Futuristisches Reseller-Dashboard</title>
+  <title>ResellDeck — Clean Reseller Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <style>
-    :root {
-      --bg: #0b0f1a;
-      --surface: rgba(16, 20, 35, 0.72);
-      --muted: #9aa4bf;
-      --text: #e8edff;
-      --accent: #7c4dff;
-      --accent2: #00e5ff;
-      --ok: #00d48a;
-      --warn: #ffb020;
-      --danger: #ff4d67;
-      --glass: blur(14px) saturate(130%);
-      --radius: 18px;
-      --shadow: 0 10px 35px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.06);
-      --gradient: radial-gradient(1000px 600px at 0% -10%, rgba(124,77,255,.25), transparent 60%),
-                  radial-gradient(900px 600px at 100% 110%, rgba(0,229,255,.18), transparent 60%),
-                  linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+    :root{
+      --bg:#0b0f1a;--surface:rgba(16,20,35,.72);--muted:#9aa4bf;--text:#e8edff;--accent:#7c4dff;--accent2:#00e5ff;--warn:#ffb020;--radius:18px;--shadow:0 10px 35px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.06);
+      --gradient: radial-gradient(1000px 600px at 0% -10%, rgba(124,77,255,.25), transparent 60%), radial-gradient(900px 600px at 100% 110%, rgba(0,229,255,.18), transparent 60%), linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
     }
-    * { box-sizing: border-box }
-    html, body { height: 100% }
-    body {
-      margin: 0; background: var(--bg); color: var(--text); font-family: 'Space Grotesk', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
-      background-image: var(--gradient); background-attachment: fixed; 
-    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:'Space Grotesk',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,'Noto Sans',sans-serif;background-image:var(--gradient);background-attachment:fixed}
+    a{color:var(--accent2)}
+    .container{max-width:1200px;margin:0 auto;padding:28px}
 
-    a { color: var(--accent2); text-decoration: none }
-    a:hover { text-decoration: underline }
+    /* Header */
+    header.app{position:sticky;top:0;z-index:40;backdrop-filter: blur(10px);background:rgba(11,15,26,.65);border-bottom:1px solid rgba(255,255,255,.06)}
+    header .bar{display:flex;align-items:center;gap:14px;justify-content:space-between;padding:14px 24px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
+    .logo{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 8px 28px rgba(124,77,255,.35),0 8px 28px rgba(0,229,255,.25)}
+    .searchbar{display:flex;align-items:center;gap:10px;flex:1;max-width:520px}
+    .searchbar input{width:100%;padding:12px 12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--text);border-radius:12px;outline:none}
+    .pill{border-radius:999px;padding:6px 10px;background:rgba(255,255,255,.06);font-size:12px;color:var(--muted)}
+    .btn{cursor:pointer;user-select:none;transition:.22s ease;border-radius:12px;padding:10px 12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text)}
+    .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#0a0e18;font-weight:700}
+    .btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
 
-    .container { max-width: 1200px; margin: 0 auto; padding: 28px; }
+    /* Cards / layout */
+    .card{background:var(--surface);backdrop-filter:blur(14px) saturate(130%);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .pad{padding:20px}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px}
+    @media (max-width:960px){.stats{grid-template-columns:repeat(2,1fr)}}
+    .stat .label{color:var(--muted);font-size:12px}
+    .stat .value{font-family:'JetBrains Mono',ui-monospace;font-size:24px;margin-top:6px}
 
-    /* Clean Header */
-    header.app { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(10px); background: rgba(11,15,26,.65); border-bottom: 1px solid rgba(255,255,255,.06); }
-    header.app .bar { display:flex; align-items:center; justify-content:space-between; gap:16px; padding: 16px 24px; }
-    .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:.5px; }
-    .brand .logo { width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--accent2)); box-shadow: 0 8px 28px rgba(124,77,255,.35), 0 8px 28px rgba(0,229,255,.25); }
-    .searchbar { display:flex; align-items:center; gap:10px; flex:1; max-width: 520px }
-    .searchbar input { width: 100%; padding: 12px 12px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: var(--text); border-radius: 12px; outline: none; }
-    .pill { border-radius: 999px; padding: 6px 10px; background: rgba(255,255,255,.06); font-size:12px; color: var(--muted) }
-    .btn { cursor: pointer; user-select: none; transition: .22s ease; border-radius: 12px; padding: 10px 12px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); color: var(--text) }
-    .btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; color:#0a0e18; font-weight:700 }
-    .btn:hover { transform: translateY(-1px); filter: brightness(1.05) }
+    .qa{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px}
+    @media (max-width:960px){.qa{grid-template-columns:repeat(2,1fr)}}
+    .qa .tile{display:flex;flex-direction:column;gap:8px;justify-content:center;align-items:flex-start;padding:18px;min-height:120px;border:1px dashed rgba(255,255,255,.12)}
 
-    /* Cards & layout */
-    .card { background: var(--surface); backdrop-filter: var(--glass); border-radius: var(--radius); box-shadow: var(--shadow); }
-    .pad { padding: 20px }
-    .stats { display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px }
-    @media (max-width: 960px) { .stats { grid-template-columns: repeat(2, 1fr) } }
-    .stat { position:relative; overflow:hidden }
-    .stat .label { color: var(--muted); font-size: 12px }
-    .stat .value { font-family: 'JetBrains Mono', ui-monospace; font-size: 24px; margin-top:6px }
+    .list{display:grid;gap:10px;margin-top:16px}
+    .item{display:grid;grid-template-columns:1fr 160px 140px 110px 120px 40px;gap:10px;align-items:center;padding:12px}
+    .item .title{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .item .url{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .badge{padding:6px 10px;border-radius:999px;font-size:12px;display:inline-flex;align-items:center;gap:6px}
+    .badge.sourced{background:rgba(124,77,255,.18);color:#cbb6ff}
+    .badge.contacted{background:rgba(0,229,255,.18);color:#a9f6ff}
+    .badge.negotiating{background:rgba(255,176,32,.18);color:#ffd391}
+    .badge.bought{background:rgba(0,212,138,.18);color:#a6ffd9}
+    .badge.listed{background:rgba(255,255,255,.08);color:#dfe7ff}
+    .badge.sold{background:rgba(0,212,138,.25);color:#7effc7;border:1px solid rgba(0,212,138,.35)}
 
-    /* Quick actions */
-    .qa { display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px }
-    @media (max-width: 960px) { .qa { grid-template-columns: repeat(2, 1fr) } }
-    .qa .tile { display:flex; flex-direction:column; gap:8px; justify-content:center; align-items:flex-start; padding: 18px; min-height: 120px; border: 1px dashed rgba(255,255,255,.12) }
-    .qa .tile h4 { margin:0 }
-    .qa .tile .muted { color: var(--muted); font-size: 12px }
+    .actions{display:flex;gap:8px;justify-content:flex-end}
+    .iconbtn{width:36px;height:36px;display:grid;place-items:center;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);cursor:pointer}
 
-    /* Deals list */
-    .list { display:grid; gap: 10px; margin-top: 16px }
-    .item { display:grid; grid-template-columns: 1fr 160px 140px 110px 120px 40px; gap: 10px; align-items:center; padding: 12px }
-    .item .title { font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
-    .item .url { font-size:12px; color: var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
-    .badge { padding:6px 10px; border-radius: 999px; font-size:12px; display:inline-flex; align-items:center; gap:6px }
-    .badge.sourced { background: rgba(124,77,255,.18); color: #cbb6ff }
-    .badge.contacted { background: rgba(0,229,255,.18); color: #a9f6ff }
-    .badge.negotiating { background: rgba(255,176,32,.18); color: #ffd391 }
-    .badge.bought { background: rgba(0,212,138,.18); color: #a6ffd9 }
-    .badge.listed { background: rgba(255,255,255,.08); color: #dfe7ff }
-    .badge.sold { background: rgba(0,212,138,.25); color: #7effc7; border: 1px solid rgba(0,212,138,.35) }
+    .thumbs{display:flex;gap:6px;flex-wrap:wrap}
+    .thumb{width:34px;height:34px;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+    .thumb img{width:100%;height:100%;object-fit:cover}
 
-    .actions { display:flex; gap:8px; justify-content:flex-end }
-    .iconbtn { width:36px; height:36px; display:grid; place-items:center; border-radius: 10px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); cursor: pointer }
-
-    .thumbs { display:flex; gap:6px; flex-wrap: wrap }
-    .thumb { width: 34px; height: 34px; border-radius: 8px; overflow:hidden; border: 1px solid rgba(255,255,255,.1) }
-    .thumb img { width:100%; height:100%; object-fit: cover }
-
-    .subtle { color: var(--muted); font-size: 12px }
-    .divider { height:1px; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.12), rgba(255,255,255,0)); margin: 14px 0 }
+    .subtle{color:var(--muted);font-size:12px}
+    .divider{height:1px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.12),rgba(255,255,255,0));margin:14px 0}
 
     /* Modal */
-    .modal { position: fixed; inset: 0; display:none; place-items:center; background: rgba(3,6,10,.6); z-index: 50 }
-    .modal.show { display:grid }
-    .dialog { max-width: 820px; width: calc(100% - 36px); }
+    .modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(3,6,10,.6);z-index:60}
+    .modal.show{display:grid}
+    .dialog{max-width:820px;width:calc(100% - 36px)}
 
     /* Forms */
-    input, select, textarea { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: var(--text); border-radius: 12px; padding: 12px 12px; outline: none; width: 100%; font: inherit; }
-    input::placeholder, textarea::placeholder { color: #b9c3e4aa }
-    label { font-size: 12px; color: var(--muted); margin-bottom: 8px; display:block }
-    form.grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px }
-    form.grid .span2 { grid-column: 1 / -1 }
+    input,select,textarea{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--text);border-radius:12px;padding:12px 12px;outline:none;width:100%;font:inherit}
+    input::placeholder,textarea::placeholder{color:#b9c3e4aa}
+    label{font-size:12px;color:var(--muted);margin-bottom:8px;display:block}
+    form.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    form.grid .span2{grid-column:1 / -1}
 
-    .footer { margin-top: 24px; display:flex; gap:12px; flex-wrap:wrap; justify-content: space-between; align-items:center }
+    .footer{margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center}
 
-    .hidden { display:none !important }
+    .hidden{display:none !important}
+
+    /* Floating Add Button */
+    .fab{position:fixed;right:24px;bottom:24px;z-index:55;border-radius:999px;padding:14px 16px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0e18;border:none;box-shadow:0 10px 30px rgba(0,0,0,.35);cursor:pointer}
   </style>
 </head>
 <body>
   <!-- Header (versteckt bis Login) -->
   <header id="appHeader" class="app hidden">
     <div class="bar">
-      <div class="brand">
-        <div class="logo"></div>
-        <div>ResellDeck</div>
-      </div>
-      <div class="searchbar">
-        <i class="ti ti-search"></i>
-        <input id="search" placeholder="Suche Links, Titel, Tags… (Strg+/)" />
-      </div>
+      <div class="brand"><div class="logo"></div><div>ResellDeck</div></div>
+      <div class="searchbar"><i class="ti ti-search"></i><input id="search" placeholder="Suche Links, Titel, Tags… (Strg+/)" /></div>
       <span class="pill" id="modeText">Lokal</span>
       <span class="pill" id="userEmail">Gast</span>
       <button class="btn" id="logoutBtn"><i class="ti ti-logout"></i>&nbsp;Logout</button>
     </div>
   </header>
 
-  <!-- Auth View -->
-  <div id="authView" class="container" style="min-height:100vh; display:grid; place-items:center">
-    <div class="card pad" style="max-width:880px; width:100%">
-      <div class="brand" style="margin-bottom:12px">
-        <div class="logo" style="width:32px;height:32px"></div>
-        <div>ResellDeck</div>
-      </div>
-      <h1 style="margin:0 0 6px">Dein cleanes Reseller-Dashboard</h1>
-      <p class="subtle">Login lokal (ohne Server) oder mit Supabase-Auth – je nach Konfiguration.</p>
+  <!-- Auth / Startseite -->
+  <div id="authView" class="container" style="min-height:100vh;display:grid;place-items:center">
+    <div class="card pad" style="max-width:880px;width:100%">
+      <div class="brand" style="margin-bottom:12px"><div class="logo" style="width:32px;height:32px"></div><div>ResellDeck</div></div>
+      <h1 style="margin:0 0 6px">Willkommen 👋</h1>
+      <p class="subtle">Logge dich ein oder erstelle einen Account. Danach landest du im Dashboard.</p>
       <div class="divider"></div>
-      <div class="row" style="gap:10px">
-        <button id="tabLogin" class="btn primary" style="flex:1">Login</button>
-        <button id="tabRegister" class="btn" style="flex:1">Account erstellen</button>
-      </div>
+      <div class="row" style="gap:10px"><button id="tabLogin" class="btn primary" style="flex:1">Login</button><button id="tabRegister" class="btn" style="flex:1">Account erstellen</button></div>
 
       <form id="loginForm" class="grid" style="margin-top:12px">
         <div class="span2"><label>E-Mail</label><input required type="email" id="loginEmail" placeholder="du@beispiel.de" autocomplete="username" /></div>
@@ -150,14 +117,13 @@
         <div><label>Passwort</label><input required type="password" id="regPassword" placeholder="mind. 8 Zeichen" autocomplete="new-password" /></div>
         <div><label>Passwort (Wiederholen)</label><input required type="password" id="regPassword2" placeholder="nochmal" autocomplete="new-password" /></div>
         <div class="span2"><button class="btn primary" type="submit">Account erstellen</button></div>
-        <p class="subtle span2">Hinweis: Client-Login (LocalStorage) oder Supabase‑Auth – je nach Konfiguration. Kein doppelter Modus gleichzeitig → sauber & stabil.</p>
+        <p class="subtle span2">Lokal (ohne Server) oder Supabase‑Auth – je nach Konfiguration.</p>
       </form>
     </div>
   </div>
 
-  <!-- App View -->
+  <!-- App / Dashboard -->
   <main id="appView" class="container hidden">
-    <!-- Dashboard Cards -->
     <div class="stats">
       <div class="card pad stat"><div class="label">Gespeicherte Links</div><div id="statTotal" class="value">0</div></div>
       <div class="card pad stat"><div class="label">Aktiv (Kontakt/Laufend)</div><div id="statActive" class="value">0</div></div>
@@ -165,127 +131,50 @@
       <div class="card pad stat"><div class="label">Fällige Erinnerungen</div><div id="statDue" class="value">0</div></div>
     </div>
 
-    <!-- Quick actions as tiles -->
     <div class="qa">
-      <div class="card tile" id="tileAdd">
-        <i class="ti ti-square-rounded-plus" style="font-size:22px"></i>
-        <h4>Neuen Deal anlegen</h4>
-        <div class="muted">URL, Preisziele, Status & Bilder</div>
-      </div>
-      <div class="card tile" id="tileTemplates">
-        <i class="ti ti-message-2" style="font-size:22px"></i>
-        <h4>Erstkontakt & Antworten</h4>
-        <div class="muted">Schnell kopieren & personalisieren</div>
-      </div>
-      <div class="card tile" id="tileImportExport">
-        <i class="ti ti-arrows-left-right" style="font-size:22px"></i>
-        <h4>Import / Export</h4>
-        <div class="muted">JSON sichern oder wiederherstellen</div>
-      </div>
-      <div class="card tile" id="tileSettings">
-        <i class="ti ti-settings" style="font-size:22px"></i>
-        <h4>Einstellungen</h4>
-        <div class="muted">Gebühren, Sync, Account</div>
-      </div>
+      <div class="card tile" id="tileAdd"><i class="ti ti-square-rounded-plus" style="font-size:22px"></i><h4 style="margin:0">Neuen Deal anlegen</h4><div class="subtle">URL, Preise, Status & Bilder</div></div>
+      <div class="card tile" id="tileTemplates"><i class="ti ti-message-2" style="font-size:22px"></i><h4 style="margin:0">Erstkontakt & Antworten</h4><div class="subtle">Schnell kopieren</div></div>
+      <div class="card tile" id="tileImportExport"><i class="ti ti-arrows-left-right" style="font-size:22px"></i><h4 style="margin:0">Import / Export</h4><div class="subtle">JSON sichern</div></div>
+      <div class="card tile" id="tileSettings"><i class="ti ti-settings" style="font-size:22px"></i><h4 style="margin:0">Einstellungen</h4><div class="subtle">Gebühren, Sync</div></div>
     </div>
 
-    <!-- Deals Section -->
     <div class="card pad" style="margin-top:16px">
-      <div class="row" style="align-items:center; justify-content:space-between">
+      <div class="row" style="align-items:center;justify-content:space-between">
         <h3 style="margin:0">Deine Deals</h3>
         <div class="row" style="align-items:center">
           <select id="filterStatus">
-            <option value="">Alle Status</option>
-            <option value="gesichtet">Gesichtet</option>
-            <option value="kontaktiert">Kontaktiert</option>
-            <option value="verhandlung">Verhandlung</option>
-            <option value="gekauft">Gekauft</option>
-            <option value="gelistet">Gelistet</option>
-            <option value="verkauft">Verkauft</option>
+            <option value="">Alle Status</option><option value="gesichtet">Gesichtet</option><option value="kontaktiert">Kontaktiert</option><option value="verhandlung">Verhandlung</option><option value="gekauft">Gekauft</option><option value="gelistet">Gelistet</option><option value="verkauft">Verkauft</option>
           </select>
           <select id="sortBy">
-            <option value="createdDesc">Neueste zuerst</option>
-            <option value="profitDesc">Höchster Profit</option>
-            <option value="dueAsc">Nächste Fälligkeit</option>
-            <option value="titleAsc">Titel A→Z</option>
+            <option value="createdDesc">Neueste zuerst</option><option value="profitDesc">Höchster Profit</option><option value="dueAsc">Nächste Fälligkeit</option><option value="titleAsc">Titel A→Z</option>
           </select>
         </div>
       </div>
       <div class="list" id="list"></div>
     </div>
 
-    <div class="footer">
-      <div class="subtle">💡 Tipp: Mit <strong>Strg+/</strong> öffnest du die Suche. In der Deal-Karte siehst du Mini-Thumbnails deiner Bilder.</div>
-      <div class="pill" id="modeInfo">Modus: <span id="modeInfoText">Lokal</span></div>
-    </div>
+    <div class="footer"><div class="subtle">💡 Neues anlegen: Kachel oben oder der runde **+** Button unten rechts.</div><div class="pill">Modus: <span id="modeInfoText">Lokal</span></div></div>
   </main>
 
-  <!-- Deal Modal (Add/Edit) -->
+  <!-- Floating Add Button -->
+  <button id="fabAdd" class="fab" title="Neuen Deal anlegen"><i class="ti ti-plus"></i></button>
+
+  <!-- Deal Modal -->
   <div id="dealModal" class="modal">
     <div class="dialog card pad">
-      <div class="row" style="align-items:center; justify-content:space-between">
-        <h3 id="dealModalTitle" style="margin:0">Neuer Deal</h3>
-        <button class="btn" id="dealClose"><i class="ti ti-x"></i></button>
-      </div>
+      <div class="row" style="align-items:center;justify-content:space-between"><h3 id="dealModalTitle" style="margin:0">Neuer Deal</h3><button class="btn" id="dealClose"><i class="ti ti-x"></i></button></div>
       <form id="dealForm" class="grid" style="margin-top:8px">
-        <div class="span2">
-          <label>URL</label>
-          <input id="dUrl" type="url" placeholder="https://www.kleinanzeigen.de/... oder https://www.ebay.de/..." required />
-        </div>
-        <div>
-          <label>Titel</label>
-          <input id="dTitle" placeholder="z.B. iPhone 13, sehr guter Zustand" />
-        </div>
-        <div>
-          <label>Plattform</label>
-          <select id="dPlatform">
-            <option>Automatisch</option>
-            <option>eBay</option>
-            <option>Kleinanzeigen</option>
-            <option>Sonstiges</option>
-          </select>
-        </div>
-        <div>
-          <label>Einkaufspreis (Ziel)</label>
-          <input id="dBuy" type="number" inputmode="decimal" placeholder="€" />
-        </div>
-        <div>
-          <label>Verkaufspreis (Ziel)</label>
-          <input id="dSell" type="number" inputmode="decimal" placeholder="€" />
-        </div>
-        <div>
-          <label>Status</label>
-          <select id="dStatus">
-            <option>gesichtet</option>
-            <option>kontaktiert</option>
-            <option>verhandlung</option>
-            <option>gekauft</option>
-            <option>gelistet</option>
-            <option>verkauft</option>
-          </select>
-        </div>
-        <div>
-          <label>Erinnerung</label>
-          <input id="dDue" type="date" />
-        </div>
-        <div class="span2">
-          <label>Tags (Komma-getrennt)</label>
-          <input id="dTags" placeholder="iphone, 128gb, spacegray" />
-        </div>
-        <div class="span2">
-          <label>Notiz</label>
-          <textarea id="dNote" rows="3" placeholder="Zustand, Standort, Argumente…"></textarea>
-        </div>
-        <div class="span2">
-          <label>Bilder hinzufügen</label>
-          <input id="dImages" type="file" accept="image/*" multiple />
-          <div id="dPreview" class="thumbs" style="margin-top:8px"></div>
-          <p class="subtle">Hinweis: Bilder werden lokal gespeichert (Data‑URL). Viele große Bilder können Speicher fressen. (Cloud‑Upload optional später)</p>
-        </div>
-        <div class="span2" style="display:flex; gap:10px; justify-content:flex-end; margin-top:6px">
-          <button type="button" class="btn" id="dealCalc"><i class="ti ti-calculator"></i>&nbsp;Profit-Rechner</button>
-          <button type="submit" class="btn primary" id="dealSave"><i class="ti ti-device-floppy"></i>&nbsp;Speichern</button>
-        </div>
+        <div class="span2"><label>URL</label><input id="dUrl" type="url" placeholder="https://www.kleinanzeigen.de/... oder https://www.ebay.de/..." required /></div>
+        <div><label>Titel</label><input id="dTitle" placeholder="z.B. iPhone 13, sehr guter Zustand" /></div>
+        <div><label>Plattform</label><select id="dPlatform"><option>Automatisch</option><option>eBay</option><option>Kleinanzeigen</option><option>Sonstiges</option></select></div>
+        <div><label>Einkaufspreis (Ziel)</label><input id="dBuy" type="number" inputmode="decimal" placeholder="€" /></div>
+        <div><label>Verkaufspreis (Ziel)</label><input id="dSell" type="number" inputmode="decimal" placeholder="€" /></div>
+        <div><label>Status</label><select id="dStatus"><option>gesichtet</option><option>kontaktiert</option><option>verhandlung</option><option>gekauft</option><option>gelistet</option><option>verkauft</option></select></div>
+        <div><label>Erinnerung</label><input id="dDue" type="date" /></div>
+        <div class="span2"><label>Tags (Komma-getrennt)</label><input id="dTags" placeholder="iphone, 128gb, spacegray" /></div>
+        <div class="span2"><label>Notiz</label><textarea id="dNote" rows="3" placeholder="Zustand, Standort, Argumente…"></textarea></div>
+        <div class="span2"><label>Bilder hinzufügen</label><input id="dImages" type="file" accept="image/*" multiple /><div id="dPreview" class="thumbs" style="margin-top:8px"></div><p class="subtle">Bilder werden lokal als Data‑URL gespeichert. Cloud‑Storage kann ich dir nachrüsten.</p></div>
+        <div class="span2" style="display:flex;gap:10px;justify-content:flex-end;margin-top:6px"><button type="button" class="btn" id="dealCalc"><i class="ti ti-calculator"></i>&nbsp;Profit-Rechner</button><button type="submit" class="btn primary" id="dealSave"><i class="ti ti-device-floppy"></i>&nbsp;Speichern</button></div>
       </form>
     </div>
   </div>
@@ -293,205 +182,146 @@
   <!-- Templates Modal -->
   <div id="tplModal" class="modal">
     <div class="dialog card pad">
-      <div class="row" style="align-items:center; justify-content:space-between">
-        <h3 style="margin:0">Vorlagen</h3>
-        <button class="btn" id="tplClose"><i class="ti ti-x"></i></button>
-      </div>
+      <div class="row" style="align-items:center;justify-content:space-between"><h3 style="margin:0">Vorlagen</h3><button class="btn" id="tplClose"><i class="ti ti-x"></i></button></div>
       <div class="divider"></div>
-      <div class="card pad" style="margin-bottom:10px">
-        <div class="row" style="align-items:center; justify-content:space-between">
-          <div>
-            <div class="subtle">Erstkontakt</div>
-            <div style="margin-top:6px" id="tpl1">Hi! 😊 Ist der Artikel noch verfügbar? Würde heute abholen/zzgl. Versand nehmen. Wenn  <Zielpreis>  für dich passt, bin ich sofort dabei. Danke dir!</div>
-          </div>
-          <button class="btn" id="copyTpl1"><i class="ti ti-copy"></i>&nbsp;Kopieren</button>
-        </div>
-      </div>
-      <div class="card pad">
-        <div class="row" style="align-items:center; justify-content:space-between">
-          <div>
-            <div class="subtle">Gegenangebot</div>
-            <div style="margin-top:6px" id="tpl2">Danke fürs schnelle Feedback! Ich könnte  <MeinPreis>  anbieten und heute/sofort zahlen. Deal?</div>
-          </div>
-          <button class="btn" id="copyTpl2"><i class="ti ti-copy"></i>&nbsp;Kopieren</button>
-        </div>
-      </div>
+      <div class="card pad" style="margin-bottom:10px"><div class="row" style="align-items:center;justify-content:space-between"><div><div class="subtle">Erstkontakt</div><div style="margin-top:6px" id="tpl1">Hi! 😊 Ist der Artikel noch verfügbar? Würde heute abholen/zzgl. Versand nehmen. Wenn  <Zielpreis>  für dich passt, bin ich sofort dabei. Danke dir!</div></div><button class="btn" id="copyTpl1"><i class="ti ti-copy"></i>&nbsp;Kopieren</button></div></div>
+      <div class="card pad"><div class="row" style="align-items:center;justify-content:space-between"><div><div class="subtle">Gegenangebot</div><div style="margin-top:6px" id="tpl2">Danke fürs schnelle Feedback! Ich könnte  <MeinPreis>  anbieten und heute/sofort zahlen. Deal?</div></div><button class="btn" id="copyTpl2"><i class="ti ti-copy"></i>&nbsp;Kopieren</button></div></div>
     </div>
   </div>
 
-  <!-- Profit Modal (bereits vorhanden) -->
+  <!-- Profit Modal -->
   <div id="profitModal" class="modal">
     <div class="dialog card pad">
-      <div class="row" style="justify-content:space-between; align-items:center; margin-bottom:8px">
-        <h3 style="margin:0">Profit-Rechner</h3>
-        <button class="btn" id="profitClose"><i class="ti ti-x"></i></button>
-      </div>
-      <form class="grid">
-        <div><label>Einkaufspreis</label><input id="pmBuy" type="number" inputmode="decimal" /></div>
-        <div><label>Verkaufspreis</label><input id="pmSell" type="number" inputmode="decimal" /></div>
-        <div><label>Plattformgebühren (%)</label><input id="pmFeePct" type="number" inputmode="decimal" value="11" /></div>
-        <div><label>Versandkosten</label><input id="pmShip" type="number" inputmode="decimal" value="0" /></div>
-      </form>
+      <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px"><h3 style="margin:0">Profit-Rechner</h3><button class="btn" id="profitClose"><i class="ti ti-x"></i></button></div>
+      <form class="grid"><div><label>Einkaufspreis</label><input id="pmBuy" type="number" inputmode="decimal" /></div><div><label>Verkaufspreis</label><input id="pmSell" type="number" inputmode="decimal" /></div><div><label>Plattformgebühren (%)</label><input id="pmFeePct" type="number" inputmode="decimal" value="11" /></div><div><label>Versandkosten</label><input id="pmShip" type="number" inputmode="decimal" value="0" /></div></form>
       <div class="divider"></div>
-      <div class="row" style="align-items:center; justify-content:space-between">
-        <div>
-          <div class="subtle">Prognose</div>
-          <div id="pmResult" style="font-family:'JetBrains Mono', ui-monospace; font-size:20px">€0</div>
-        </div>
-        <button class="btn primary" id="pmApply"><i class="ti ti-check"></i>&nbsp;In Deal übernehmen</button>
-      </div>
+      <div class="row" style="align-items:center;justify-content:space-between"><div><div class="subtle">Prognose</div><div id="pmResult" style="font-family:'JetBrains Mono',ui-monospace;font-size:20px">€0</div></div><button class="btn primary" id="pmApply"><i class="ti ti-check"></i>&nbsp;In Deal übernehmen</button></div>
     </div>
   </div>
 
   <template id="itemTmpl">
     <div class="item card">
-      <div>
-        <div class="title"></div>
-        <div class="url"></div>
-        <div class="thumbs"></div>
-      </div>
+      <div><div class="title"></div><div class="url"></div><div class="thumbs"></div></div>
       <div class="platform"></div>
       <div class="status"></div>
-      <div class="profit" style="font-family:'JetBrains Mono', ui-monospace">€0</div>
+      <div class="profit" style="font-family:'JetBrains Mono',ui-monospace">€0</div>
       <div class="due subtle">–</div>
-      <div class="actions">
-        <button class="iconbtn open" title="Öffnen"><i class="ti ti-external-link"></i></button>
-        <button class="iconbtn edit" title="Bearbeiten"><i class="ti ti-pencil"></i></button>
-        <button class="iconbtn calc" title="Profit-Rechner"><i class="ti ti-calculator"></i></button>
-        <button class="iconbtn del" title="Löschen" style="border-color: rgba(255,77,103,.35)"><i class="ti ti-trash"></i></button>
-      </div>
+      <div class="actions"><button class="iconbtn open" title="Öffnen"><i class="ti ti-external-link"></i></button><button class="iconbtn edit" title="Bearbeiten"><i class="ti ti-pencil"></i></button><button class="iconbtn calc" title="Profit-Rechner"><i class="ti ti-calculator"></i></button><button class="iconbtn del" title="Löschen" style="border-color:rgba(255,77,103,.35)"><i class="ti ti-trash"></i></button></div>
     </div>
   </template>
 
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-    // ===== Supabase Config =====
+    // === Supabase ===
     const SUPABASE_URL = 'https://okycsoofgaddpxbircit.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9reWNzb29mZ2FkZHB4YmlyY2l0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0NTM0NjUsImV4cCI6MjA3MzAyOTQ2NX0.3DTX4GzHRoSSpqsqXQ4v04UVreUHIthukk223uFwxTM';
     const CLOUD = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
     const sb = CLOUD ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
-    // ===== Utilities =====
-    const $ = (sel, el=document) => el.querySelector(sel);
-    const $$ = (sel, el=document) => [...el.querySelectorAll(sel)];
-    const fmtMoney = (n) => `€${Number(n||0).toLocaleString('de-DE', {maximumFractionDigits: 2})}`;
-    const todayISO = () => new Date().toISOString().slice(0,10);
+    // === Utils ===
+    const $=(s,el=document)=>el.querySelector(s); const $$=(s,el=document)=>[...el.querySelectorAll(s)];
+    const fmtMoney=n=>`€${Number(n||0).toLocaleString('de-DE',{maximumFractionDigits:2})}`; const todayISO=()=>new Date().toISOString().slice(0,10);
+    async function sha256Hex(str){const enc=new TextEncoder();const buf=await crypto.subtle.digest('SHA-256',enc.encode(str));return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('')}
+    const randHex=(len=16)=>[...crypto.getRandomValues(new Uint8Array(len))].map(x=>x.toString(16).padStart(2,'0')).join('')
 
-    async function sha256Hex(str){ const enc = new TextEncoder(); const buf = await crypto.subtle.digest('SHA-256', enc.encode(str)); return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join(''); }
-    const randHex = (len=16) => [...crypto.getRandomValues(new Uint8Array(len))].map(x=>x.toString(16).padStart(2,'0')).join('');
+    // === Local storage ===
+    const USERS_KEY='rd_users_v1'; const SESSION_KEY='rd_session_v1';
+    const readUsers=()=>{try{return JSON.parse(localStorage.getItem(USERS_KEY)||'{}')}catch{return{}}};
+    const writeUsers=o=>localStorage.setItem(USERS_KEY,JSON.stringify(o));
+    const dataKey=email=>`rd_data_${email}`; const readData=email=>{try{return JSON.parse(localStorage.getItem(dataKey(email))||'{}')}catch{return{}}}; const writeData=(email,o)=>localStorage.setItem(dataKey(email),JSON.stringify(o));
+    const defaultData=()=>({items:[],templates:{first:$('#tpl1')?.textContent?.trim()||'',counter:$('#tpl2')?.textContent?.trim()||''},settings:{feePct:11}});
+    let currentUser=null; const setSession=email=>email?localStorage.setItem(SESSION_KEY,email):localStorage.removeItem(SESSION_KEY); const getSession=()=>localStorage.getItem(SESSION_KEY);
 
-    // Storage (Local Mode)
-    const USERS_KEY = 'rd_users_v1';
-    const SESSION_KEY = 'rd_session_v1';
-    function readUsers(){ try { return JSON.parse(localStorage.getItem(USERS_KEY) || '{}') } catch { return {} } }
-    function writeUsers(obj){ localStorage.setItem(USERS_KEY, JSON.stringify(obj)) }
-    function dataKey(email){ return `rd_data_${email}` }
-    function readData(email){ try { return JSON.parse(localStorage.getItem(dataKey(email)) || '{}') } catch { return {} } }
-    function writeData(email, obj){ localStorage.setItem(dataKey(email), JSON.stringify(obj)) }
-    function defaultData(){ return { items: [], templates: { first: $('#tpl1')?.textContent?.trim() || '', counter: $('#tpl2')?.textContent?.trim() || '' }, settings: { feePct: 11 } } }
+    // === Helpers ===
+    const platformFromUrl=u=>{try{const h=new URL(u).hostname;if(/kleinanzeigen\.de|ebay-kleinanzeigen\.de/i.test(h))return'Kleinanzeigen';if(/ebay\./i.test(h))return'eBay';}catch{}return'Sonstiges'};
+    const statusBadge=s=>{const map={gesichtet:'sourced',kontaktiert:'contacted',verhandlung:'negotiating',gekauft:'bought',gelistet:'listed',verkauft:'sold'};const cls=map[s]||'sourced';const e=document.createElement('span');e.className=`badge ${cls}`;e.textContent=s.charAt(0).toUpperCase()+s.slice(1);return e};
+    const computeProfit=(it,feePctFallback=11)=>{const buy=Number(it.buy||0),sell=Number(it.sell||0),feePct=Number(typeof it.feePct==='number'?it.feePct:feePctFallback),fees=sell*(feePct/100),ship=Number(it.ship||0);return Math.round((sell-fees-ship-buy)*100)/100};
 
-    // Auth State
-    let currentUser = null;
-    function setSession(email){ if(email){ localStorage.setItem(SESSION_KEY, email); } else { localStorage.removeItem(SESSION_KEY) } }
-    function getSession(){ return localStorage.getItem(SESSION_KEY) }
+    function recalcStats(){const data=readData(currentUser)||defaultData();const items=data.items||[];$('#statTotal').textContent=items.length;$('#statActive').textContent=items.filter(i=>['kontaktiert','verhandlung','gelistet'].includes(i.status)).length;const profit=items.reduce((s,i)=>s+((i.status==='verkauft'||i.sell)?computeProfit(i,data.settings.feePct):0),0);$('#statProfit').textContent=fmtMoney(profit);$('#statDue').textContent=items.filter(i=>i.due&&i.due<=todayISO()).length;$('#modeInfoText').textContent=CLOUD?'Cloud':'Lokal'}
 
-    // Helpers
-    function platformFromUrl(u){ try { const h = new URL(u).hostname; if(/kleinanzeigen\.de|ebay-kleinanzeigen\.de/i.test(h)) return 'Kleinanzeigen'; if(/ebay\./i.test(h)) return 'eBay'; } catch {} return 'Sonstiges'; }
-    function statusBadge(s){ const map = { gesichtet:'sourced', kontaktiert:'contacted', verhandlung:'negotiating', gekauft:'bought', gelistet:'listed', verkauft:'sold' }; const cls = map[s] || 'sourced'; const span = document.createElement('span'); span.className = `badge ${cls}`; span.textContent = s.charAt(0).toUpperCase()+s.slice(1); return span; }
-    function computeProfit(it, feePctFallback=11){ const buy = Number(it.buy || 0); const sell = Number(it.sell || 0); const feePct = Number(typeof it.feePct === 'number' ? it.feePct : feePctFallback); const fees = sell * (feePct/100); const ship = Number(it.ship || 0); return Math.round((sell - fees - ship - buy) * 100) / 100; }
+    function renderList(){const data=readData(currentUser)||defaultData();const q=$('#search').value.trim().toLowerCase();const fStatus=$('#filterStatus').value;const sortBy=$('#sortBy').value;let items=[...(data.items||[])];if(q){items=items.filter(i=>(i.title||'').toLowerCase().includes(q)||(i.url||'').toLowerCase().includes(q)||(i.tags||'').toLowerCase().includes(q))}if(fStatus){items=items.filter(i=>i.status===fStatus)}items.sort((a,b)=>{switch(sortBy){case'profitDesc':return computeProfit(b,data.settings.feePct)-computeProfit(a,data.settings.feePct);case'dueAsc':return (a.due||'9999-12-31').localeCompare(b.due||'9999-12-31');case'titleAsc':return (a.title||'').localeCompare(b.title||'');default:return (b.created||0)-(a.created||0)}});const list=$('#list');list.innerHTML='';const tmpl=$('#itemTmpl');for(const it of items){const row=tmpl.content.firstElementChild.cloneNode(true);$('.title',row).textContent=it.title||'(ohne Titel)';$('.url',row).textContent=it.url;$('.platform',row).innerHTML=`<span class="pill">${it.platform}</span>`;const st=$('.status',row);st.innerHTML='';st.appendChild(statusBadge(it.status||'gesichtet'));$('.profit',row).textContent=fmtMoney(computeProfit(it,(readData(currentUser)?.settings?.feePct)||11));$('.due',row).innerHTML=it.due?(it.due<=todayISO()?`<span style="color:var(--warn)">${it.due}</span>`:it.due):'–';const t=$('.thumbs',row);(it.images||[]).slice(0,4).forEach(img=>{const d=document.createElement('div');d.className='thumb';d.innerHTML=`<img alt="Bild" src="${img.data}"/>`;d.title=img.name||'Bild';d.addEventListener('click',()=>window.open(img.data,'_blank'));t.appendChild(d)});$('.open',row).addEventListener('click',()=>window.open(it.url,'_blank'));$('.del',row).addEventListener('click',()=>onDelete(it.id));$('.edit',row).addEventListener('click',()=>openDealModal(it.id));$('.calc',row).addEventListener('click',()=>openProfit(it.id));list.appendChild(row)}recalcStats()}
 
-    function recalcStats(){ const data = readData(currentUser) || defaultData(); const items = data.items || []; $('#statTotal').textContent = items.length; $('#statActive').textContent = items.filter(i=>['kontaktiert','verhandlung','gelistet'].includes(i.status)).length; const profit = items.reduce((sum,i)=> sum + (i.status==='verkauft' || i.sell ? computeProfit(i, data.settings.feePct) : 0), 0); $('#statProfit').textContent = fmtMoney(profit); const due = items.filter(i=> i.due && i.due <= todayISO()).length; $('#statDue').textContent = due; $('#modeInfoText').textContent = CLOUD ? 'Cloud' : 'Lokal'; }
+    // === Profit modal ===
+    let profitContextId=null;function openProfit(id){const data=readData(currentUser)||defaultData();const it=data.items.find(x=>x.id===id);profitContextId=id;$('#pmBuy').value=it?.buy||'';$('#pmSell').value=it?.sell||'';$('#pmFeePct').value=typeof it?.feePct==='number'?it.feePct:(data.settings.feePct||11);$('#pmShip').value=it?.ship||0;updateProfitResult();$('#profitModal').classList.add('show')}
+    function updateProfitResult(){const buy=Number($('#pmBuy').value||0),sell=Number($('#pmSell').value||0),feePct=Number($('#pmFeePct').value||0),ship=Number($('#pmShip').value||0),fees=sell*(feePct/100),p=Math.round((sell-fees-ship-buy)*100)/100;$('#pmResult').textContent=fmtMoney(p)}
+    ;['pmBuy','pmSell','pmFeePct','pmShip'].forEach(id=>$('#'+id).addEventListener('input',updateProfitResult));
+    $('#profitClose').addEventListener('click',()=>$('#profitModal').classList.remove('show'));
+    $('#pmApply').addEventListener('click',async()=>{const data=readData(currentUser)||defaultData();const it=data.items.find(x=>x.id===profitContextId);if(!it)return;it.buy=Number($('#pmBuy').value||0);it.sell=Number($('#pmSell').value||0);it.feePct=Number($('#pmFeePct').value||0);it.ship=Number($('#pmShip').value||0);writeData(currentUser,data);await syncUpOne(it).catch(()=>{});$('#profitModal').classList.remove('show');renderList()});
 
-    function renderList(){ const data = readData(currentUser) || defaultData(); const q = $('#search').value.trim().toLowerCase(); const fStatus = $('#filterStatus').value; const sortBy = $('#sortBy').value; let items = [...(data.items||[])]; if(q){ items = items.filter(i=> (i.title||'').toLowerCase().includes(q) || (i.url||'').toLowerCase().includes(q) || (i.tags||'').toLowerCase().includes(q)) } if(fStatus){ items = items.filter(i=> i.status === fStatus) } items.sort((a,b)=>{ switch(sortBy){ case 'profitDesc': return computeProfit(b, data.settings.feePct) - computeProfit(a, data.settings.feePct); case 'dueAsc': return (a.due||'9999-12-31').localeCompare(b.due||'9999-12-31'); case 'titleAsc': return (a.title||'').localeCompare(b.title||''); default: return (b.created||0) - (a.created||0); } }); const list = $('#list'); list.innerHTML = ''; const tmpl = $('#itemTmpl'); for(const it of items){ const row = tmpl.content.firstElementChild.cloneNode(true); $('.title', row).textContent = it.title || '(ohne Titel)'; $('.url', row).textContent = it.url; const plat = $('.platform', row); plat.innerHTML = `<span class="pill">${it.platform}</span>`; const st = $('.status', row); st.innerHTML = ''; st.appendChild(statusBadge(it.status || 'gesichtet')); $('.profit', row).textContent = fmtMoney(computeProfit(it, data.settings.feePct)); $('.due', row).innerHTML = it.due ? (it.due <= todayISO() ? `<span style="color:var(--warn)">${it.due}</span>` : it.due) : '–'; const t = $('.thumbs', row); (it.images||[]).slice(0,4).forEach(img=>{ const d=document.createElement('div'); d.className='thumb'; d.innerHTML=`<img alt="Bild" src="${img.data}"/>`; d.title=img.name||'Bild'; d.addEventListener('click', ()=> window.open(img.data, '_blank')); t.appendChild(d); }); $('.open', row).addEventListener('click', ()=> window.open(it.url, '_blank')); $('.del', row).addEventListener('click', ()=> onDelete(it.id)); $('.edit', row).addEventListener('click', ()=> openDealModal(it.id)); $('.calc', row).addEventListener('click', ()=> openProfit(it.id)); list.appendChild(row); } recalcStats(); }
+    // === Deal Modal ===
+    let editingId=null;let pendingImages=[];
+    function resetDealForm(){editingId=null;pendingImages=[];$('#dealForm').reset();$('#dPreview').innerHTML='';$('#dealModalTitle').textContent='Neuer Deal'}
+    function openDealModal(id=null){resetDealForm();if(id){const data=readData(currentUser)||defaultData();const it=data.items.find(x=>x.id===id);if(it){editingId=id;$('#dealModalTitle').textContent='Deal bearbeiten';$('#dUrl').value=it.url||'';$('#dTitle').value=it.title||'';$('#dPlatform').value=['eBay','Kleinanzeigen','Sonstiges'].includes(it.platform)?it.platform:'Automatisch';$('#dBuy').value=it.buy||'';$('#dSell').value=it.sell||'';$('#dStatus').value=it.status||'gesichtet';$('#dDue').value=it.due||'';$('#dTags').value=it.tags||'';$('#dNote').value=it.note||'';(it.images||[]).forEach(img=>addPreview(img));pendingImages=[...(it.images||[])]}}
+      $('#dealModal').classList.add('show');setTimeout(()=>$('#dUrl').focus(),0)}
+    function addPreview(img){const wrap=document.createElement('div');wrap.className='thumb';wrap.style.position='relative';wrap.innerHTML=`<img alt="Bild" src="${img.data}"/><button title="Entfernen" style="position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.45);color:#fff;cursor:pointer"><i class="ti ti-x" style="font-size:12px"></i></button>`;wrap.querySelector('button').addEventListener('click',()=>{pendingImages=pendingImages.filter(x=>x.id!==img.id);wrap.remove()});$('#dPreview').appendChild(wrap)}
+    async function fileToDataUrl(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)})}
+    $('#dImages').addEventListener('change',async e=>{const files=[...e.target.files];for(const f of files){const data=await fileToDataUrl(f);const img={id:'img_'+randHex(6),name:f.name,data};pendingImages.push(img);addPreview(img)}e.target.value=''});
+    $('#dealCalc').addEventListener('click',()=>{$('#profitModal').classList.add('show');$('#pmBuy').value=$('#dBuy').value||0;$('#pmSell').value=$('#dSell').value||0;updateProfitResult()});
+    $('#dealClose').addEventListener('click',()=>$('#dealModal').classList.remove('show'));
+    $('#dealForm').addEventListener('submit',async e=>{e.preventDefault();const data=readData(currentUser)||defaultData();let platform=$('#dPlatform').value;const url=$('#dUrl').value.trim();if(platform==='Automatisch')platform=platformFromUrl(url);const payload={url,title:$('#dTitle').value.trim(),platform,buy:Number($('#dBuy').value||0),sell:Number($('#dSell').value||0),status:$('#dStatus').value,due:$('#dDue').value||'',tags:$('#dTags').value.trim(),note:$('#dNote').value.trim(),images:pendingImages,ship:0};if(editingId){const it=data.items.find(x=>x.id===editingId);if(it){Object.assign(it,payload);await syncUpOne(it)}}else{const it={id:'i_'+randHex(8),created:Date.now(),...payload};data.items.unshift(it);await syncUpOne(it)}writeData(currentUser,data);$('#dealModal').classList.remove('show');renderList()});
 
-    // ===== Profit modal =====
-    let profitContextId = null;
-    function openProfit(id){ const data = readData(currentUser) || defaultData(); const it = data.items.find(x=>x.id===id); profitContextId = id; $('#pmBuy').value = it?.buy || ''; $('#pmSell').value = it?.sell || ''; $('#pmFeePct').value = typeof it?.feePct === 'number' ? it.feePct : (data.settings.feePct||11); $('#pmShip').value = it?.ship || 0; updateProfitResult(); $('#profitModal').classList.add('show'); }
-    function updateProfitResult(){ const buy = Number($('#pmBuy').value||0); const sell = Number($('#pmSell').value||0); const feePct = Number($('#pmFeePct').value||0); const ship = Number($('#pmShip').value||0); const fees = sell * (feePct/100); const p = Math.round((sell - fees - ship - buy) * 100) / 100; $('#pmResult').textContent = fmtMoney(p); }
-    ['pmBuy','pmSell','pmFeePct','pmShip'].forEach(id=> $('#'+id).addEventListener('input', updateProfitResult));
-    $('#profitClose').addEventListener('click', ()=> $('#profitModal').classList.remove('show'));
-    $('#pmApply').addEventListener('click', async ()=>{ const data = readData(currentUser) || defaultData(); const it = data.items.find(x=>x.id===profitContextId); if(!it) return; it.buy = Number($('#pmBuy').value||0); it.sell = Number($('#pmSell').value||0); it.feePct = Number($('#pmFeePct').value||0); it.ship = Number($('#pmShip').value||0); writeData(currentUser, data); await syncUpOne(it).catch(()=>{}); $('#profitModal').classList.remove('show'); renderList(); });
-
-    // ===== Deal Modal (Add/Edit) =====
-    let editingId = null; let pendingImages = [];
-    function resetDealForm(){ editingId=null; pendingImages=[]; $('#dealForm').reset(); $('#dPreview').innerHTML=''; $('#dealModalTitle').textContent='Neuer Deal'; }
-    function openDealModal(id=null){ resetDealForm(); if(id){ const data = readData(currentUser)||defaultData(); const it = data.items.find(x=>x.id===id); if(it){ editingId=id; $('#dealModalTitle').textContent='Deal bearbeiten'; $('#dUrl').value=it.url||''; $('#dTitle').value=it.title||''; $('#dPlatform').value=['eBay','Kleinanzeigen','Sonstiges'].includes(it.platform)?it.platform:'Automatisch'; $('#dBuy').value=it.buy||''; $('#dSell').value=it.sell||''; $('#dStatus').value=it.status||'gesichtet'; $('#dDue').value=it.due||''; $('#dTags').value=it.tags||''; $('#dNote').value=it.note||''; (it.images||[]).forEach(img=> addPreview(img)); pendingImages = [...(it.images||[])]; } }
-      $('#dealModal').classList.add('show'); setTimeout(()=>$('#dUrl').focus(), 0); }
-    function addPreview(img){ const wrap=document.createElement('div'); wrap.className='thumb'; wrap.style.position='relative'; wrap.innerHTML=`<img alt="Bild" src="${img.data}"/><button title="Entfernen" style="position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.45);color:#fff;cursor:pointer"><i class="ti ti-x" style="font-size:12px"></i></button>`; wrap.querySelector('button').addEventListener('click', ()=>{ pendingImages = pendingImages.filter(x=>x.id!==img.id); wrap.remove(); }); $('#dPreview').appendChild(wrap); }
-    async function fileToDataUrl(file){ return new Promise((res, rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
-    $('#dImages').addEventListener('change', async (e)=>{ const files=[...e.target.files]; for(const f of files){ const data=await fileToDataUrl(f); const img={ id:'img_'+randHex(6), name:f.name, data }; pendingImages.push(img); addPreview(img); } e.target.value=''; });
-    $('#dealCalc').addEventListener('click', ()=>{ $('#profitModal').classList.add('show'); $('#pmBuy').value = $('#dBuy').value||0; $('#pmSell').value=$('#dSell').value||0; updateProfitResult(); });
-    $('#dealClose').addEventListener('click', ()=> $('#dealModal').classList.remove('show'));
-
-    $('#dealForm').addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const data = readData(currentUser) || defaultData();
-      let platform = $('#dPlatform').value; const url=$('#dUrl').value.trim(); if(platform==='Automatisch') platform = platformFromUrl(url);
-      const payload = { url, title: $('#dTitle').value.trim(), platform, buy: Number($('#dBuy').value||0), sell: Number($('#dSell').value||0), status: $('#dStatus').value, due: $('#dDue').value||'', tags: $('#dTags').value.trim(), note: $('#dNote').value.trim(), images: pendingImages, ship: 0 };
-      if(editingId){ const it = data.items.find(x=>x.id===editingId); if(it){ Object.assign(it, payload); } await syncUpOne(it); }
-      else { const it = { id: 'i_'+randHex(8), created: Date.now(), ...payload }; data.items.unshift(it); await syncUpOne(it); }
-      writeData(currentUser, data);
-      $('#dealModal').classList.remove('show'); renderList();
-    });
-
-    // ===== Tiles actions =====
-    $('#tileAdd').addEventListener('click', ()=> openDealModal());
-    $('#tileTemplates').addEventListener('click', ()=> $('#tplModal').classList.add('show'));
-    $('#tplClose').addEventListener('click', ()=> $('#tplModal').classList.remove('show'));
-    $('#tileImportExport').addEventListener('click', ()=>{
-      const data = readData(currentUser)||defaultData();
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `reselldeck_${currentUser?.replace(/[^a-z0-9]/gi,'_')||'export'}.json`; a.click(); URL.revokeObjectURL(a.href);
-    });
-    $('#tileSettings').addEventListener('click', ()=> alert('Settings (soon): Gebühren-Default, Storage, E-Mail‑Bridge…'));
+    // === Tiles & FAB ===
+    $('#tileAdd').addEventListener('click',()=>openDealModal());
+    $('#fabAdd').addEventListener('click',()=>openDealModal());
+    $('#tileTemplates').addEventListener('click',()=>$('#tplModal').classList.add('show'));
+    $('#tplClose').addEventListener('click',()=>$('#tplModal').classList.remove('show'));
+    $('#tileImportExport').addEventListener('click',()=>{const data=readData(currentUser)||defaultData();const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`reselldeck_${currentUser?.replace(/[^a-z0-9]/gi,'_')||'export'}.json`;a.click();URL.revokeObjectURL(a.href)});
+    $('#tileSettings').addEventListener('click',()=>alert('Settings (soon): Gebühren-Default, Storage, E-Mail‑Bridge…'));
 
     // Copy templates
-    async function copyText(t){ try { await navigator.clipboard.writeText(t); alert('Vorlage kopiert!') } catch { prompt('Kopiere manuell:', t) } }
-    $('#copyTpl1').addEventListener('click', ()=> copyText($('#tpl1').textContent));
-    $('#copyTpl2').addEventListener('click', ()=> copyText($('#tpl2').textContent));
+    async function copyText(t){try{await navigator.clipboard.writeText(t);alert('Vorlage kopiert!')}catch{prompt('Kopiere manuell:',t)}}
+    $('#copyTpl1').addEventListener('click',()=>copyText($('#tpl1').textContent));
+    $('#copyTpl2').addEventListener('click',()=>copyText($('#tpl2').textContent));
 
-    // ===== Auth switching =====
-    const loginForm = $('#loginForm');
-    const registerForm = $('#registerForm');
-    $('#tabLogin').addEventListener('click', ()=>{ registerForm.classList.add('hidden'); loginForm.classList.remove('hidden'); });
-    $('#tabRegister').addEventListener('click', ()=>{ loginForm.classList.add('hidden'); registerForm.classList.remove('hidden'); });
+    // Search & filters
+    $('#search').addEventListener('input',renderList);$('#filterStatus').addEventListener('change',renderList);$('#sortBy').addEventListener('change',renderList);window.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='/'){e.preventDefault();$('#search').focus()}});
 
-    // ===== Local Auth (nur wenn kein CLOUD) =====
+    // === Auth switching buttons ===
+    const loginForm=$('#loginForm'); const registerForm=$('#registerForm');
+    $('#tabLogin').addEventListener('click',()=>{registerForm.classList.add('hidden');loginForm.classList.remove('hidden')});
+    $('#tabRegister').addEventListener('click',()=>{loginForm.classList.add('hidden');registerForm.classList.remove('hidden')});
+
+    // === Local Auth (nur ohne Cloud) ===
     async function attachLocalAuth(){
-      registerForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const email=$('#regEmail').value.trim().toLowerCase(); const pw=$('#regPassword').value; const pw2=$('#regPassword2').value; if(pw.length<8) return alert('Passwort zu kurz (min. 8 Zeichen).'); if(pw!==pw2) return alert('Passwörter stimmen nicht überein.'); const users=readUsers(); if(users[email]) return alert('E-Mail bereits registriert.'); const salt=randHex(16); const hash=await sha256Hex(pw+':'+salt); users[email]={salt,hash,created:Date.now()}; writeUsers(users); writeData(email, defaultData()); alert('Account erstellt! Du kannst dich jetzt einloggen.'); $('#tabLogin').click(); });
-      loginForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const email=$('#loginEmail').value.trim().toLowerCase(); const pw=$('#loginPassword').value; const users=readUsers(); const u=users[email]; if(!u) return alert('Unbekannte E-Mail. Bitte registrieren.'); const hash=await sha256Hex(pw+':'+u.salt); if(hash!==u.hash) return alert('Falsches Passwort.'); currentUser=email; setSession(email); $('#userEmail').textContent=email; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent='Lokal'; if(!(readData(email)?.items?.length)) seedSamples(); renderList(); recalcStats(); });
-      $('#logoutBtn').addEventListener('click', ()=>{ currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#appHeader').classList.add('hidden'); $('#loginEmail').focus(); });
+      loginForm.addEventListener('submit',async e=>{e.preventDefault();const email=$('#loginEmail').value.trim().toLowerCase();const pw=$('#loginPassword').value;const users=readUsers();const u=users[email];if(!u)return alert('Unbekannte E-Mail. Bitte registrieren.');const hash=await sha256Hex(pw+':'+u.salt);if(hash!==u.hash)return alert('Falsches Passwort.');currentUser=email;setSession(email);$('#userEmail').textContent=email;showApp('Lokal');if(!(readData(email)?.items?.length))seedSamples();renderList();recalcStats()});
+      registerForm.addEventListener('submit',async e=>{e.preventDefault();const email=$('#regEmail').value.trim().toLowerCase();const pw=$('#regPassword').value;const pw2=$('#regPassword2').value;if(pw.length<8)return alert('Passwort zu kurz (min. 8 Zeichen).');if(pw!==pw2)return alert('Passwörter stimmen nicht überein.');const users=readUsers();if(users[email])return alert('E-Mail bereits registriert.');const salt=randHex(16);const hash=await sha256Hex(pw+':'+salt);users[email]={salt,hash,created:Date.now()};writeUsers(users);writeData(email,defaultData());alert('Account erstellt! Du kannst dich jetzt einloggen.');$('#tabLogin').click()});
+      $('#logoutBtn').addEventListener('click',()=>{currentUser=null;setSession(null);showAuth()})
     }
 
-    // ===== Cloud Auth (Supabase) =====
+    // === Cloud Auth (Supabase) ===
     async function attachCloudAuth(){
-      registerForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const email=$('#regEmail').value.trim().toLowerCase(); const password=$('#regPassword').value; const pw2=$('#regPassword2').value; if(password.length<8) return alert('Passwort zu kurz (min. 8 Zeichen).'); if(password!==pw2) return alert('Passwörter stimmen nicht überein.'); const { error } = await sb.auth.signUp({ email, password }); if(error) return alert(error.message); alert('Account erstellt! Prüfe ggf. dein Postfach (Bestätigung).'); $('#tabLogin').click(); });
-      loginForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const email=$('#loginEmail').value.trim().toLowerCase(); const password=$('#loginPassword').value; const { data, error } = await sb.auth.signInWithPassword({ email, password }); if(error) return alert(error.message); currentUser=data.user.email; setSession(currentUser); $('#userEmail').textContent=currentUser; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent='Cloud'; await syncDown(); renderList(); recalcStats(); });
-      $('#logoutBtn').addEventListener('click', async ()=>{ await sb.auth.signOut(); currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#appHeader').classList.add('hidden'); $('#loginEmail').focus(); });
+      loginForm.addEventListener('submit',async e=>{e.preventDefault();const email=$('#loginEmail').value.trim().toLowerCase();const password=$('#loginPassword').value;const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)return alert(error.message);currentUser=data.user.email;setSession(currentUser);$('#userEmail').textContent=currentUser;await syncDown();showApp('Cloud');renderList();recalcStats()});
+      registerForm.addEventListener('submit',async e=>{e.preventDefault();const email=$('#regEmail').value.trim().toLowerCase();const password=$('#regPassword').value;const pw2=$('#regPassword2').value;if(password.length<8)return alert('Passwort zu kurz (min. 8 Zeichen).');if(password!==pw2)return alert('Passwörter stimmen nicht überein.');const {error}=await sb.auth.signUp({email,password});if(error)return alert(error.message);alert('Account erstellt! Prüfe ggf. dein Postfach (Bestätigung).');$('#tabLogin').click()});
+      $('#logoutBtn').addEventListener('click',async()=>{await sb.auth.signOut();currentUser=null;setSession(null);showAuth()})
     }
 
-    // ===== Cloud sync helpers =====
-    async function syncUpOne(it){ if(!CLOUD) return; try { const { data: u } = await sb.auth.getUser(); const row = toRow(it, u?.user?.id); await sb.from('deals').upsert(row); } catch(e){ console.warn(e); } }
-    async function syncDown(){ if(!CLOUD) return; const { data: rows, error } = await sb.from('deals').select('*').order('created', { ascending: false }); if(error){ console.warn(error); return; } const email = (await sb.auth.getUser()).data.user.email; currentUser = email; setSession(email); $('#userEmail').textContent = email; const data = readData(email) || defaultData(); data.items = (rows||[]).map(fromRow); writeData(email, data); }
-    function toRow(it, userId){ return { id: it.id, user_id: userId, created: it.created || Date.now(), url: it.url || null, title: it.title || null, platform: it.platform || null, buy: it.buy ?? null, sell: it.sell ?? null, fee_pct: (typeof it.feePct==='number'? it.feePct : null), ship: it.ship ?? null, status: it.status || null, due: it.due || null, tags: it.tags || null, note: it.note || null }; }
-    function fromRow(r){ return { id: r.id, created: r.created, url: r.url, title: r.title, platform: r.platform||'Sonstiges', buy: Number(r.buy ?? 0), sell: Number(r.sell ?? 0), feePct: typeof r.fee_pct==='number'? r.fee_pct : undefined, ship: Number(r.ship ?? 0), status: r.status||'gesichtet', due: r.due || '', tags: r.tags || '', note: r.note || '', images: [] }; }
+    // === Cloud sync ===
+    async function syncUpOne(it){if(!CLOUD)return;try{const {data:u}=await sb.auth.getUser();const row=toRow(it,u?.user?.id);await sb.from('deals').upsert(row)}catch(e){console.warn(e)}}
+    async function syncDown(){if(!CLOUD)return;const {data:rows,error}=await sb.from('deals').select('*').order('created',{ascending:false});if(error){console.warn(error);return}const email=(await sb.auth.getUser()).data.user.email;currentUser=email;setSession(email);$('#userEmail').textContent=email;const data=readData(email)||defaultData();data.items=(rows||[]).map(fromRow);writeData(email,data)}
+    const toRow=(it,user_id)=>({id:it.id,user_id,created:it.created||Date.now(),url:it.url||null,title:it.title||null,platform:it.platform||null,buy:it.buy??null,sell:it.sell??null,fee_pct:(typeof it.feePct==='number'?it.feePct:null),ship:it.ship??null,status:it.status||null,due:it.due||null,tags:it.tags||null,note:it.note||null});
+    const fromRow=r=>({id:r.id,created:r.created,url:r.url,title:r.title,platform:r.platform||'Sonstiges',buy:Number(r.buy??0),sell:Number(r.sell??0),feePct:typeof r.fee_pct==='number'?r.fee_pct:undefined,ship:Number(r.ship??0),status:r.status||'gesichtet',due:r.due||'',tags:r.tags||'',note:r.note||'',images:[]});
 
-    // Export/Import via footer tile handled oben
+    // === Seed (nur lokal) ===
+    function seedSamples(){const email=currentUser;const data=readData(email)||defaultData();if((data.items||[]).length)return;const now=Date.now();data.items=[{id:'i_'+randHex(6),created:now-300000,url:'https://www.kleinanzeigen.de/s-anzeige/sony-a7-iii-kit/1234567890',title:'Sony A7 III (Kit) – Top Zustand',platform:'Kleinanzeigen',buy:750,sell:1050,feePct:0,ship:0,status:'verhandlung',due:todayISO(),tags:'kamera, sony, vollformat',note:'Mit 2 Akkus, 24-70mm. Angebot 780€ abgegeben.',images:[]},{id:'i_'+randHex(6),created:now-7200000,url:'https://www.ebay.de/itm/Apple-iPhone-13/10000001',title:'iPhone 13 128GB Midnight – OVP',platform:'eBay',buy:380,sell:520,feePct:11,ship:5.49,status:'kontaktiert',due:'',tags:'iphone, 128gb',note:'Leichte Kratzer, Akku 87%.',images:[]},{id:'i_'+randHex(6),created:now-17200000,url:'https://www.kleinanzeigen.de/s-anzeige/dyson-v11/2222222',title:'Dyson V11 – Zubehör komplett',platform:'Kleinanzeigen',buy:120,sell:230,feePct:0,ship:0,status:'verkauft',due:'',tags:'haushalt',note:'Schon verkauft an Max. Abholung erledigt.',images:[]}];writeData(email,data)}
 
-    // Seed sample data (nur lokal)
-    function seedSamples(){ const email = currentUser; const data = readData(email) || defaultData(); if((data.items||[]).length) return; const now = Date.now(); data.items = [ { id:'i_'+randHex(6), created: now-300000, url:'https://www.kleinanzeigen.de/s-anzeige/sony-a7-iii-kit/1234567890', title:'Sony A7 III (Kit) – Top Zustand', platform:'Kleinanzeigen', buy:750, sell:1050, feePct:0, ship:0, status:'verhandlung', due: todayISO(), tags:'kamera, sony, vollformat', note:'Mit 2 Akkus, 24-70mm. Angebot 780€ abgegeben.', images: [] }, { id:'i_'+randHex(6), created: now-7200000, url:'https://www.ebay.de/itm/Apple-iPhone-13/10000001', title:'iPhone 13 128GB Midnight – OVP', platform:'eBay', buy:380, sell:520, feePct:11, ship:5.49, status:'kontaktiert', due:'', tags:'iphone, 128gb', note:'Leichte Kratzer, Akku 87%.', images: [] }, { id:'i_'+randHex(6), created: now-17200000, url:'https://www.kleinanzeigen.de/s-anzeige/dyson-v11/2222222', title:'Dyson V11 – Zubehör komplett', platform:'Kleinanzeigen', buy:120, sell:230, feePct:0, ship:0, status:'verkauft', due:'', tags:'haushalt', note:'Schon verkauft an Max. Abholung erledigt.', images: [] } ]; writeData(email, data); }
+    // === View helpers ===
+    function showApp(mode){$('#authView').classList.add('hidden');$('#appView').classList.remove('hidden');$('#appHeader').classList.remove('hidden');$('#modeText').textContent=mode;$('#modeInfoText').textContent=mode}
+    function showAuth(){$('#authView').classList.remove('hidden');$('#appView').classList.add('hidden');$('#appHeader').classList.add('hidden')}
 
-    // ===== Global UI =====
-    $('#search').addEventListener('input', renderList);
-    $('#filterStatus').addEventListener('change', renderList);
-    $('#sortBy').addEventListener('change', renderList);
-    window.addEventListener('keydown', (e)=>{ if(e.ctrlKey && e.key === '/') { e.preventDefault(); $('#search').focus() } });
-
-    // ===== Init (Cloud ODER Lokal) =====
+    // === Init ===
     (async function init(){
-      if(CLOUD){ await attachCloudAuth(); const { data } = await sb.auth.getSession(); if(data?.session){ const email = data.session.user.email; currentUser = email; setSession(email); $('#userEmail').textContent = email; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent = 'Cloud'; await syncDown(); renderList(); recalcStats(); } return; }
-      await attachLocalAuth(); const sess = getSession(); if(sess && readUsers()[sess]){ currentUser = sess; $('#userEmail').textContent = sess; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent = 'Lokal'; if(!(readData(sess)?.items?.length)) seedSamples(); renderList(); }
+      // Immer als Start: Auth sichtbar, App/Head ausgeblendet
+      showAuth();
+      if(CLOUD){
+        await attachCloudAuth();
+        const { data } = await sb.auth.getSession();
+        if(data?.session){ await syncDown(); showApp('Cloud'); renderList(); recalcStats(); }
+        return; // Cloud-Modus → kein lokaler Fallback
+      }
+      await attachLocalAuth();
+      const sess=getSession();
+      if(sess && readUsers()[sess]){ currentUser=sess; $('#userEmail').textContent=sess; showApp('Lokal'); if(!(readData(sess)?.items?.length)) seedSamples(); renderList(); recalcStats(); }
     })();
   </script>
 </body>
@@ -501,141 +331,108 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ResellDeck — Futuristisches Reseller-Dashboard</title>
+  <title>ResellDeck — Clean Reseller Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <style>
-    :root {
-      --bg: #0b0f1a;
-      --surface: rgba(16, 20, 35, 0.72);
-      --muted: #9aa4bf;
-      --text: #e8edff;
-      --accent: #7c4dff;
-      --accent2: #00e5ff;
-      --ok: #00d48a;
-      --warn: #ffb020;
-      --danger: #ff4d67;
-      --glass: blur(14px) saturate(130%);
-      --radius: 18px;
-      --shadow: 0 10px 35px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.06);
-      --gradient: radial-gradient(1000px 600px at 0% -10%, rgba(124,77,255,.25), transparent 60%),
-                  radial-gradient(900px 600px at 100% 110%, rgba(0,229,255,.18), transparent 60%),
-                  linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+    :root{
+      --bg:#0b0f1a;--surface:rgba(16,20,35,.72);--muted:#9aa4bf;--text:#e8edff;--accent:#7c4dff;--accent2:#00e5ff;--warn:#ffb020;--radius:18px;--shadow:0 10px 35px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.06);
+      --gradient: radial-gradient(1000px 600px at 0% -10%, rgba(124,77,255,.25), transparent 60%), radial-gradient(900px 600px at 100% 110%, rgba(0,229,255,.18), transparent 60%), linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
     }
-    * { box-sizing: border-box }
-    html, body { height: 100% }
-    body {
-      margin: 0; background: var(--bg); color: var(--text); font-family: 'Space Grotesk', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
-      background-image: var(--gradient); background-attachment: fixed; 
-    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:'Space Grotesk',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,'Noto Sans',sans-serif;background-image:var(--gradient);background-attachment:fixed}
+    a{color:var(--accent2)}
+    .container{max-width:1200px;margin:0 auto;padding:28px}
 
-    a { color: var(--accent2); text-decoration: none }
-    a:hover { text-decoration: underline }
+    /* Header */
+    header.app{position:sticky;top:0;z-index:40;backdrop-filter: blur(10px);background:rgba(11,15,26,.65);border-bottom:1px solid rgba(255,255,255,.06)}
+    header .bar{display:flex;align-items:center;gap:14px;justify-content:space-between;padding:14px 24px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
+    .logo{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 8px 28px rgba(124,77,255,.35),0 8px 28px rgba(0,229,255,.25)}
+    .searchbar{display:flex;align-items:center;gap:10px;flex:1;max-width:520px}
+    .searchbar input{width:100%;padding:12px 12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--text);border-radius:12px;outline:none}
+    .pill{border-radius:999px;padding:6px 10px;background:rgba(255,255,255,.06);font-size:12px;color:var(--muted)}
+    .btn{cursor:pointer;user-select:none;transition:.22s ease;border-radius:12px;padding:10px 12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text)}
+    .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#0a0e18;font-weight:700}
+    .btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
 
-    .container { max-width: 1200px; margin: 0 auto; padding: 28px; }
+    /* Cards / layout */
+    .card{background:var(--surface);backdrop-filter:blur(14px) saturate(130%);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .pad{padding:20px}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px}
+    @media (max-width:960px){.stats{grid-template-columns:repeat(2,1fr)}}
+    .stat .label{color:var(--muted);font-size:12px}
+    .stat .value{font-family:'JetBrains Mono',ui-monospace;font-size:24px;margin-top:6px}
 
-    /* Clean Header */
-    header.app { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(10px); background: rgba(11,15,26,.65); border-bottom: 1px solid rgba(255,255,255,.06); }
-    header.app .bar { display:flex; align-items:center; justify-content:space-between; gap:16px; padding: 16px 24px; }
-    .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:.5px; }
-    .brand .logo { width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--accent2)); box-shadow: 0 8px 28px rgba(124,77,255,.35), 0 8px 28px rgba(0,229,255,.25); }
-    .searchbar { display:flex; align-items:center; gap:10px; flex:1; max-width: 520px }
-    .searchbar input { width: 100%; padding: 12px 12px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: var(--text); border-radius: 12px; outline: none; }
-    .pill { border-radius: 999px; padding: 6px 10px; background: rgba(255,255,255,.06); font-size:12px; color: var(--muted) }
-    .btn { cursor: pointer; user-select: none; transition: .22s ease; border-radius: 12px; padding: 10px 12px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); color: var(--text) }
-    .btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; color:#0a0e18; font-weight:700 }
-    .btn:hover { transform: translateY(-1px); filter: brightness(1.05) }
+    .qa{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px}
+    @media (max-width:960px){.qa{grid-template-columns:repeat(2,1fr)}}
+    .qa .tile{display:flex;flex-direction:column;gap:8px;justify-content:center;align-items:flex-start;padding:18px;min-height:120px;border:1px dashed rgba(255,255,255,.12)}
 
-    /* Cards & layout */
-    .card { background: var(--surface); backdrop-filter: var(--glass); border-radius: var(--radius); box-shadow: var(--shadow); }
-    .pad { padding: 20px }
-    .stats { display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px }
-    @media (max-width: 960px) { .stats { grid-template-columns: repeat(2, 1fr) } }
-    .stat { position:relative; overflow:hidden }
-    .stat .label { color: var(--muted); font-size: 12px }
-    .stat .value { font-family: 'JetBrains Mono', ui-monospace; font-size: 24px; margin-top:6px }
+    .list{display:grid;gap:10px;margin-top:16px}
+    .item{display:grid;grid-template-columns:1fr 160px 140px 110px 120px 40px;gap:10px;align-items:center;padding:12px}
+    .item .title{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .item .url{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .badge{padding:6px 10px;border-radius:999px;font-size:12px;display:inline-flex;align-items:center;gap:6px}
+    .badge.sourced{background:rgba(124,77,255,.18);color:#cbb6ff}
+    .badge.contacted{background:rgba(0,229,255,.18);color:#a9f6ff}
+    .badge.negotiating{background:rgba(255,176,32,.18);color:#ffd391}
+    .badge.bought{background:rgba(0,212,138,.18);color:#a6ffd9}
+    .badge.listed{background:rgba(255,255,255,.08);color:#dfe7ff}
+    .badge.sold{background:rgba(0,212,138,.25);color:#7effc7;border:1px solid rgba(0,212,138,.35)}
 
-    /* Quick actions */
-    .qa { display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px }
-    @media (max-width: 960px) { .qa { grid-template-columns: repeat(2, 1fr) } }
-    .qa .tile { display:flex; flex-direction:column; gap:8px; justify-content:center; align-items:flex-start; padding: 18px; min-height: 120px; border: 1px dashed rgba(255,255,255,.12) }
-    .qa .tile h4 { margin:0 }
-    .qa .tile .muted { color: var(--muted); font-size: 12px }
+    .actions{display:flex;gap:8px;justify-content:flex-end}
+    .iconbtn{width:36px;height:36px;display:grid;place-items:center;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);cursor:pointer}
 
-    /* Deals list */
-    .list { display:grid; gap: 10px; margin-top: 16px }
-    .item { display:grid; grid-template-columns: 1fr 160px 140px 110px 120px 40px; gap: 10px; align-items:center; padding: 12px }
-    .item .title { font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
-    .item .url { font-size:12px; color: var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
-    .badge { padding:6px 10px; border-radius: 999px; font-size:12px; display:inline-flex; align-items:center; gap:6px }
-    .badge.sourced { background: rgba(124,77,255,.18); color: #cbb6ff }
-    .badge.contacted { background: rgba(0,229,255,.18); color: #a9f6ff }
-    .badge.negotiating { background: rgba(255,176,32,.18); color: #ffd391 }
-    .badge.bought { background: rgba(0,212,138,.18); color: #a6ffd9 }
-    .badge.listed { background: rgba(255,255,255,.08); color: #dfe7ff }
-    .badge.sold { background: rgba(0,212,138,.25); color: #7effc7; border: 1px solid rgba(0,212,138,.35) }
+    .thumbs{display:flex;gap:6px;flex-wrap:wrap}
+    .thumb{width:34px;height:34px;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+    .thumb img{width:100%;height:100%;object-fit:cover}
 
-    .actions { display:flex; gap:8px; justify-content:flex-end }
-    .iconbtn { width:36px; height:36px; display:grid; place-items:center; border-radius: 10px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); cursor: pointer }
-
-    .thumbs { display:flex; gap:6px; flex-wrap: wrap }
-    .thumb { width: 34px; height: 34px; border-radius: 8px; overflow:hidden; border: 1px solid rgba(255,255,255,.1) }
-    .thumb img { width:100%; height:100%; object-fit: cover }
-
-    .subtle { color: var(--muted); font-size: 12px }
-    .divider { height:1px; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.12), rgba(255,255,255,0)); margin: 14px 0 }
+    .subtle{color:var(--muted);font-size:12px}
+    .divider{height:1px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.12),rgba(255,255,255,0));margin:14px 0}
 
     /* Modal */
-    .modal { position: fixed; inset: 0; display:none; place-items:center; background: rgba(3,6,10,.6); z-index: 50 }
-    .modal.show { display:grid }
-    .dialog { max-width: 820px; width: calc(100% - 36px); }
+    .modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(3,6,10,.6);z-index:60}
+    .modal.show{display:grid}
+    .dialog{max-width:820px;width:calc(100% - 36px)}
 
     /* Forms */
-    input, select, textarea { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: var(--text); border-radius: 12px; padding: 12px 12px; outline: none; width: 100%; font: inherit; }
-    input::placeholder, textarea::placeholder { color: #b9c3e4aa }
-    label { font-size: 12px; color: var(--muted); margin-bottom: 8px; display:block }
-    form.grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px }
-    form.grid .span2 { grid-column: 1 / -1 }
+    input,select,textarea{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--text);border-radius:12px;padding:12px 12px;outline:none;width:100%;font:inherit}
+    input::placeholder,textarea::placeholder{color:#b9c3e4aa}
+    label{font-size:12px;color:var(--muted);margin-bottom:8px;display:block}
+    form.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    form.grid .span2{grid-column:1 / -1}
 
-    .footer { margin-top: 24px; display:flex; gap:12px; flex-wrap:wrap; justify-content: space-between; align-items:center }
+    .footer{margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center}
 
-    .hidden { display:none !important }
+    .hidden{display:none !important}
+
+    /* Floating Add Button */
+    .fab{position:fixed;right:24px;bottom:24px;z-index:55;border-radius:999px;padding:14px 16px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0e18;border:none;box-shadow:0 10px 30px rgba(0,0,0,.35);cursor:pointer}
   </style>
 </head>
 <body>
   <!-- Header (versteckt bis Login) -->
   <header id="appHeader" class="app hidden">
     <div class="bar">
-      <div class="brand">
-        <div class="logo"></div>
-        <div>ResellDeck</div>
-      </div>
-      <div class="searchbar">
-        <i class="ti ti-search"></i>
-        <input id="search" placeholder="Suche Links, Titel, Tags… (Strg+/)" />
-      </div>
+      <div class="brand"><div class="logo"></div><div>ResellDeck</div></div>
+      <div class="searchbar"><i class="ti ti-search"></i><input id="search" placeholder="Suche Links, Titel, Tags… (Strg+/)" /></div>
       <span class="pill" id="modeText">Lokal</span>
       <span class="pill" id="userEmail">Gast</span>
       <button class="btn" id="logoutBtn"><i class="ti ti-logout"></i>&nbsp;Logout</button>
     </div>
   </header>
 
-  <!-- Auth View -->
-  <div id="authView" class="container" style="min-height:100vh; display:grid; place-items:center">
-    <div class="card pad" style="max-width:880px; width:100%">
-      <div class="brand" style="margin-bottom:12px">
-        <div class="logo" style="width:32px;height:32px"></div>
-        <div>ResellDeck</div>
-      </div>
-      <h1 style="margin:0 0 6px">Dein cleanes Reseller-Dashboard</h1>
-      <p class="subtle">Login lokal (ohne Server) oder mit Supabase-Auth – je nach Konfiguration.</p>
+  <!-- Auth / Startseite -->
+  <div id="authView" class="container" style="min-height:100vh;display:grid;place-items:center">
+    <div class="card pad" style="max-width:880px;width:100%">
+      <div class="brand" style="margin-bottom:12px"><div class="logo" style="width:32px;height:32px"></div><div>ResellDeck</div></div>
+      <h1 style="margin:0 0 6px">Willkommen 👋</h1>
+      <p class="subtle">Logge dich ein oder erstelle einen Account. Danach landest du im Dashboard.</p>
       <div class="divider"></div>
-      <div class="row" style="gap:10px">
-        <button id="tabLogin" class="btn primary" style="flex:1">Login</button>
-        <button id="tabRegister" class="btn" style="flex:1">Account erstellen</button>
-      </div>
+      <div class="row" style="gap:10px"><button id="tabLogin" class="btn primary" style="flex:1">Login</button><button id="tabRegister" class="btn" style="flex:1">Account erstellen</button></div>
 
       <form id="loginForm" class="grid" style="margin-top:12px">
         <div class="span2"><label>E-Mail</label><input required type="email" id="loginEmail" placeholder="du@beispiel.de" autocomplete="username" /></div>
@@ -648,14 +445,13 @@
         <div><label>Passwort</label><input required type="password" id="regPassword" placeholder="mind. 8 Zeichen" autocomplete="new-password" /></div>
         <div><label>Passwort (Wiederholen)</label><input required type="password" id="regPassword2" placeholder="nochmal" autocomplete="new-password" /></div>
         <div class="span2"><button class="btn primary" type="submit">Account erstellen</button></div>
-        <p class="subtle span2">Hinweis: Client-Login (LocalStorage) oder Supabase‑Auth – je nach Konfiguration. Kein doppelter Modus gleichzeitig → sauber & stabil.</p>
+        <p class="subtle span2">Lokal (ohne Server) oder Supabase‑Auth – je nach Konfiguration.</p>
       </form>
     </div>
   </div>
 
-  <!-- App View -->
+  <!-- App / Dashboard -->
   <main id="appView" class="container hidden">
-    <!-- Dashboard Cards -->
     <div class="stats">
       <div class="card pad stat"><div class="label">Gespeicherte Links</div><div id="statTotal" class="value">0</div></div>
       <div class="card pad stat"><div class="label">Aktiv (Kontakt/Laufend)</div><div id="statActive" class="value">0</div></div>
@@ -663,127 +459,50 @@
       <div class="card pad stat"><div class="label">Fällige Erinnerungen</div><div id="statDue" class="value">0</div></div>
     </div>
 
-    <!-- Quick actions as tiles -->
     <div class="qa">
-      <div class="card tile" id="tileAdd">
-        <i class="ti ti-square-rounded-plus" style="font-size:22px"></i>
-        <h4>Neuen Deal anlegen</h4>
-        <div class="muted">URL, Preisziele, Status & Bilder</div>
-      </div>
-      <div class="card tile" id="tileTemplates">
-        <i class="ti ti-message-2" style="font-size:22px"></i>
-        <h4>Erstkontakt & Antworten</h4>
-        <div class="muted">Schnell kopieren & personalisieren</div>
-      </div>
-      <div class="card tile" id="tileImportExport">
-        <i class="ti ti-arrows-left-right" style="font-size:22px"></i>
-        <h4>Import / Export</h4>
-        <div class="muted">JSON sichern oder wiederherstellen</div>
-      </div>
-      <div class="card tile" id="tileSettings">
-        <i class="ti ti-settings" style="font-size:22px"></i>
-        <h4>Einstellungen</h4>
-        <div class="muted">Gebühren, Sync, Account</div>
-      </div>
+      <div class="card tile" id="tileAdd"><i class="ti ti-square-rounded-plus" style="font-size:22px"></i><h4 style="margin:0">Neuen Deal anlegen</h4><div class="subtle">URL, Preise, Status & Bilder</div></div>
+      <div class="card tile" id="tileTemplates"><i class="ti ti-message-2" style="font-size:22px"></i><h4 style="margin:0">Erstkontakt & Antworten</h4><div class="subtle">Schnell kopieren</div></div>
+      <div class="card tile" id="tileImportExport"><i class="ti ti-arrows-left-right" style="font-size:22px"></i><h4 style="margin:0">Import / Export</h4><div class="subtle">JSON sichern</div></div>
+      <div class="card tile" id="tileSettings"><i class="ti ti-settings" style="font-size:22px"></i><h4 style="margin:0">Einstellungen</h4><div class="subtle">Gebühren, Sync</div></div>
     </div>
 
-    <!-- Deals Section -->
     <div class="card pad" style="margin-top:16px">
-      <div class="row" style="align-items:center; justify-content:space-between">
+      <div class="row" style="align-items:center;justify-content:space-between">
         <h3 style="margin:0">Deine Deals</h3>
         <div class="row" style="align-items:center">
           <select id="filterStatus">
-            <option value="">Alle Status</option>
-            <option value="gesichtet">Gesichtet</option>
-            <option value="kontaktiert">Kontaktiert</option>
-            <option value="verhandlung">Verhandlung</option>
-            <option value="gekauft">Gekauft</option>
-            <option value="gelistet">Gelistet</option>
-            <option value="verkauft">Verkauft</option>
+            <option value="">Alle Status</option><option value="gesichtet">Gesichtet</option><option value="kontaktiert">Kontaktiert</option><option value="verhandlung">Verhandlung</option><option value="gekauft">Gekauft</option><option value="gelistet">Gelistet</option><option value="verkauft">Verkauft</option>
           </select>
           <select id="sortBy">
-            <option value="createdDesc">Neueste zuerst</option>
-            <option value="profitDesc">Höchster Profit</option>
-            <option value="dueAsc">Nächste Fälligkeit</option>
-            <option value="titleAsc">Titel A→Z</option>
+            <option value="createdDesc">Neueste zuerst</option><option value="profitDesc">Höchster Profit</option><option value="dueAsc">Nächste Fälligkeit</option><option value="titleAsc">Titel A→Z</option>
           </select>
         </div>
       </div>
       <div class="list" id="list"></div>
     </div>
 
-    <div class="footer">
-      <div class="subtle">💡 Tipp: Mit <strong>Strg+/</strong> öffnest du die Suche. In der Deal-Karte siehst du Mini-Thumbnails deiner Bilder.</div>
-      <div class="pill" id="modeInfo">Modus: <span id="modeInfoText">Lokal</span></div>
-    </div>
+    <div class="footer"><div class="subtle">💡 Neues anlegen: Kachel oben oder der runde **+** Button unten rechts.</div><div class="pill">Modus: <span id="modeInfoText">Lokal</span></div></div>
   </main>
 
-  <!-- Deal Modal (Add/Edit) -->
+  <!-- Floating Add Button -->
+  <button id="fabAdd" class="fab" title="Neuen Deal anlegen"><i class="ti ti-plus"></i></button>
+
+  <!-- Deal Modal -->
   <div id="dealModal" class="modal">
     <div class="dialog card pad">
-      <div class="row" style="align-items:center; justify-content:space-between">
-        <h3 id="dealModalTitle" style="margin:0">Neuer Deal</h3>
-        <button class="btn" id="dealClose"><i class="ti ti-x"></i></button>
-      </div>
+      <div class="row" style="align-items:center;justify-content:space-between"><h3 id="dealModalTitle" style="margin:0">Neuer Deal</h3><button class="btn" id="dealClose"><i class="ti ti-x"></i></button></div>
       <form id="dealForm" class="grid" style="margin-top:8px">
-        <div class="span2">
-          <label>URL</label>
-          <input id="dUrl" type="url" placeholder="https://www.kleinanzeigen.de/... oder https://www.ebay.de/..." required />
-        </div>
-        <div>
-          <label>Titel</label>
-          <input id="dTitle" placeholder="z.B. iPhone 13, sehr guter Zustand" />
-        </div>
-        <div>
-          <label>Plattform</label>
-          <select id="dPlatform">
-            <option>Automatisch</option>
-            <option>eBay</option>
-            <option>Kleinanzeigen</option>
-            <option>Sonstiges</option>
-          </select>
-        </div>
-        <div>
-          <label>Einkaufspreis (Ziel)</label>
-          <input id="dBuy" type="number" inputmode="decimal" placeholder="€" />
-        </div>
-        <div>
-          <label>Verkaufspreis (Ziel)</label>
-          <input id="dSell" type="number" inputmode="decimal" placeholder="€" />
-        </div>
-        <div>
-          <label>Status</label>
-          <select id="dStatus">
-            <option>gesichtet</option>
-            <option>kontaktiert</option>
-            <option>verhandlung</option>
-            <option>gekauft</option>
-            <option>gelistet</option>
-            <option>verkauft</option>
-          </select>
-        </div>
-        <div>
-          <label>Erinnerung</label>
-          <input id="dDue" type="date" />
-        </div>
-        <div class="span2">
-          <label>Tags (Komma-getrennt)</label>
-          <input id="dTags" placeholder="iphone, 128gb, spacegray" />
-        </div>
-        <div class="span2">
-          <label>Notiz</label>
-          <textarea id="dNote" rows="3" placeholder="Zustand, Standort, Argumente…"></textarea>
-        </div>
-        <div class="span2">
-          <label>Bilder hinzufügen</label>
-          <input id="dImages" type="file" accept="image/*" multiple />
-          <div id="dPreview" class="thumbs" style="margin-top:8px"></div>
-          <p class="subtle">Hinweis: Bilder werden lokal gespeichert (Data‑URL). Viele große Bilder können Speicher fressen. (Cloud‑Upload optional später)</p>
-        </div>
-        <div class="span2" style="display:flex; gap:10px; justify-content:flex-end; margin-top:6px">
-          <button type="button" class="btn" id="dealCalc"><i class="ti ti-calculator"></i>&nbsp;Profit-Rechner</button>
-          <button type="submit" class="btn primary" id="dealSave"><i class="ti ti-device-floppy"></i>&nbsp;Speichern</button>
-        </div>
+        <div class="span2"><label>URL</label><input id="dUrl" type="url" placeholder="https://www.kleinanzeigen.de/... oder https://www.ebay.de/..." required /></div>
+        <div><label>Titel</label><input id="dTitle" placeholder="z.B. iPhone 13, sehr guter Zustand" /></div>
+        <div><label>Plattform</label><select id="dPlatform"><option>Automatisch</option><option>eBay</option><option>Kleinanzeigen</option><option>Sonstiges</option></select></div>
+        <div><label>Einkaufspreis (Ziel)</label><input id="dBuy" type="number" inputmode="decimal" placeholder="€" /></div>
+        <div><label>Verkaufspreis (Ziel)</label><input id="dSell" type="number" inputmode="decimal" placeholder="€" /></div>
+        <div><label>Status</label><select id="dStatus"><option>gesichtet</option><option>kontaktiert</option><option>verhandlung</option><option>gekauft</option><option>gelistet</option><option>verkauft</option></select></div>
+        <div><label>Erinnerung</label><input id="dDue" type="date" /></div>
+        <div class="span2"><label>Tags (Komma-getrennt)</label><input id="dTags" placeholder="iphone, 128gb, spacegray" /></div>
+        <div class="span2"><label>Notiz</label><textarea id="dNote" rows="3" placeholder="Zustand, Standort, Argumente…"></textarea></div>
+        <div class="span2"><label>Bilder hinzufügen</label><input id="dImages" type="file" accept="image/*" multiple /><div id="dPreview" class="thumbs" style="margin-top:8px"></div><p class="subtle">Bilder werden lokal als Data‑URL gespeichert. Cloud‑Storage kann ich dir nachrüsten.</p></div>
+        <div class="span2" style="display:flex;gap:10px;justify-content:flex-end;margin-top:6px"><button type="button" class="btn" id="dealCalc"><i class="ti ti-calculator"></i>&nbsp;Profit-Rechner</button><button type="submit" class="btn primary" id="dealSave"><i class="ti ti-device-floppy"></i>&nbsp;Speichern</button></div>
       </form>
     </div>
   </div>
@@ -791,205 +510,146 @@
   <!-- Templates Modal -->
   <div id="tplModal" class="modal">
     <div class="dialog card pad">
-      <div class="row" style="align-items:center; justify-content:space-between">
-        <h3 style="margin:0">Vorlagen</h3>
-        <button class="btn" id="tplClose"><i class="ti ti-x"></i></button>
-      </div>
+      <div class="row" style="align-items:center;justify-content:space-between"><h3 style="margin:0">Vorlagen</h3><button class="btn" id="tplClose"><i class="ti ti-x"></i></button></div>
       <div class="divider"></div>
-      <div class="card pad" style="margin-bottom:10px">
-        <div class="row" style="align-items:center; justify-content:space-between">
-          <div>
-            <div class="subtle">Erstkontakt</div>
-            <div style="margin-top:6px" id="tpl1">Hi! 😊 Ist der Artikel noch verfügbar? Würde heute abholen/zzgl. Versand nehmen. Wenn  <Zielpreis>  für dich passt, bin ich sofort dabei. Danke dir!</div>
-          </div>
-          <button class="btn" id="copyTpl1"><i class="ti ti-copy"></i>&nbsp;Kopieren</button>
-        </div>
-      </div>
-      <div class="card pad">
-        <div class="row" style="align-items:center; justify-content:space-between">
-          <div>
-            <div class="subtle">Gegenangebot</div>
-            <div style="margin-top:6px" id="tpl2">Danke fürs schnelle Feedback! Ich könnte  <MeinPreis>  anbieten und heute/sofort zahlen. Deal?</div>
-          </div>
-          <button class="btn" id="copyTpl2"><i class="ti ti-copy"></i>&nbsp;Kopieren</button>
-        </div>
-      </div>
+      <div class="card pad" style="margin-bottom:10px"><div class="row" style="align-items:center;justify-content:space-between"><div><div class="subtle">Erstkontakt</div><div style="margin-top:6px" id="tpl1">Hi! 😊 Ist der Artikel noch verfügbar? Würde heute abholen/zzgl. Versand nehmen. Wenn  <Zielpreis>  für dich passt, bin ich sofort dabei. Danke dir!</div></div><button class="btn" id="copyTpl1"><i class="ti ti-copy"></i>&nbsp;Kopieren</button></div></div>
+      <div class="card pad"><div class="row" style="align-items:center;justify-content:space-between"><div><div class="subtle">Gegenangebot</div><div style="margin-top:6px" id="tpl2">Danke fürs schnelle Feedback! Ich könnte  <MeinPreis>  anbieten und heute/sofort zahlen. Deal?</div></div><button class="btn" id="copyTpl2"><i class="ti ti-copy"></i>&nbsp;Kopieren</button></div></div>
     </div>
   </div>
 
-  <!-- Profit Modal (bereits vorhanden) -->
+  <!-- Profit Modal -->
   <div id="profitModal" class="modal">
     <div class="dialog card pad">
-      <div class="row" style="justify-content:space-between; align-items:center; margin-bottom:8px">
-        <h3 style="margin:0">Profit-Rechner</h3>
-        <button class="btn" id="profitClose"><i class="ti ti-x"></i></button>
-      </div>
-      <form class="grid">
-        <div><label>Einkaufspreis</label><input id="pmBuy" type="number" inputmode="decimal" /></div>
-        <div><label>Verkaufspreis</label><input id="pmSell" type="number" inputmode="decimal" /></div>
-        <div><label>Plattformgebühren (%)</label><input id="pmFeePct" type="number" inputmode="decimal" value="11" /></div>
-        <div><label>Versandkosten</label><input id="pmShip" type="number" inputmode="decimal" value="0" /></div>
-      </form>
+      <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px"><h3 style="margin:0">Profit-Rechner</h3><button class="btn" id="profitClose"><i class="ti ti-x"></i></button></div>
+      <form class="grid"><div><label>Einkaufspreis</label><input id="pmBuy" type="number" inputmode="decimal" /></div><div><label>Verkaufspreis</label><input id="pmSell" type="number" inputmode="decimal" /></div><div><label>Plattformgebühren (%)</label><input id="pmFeePct" type="number" inputmode="decimal" value="11" /></div><div><label>Versandkosten</label><input id="pmShip" type="number" inputmode="decimal" value="0" /></div></form>
       <div class="divider"></div>
-      <div class="row" style="align-items:center; justify-content:space-between">
-        <div>
-          <div class="subtle">Prognose</div>
-          <div id="pmResult" style="font-family:'JetBrains Mono', ui-monospace; font-size:20px">€0</div>
-        </div>
-        <button class="btn primary" id="pmApply"><i class="ti ti-check"></i>&nbsp;In Deal übernehmen</button>
-      </div>
+      <div class="row" style="align-items:center;justify-content:space-between"><div><div class="subtle">Prognose</div><div id="pmResult" style="font-family:'JetBrains Mono',ui-monospace;font-size:20px">€0</div></div><button class="btn primary" id="pmApply"><i class="ti ti-check"></i>&nbsp;In Deal übernehmen</button></div>
     </div>
   </div>
 
   <template id="itemTmpl">
     <div class="item card">
-      <div>
-        <div class="title"></div>
-        <div class="url"></div>
-        <div class="thumbs"></div>
-      </div>
+      <div><div class="title"></div><div class="url"></div><div class="thumbs"></div></div>
       <div class="platform"></div>
       <div class="status"></div>
-      <div class="profit" style="font-family:'JetBrains Mono', ui-monospace">€0</div>
+      <div class="profit" style="font-family:'JetBrains Mono',ui-monospace">€0</div>
       <div class="due subtle">–</div>
-      <div class="actions">
-        <button class="iconbtn open" title="Öffnen"><i class="ti ti-external-link"></i></button>
-        <button class="iconbtn edit" title="Bearbeiten"><i class="ti ti-pencil"></i></button>
-        <button class="iconbtn calc" title="Profit-Rechner"><i class="ti ti-calculator"></i></button>
-        <button class="iconbtn del" title="Löschen" style="border-color: rgba(255,77,103,.35)"><i class="ti ti-trash"></i></button>
-      </div>
+      <div class="actions"><button class="iconbtn open" title="Öffnen"><i class="ti ti-external-link"></i></button><button class="iconbtn edit" title="Bearbeiten"><i class="ti ti-pencil"></i></button><button class="iconbtn calc" title="Profit-Rechner"><i class="ti ti-calculator"></i></button><button class="iconbtn del" title="Löschen" style="border-color:rgba(255,77,103,.35)"><i class="ti ti-trash"></i></button></div>
     </div>
   </template>
 
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-    // ===== Supabase Config =====
+    // === Supabase ===
     const SUPABASE_URL = 'https://okycsoofgaddpxbircit.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9reWNzb29mZ2FkZHB4YmlyY2l0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0NTM0NjUsImV4cCI6MjA3MzAyOTQ2NX0.3DTX4GzHRoSSpqsqXQ4v04UVreUHIthukk223uFwxTM';
     const CLOUD = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
     const sb = CLOUD ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
-    // ===== Utilities =====
-    const $ = (sel, el=document) => el.querySelector(sel);
-    const $$ = (sel, el=document) => [...el.querySelectorAll(sel)];
-    const fmtMoney = (n) => `€${Number(n||0).toLocaleString('de-DE', {maximumFractionDigits: 2})}`;
-    const todayISO = () => new Date().toISOString().slice(0,10);
+    // === Utils ===
+    const $=(s,el=document)=>el.querySelector(s); const $$=(s,el=document)=>[...el.querySelectorAll(s)];
+    const fmtMoney=n=>`€${Number(n||0).toLocaleString('de-DE',{maximumFractionDigits:2})}`; const todayISO=()=>new Date().toISOString().slice(0,10);
+    async function sha256Hex(str){const enc=new TextEncoder();const buf=await crypto.subtle.digest('SHA-256',enc.encode(str));return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('')}
+    const randHex=(len=16)=>[...crypto.getRandomValues(new Uint8Array(len))].map(x=>x.toString(16).padStart(2,'0')).join('')
 
-    async function sha256Hex(str){ const enc = new TextEncoder(); const buf = await crypto.subtle.digest('SHA-256', enc.encode(str)); return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join(''); }
-    const randHex = (len=16) => [...crypto.getRandomValues(new Uint8Array(len))].map(x=>x.toString(16).padStart(2,'0')).join('');
+    // === Local storage ===
+    const USERS_KEY='rd_users_v1'; const SESSION_KEY='rd_session_v1';
+    const readUsers=()=>{try{return JSON.parse(localStorage.getItem(USERS_KEY)||'{}')}catch{return{}}};
+    const writeUsers=o=>localStorage.setItem(USERS_KEY,JSON.stringify(o));
+    const dataKey=email=>`rd_data_${email}`; const readData=email=>{try{return JSON.parse(localStorage.getItem(dataKey(email))||'{}')}catch{return{}}}; const writeData=(email,o)=>localStorage.setItem(dataKey(email),JSON.stringify(o));
+    const defaultData=()=>({items:[],templates:{first:$('#tpl1')?.textContent?.trim()||'',counter:$('#tpl2')?.textContent?.trim()||''},settings:{feePct:11}});
+    let currentUser=null; const setSession=email=>email?localStorage.setItem(SESSION_KEY,email):localStorage.removeItem(SESSION_KEY); const getSession=()=>localStorage.getItem(SESSION_KEY);
 
-    // Storage (Local Mode)
-    const USERS_KEY = 'rd_users_v1';
-    const SESSION_KEY = 'rd_session_v1';
-    function readUsers(){ try { return JSON.parse(localStorage.getItem(USERS_KEY) || '{}') } catch { return {} } }
-    function writeUsers(obj){ localStorage.setItem(USERS_KEY, JSON.stringify(obj)) }
-    function dataKey(email){ return `rd_data_${email}` }
-    function readData(email){ try { return JSON.parse(localStorage.getItem(dataKey(email)) || '{}') } catch { return {} } }
-    function writeData(email, obj){ localStorage.setItem(dataKey(email), JSON.stringify(obj)) }
-    function defaultData(){ return { items: [], templates: { first: $('#tpl1')?.textContent?.trim() || '', counter: $('#tpl2')?.textContent?.trim() || '' }, settings: { feePct: 11 } } }
+    // === Helpers ===
+    const platformFromUrl=u=>{try{const h=new URL(u).hostname;if(/kleinanzeigen\.de|ebay-kleinanzeigen\.de/i.test(h))return'Kleinanzeigen';if(/ebay\./i.test(h))return'eBay';}catch{}return'Sonstiges'};
+    const statusBadge=s=>{const map={gesichtet:'sourced',kontaktiert:'contacted',verhandlung:'negotiating',gekauft:'bought',gelistet:'listed',verkauft:'sold'};const cls=map[s]||'sourced';const e=document.createElement('span');e.className=`badge ${cls}`;e.textContent=s.charAt(0).toUpperCase()+s.slice(1);return e};
+    const computeProfit=(it,feePctFallback=11)=>{const buy=Number(it.buy||0),sell=Number(it.sell||0),feePct=Number(typeof it.feePct==='number'?it.feePct:feePctFallback),fees=sell*(feePct/100),ship=Number(it.ship||0);return Math.round((sell-fees-ship-buy)*100)/100};
 
-    // Auth State
-    let currentUser = null;
-    function setSession(email){ if(email){ localStorage.setItem(SESSION_KEY, email); } else { localStorage.removeItem(SESSION_KEY) } }
-    function getSession(){ return localStorage.getItem(SESSION_KEY) }
+    function recalcStats(){const data=readData(currentUser)||defaultData();const items=data.items||[];$('#statTotal').textContent=items.length;$('#statActive').textContent=items.filter(i=>['kontaktiert','verhandlung','gelistet'].includes(i.status)).length;const profit=items.reduce((s,i)=>s+((i.status==='verkauft'||i.sell)?computeProfit(i,data.settings.feePct):0),0);$('#statProfit').textContent=fmtMoney(profit);$('#statDue').textContent=items.filter(i=>i.due&&i.due<=todayISO()).length;$('#modeInfoText').textContent=CLOUD?'Cloud':'Lokal'}
 
-    // Helpers
-    function platformFromUrl(u){ try { const h = new URL(u).hostname; if(/kleinanzeigen\.de|ebay-kleinanzeigen\.de/i.test(h)) return 'Kleinanzeigen'; if(/ebay\./i.test(h)) return 'eBay'; } catch {} return 'Sonstiges'; }
-    function statusBadge(s){ const map = { gesichtet:'sourced', kontaktiert:'contacted', verhandlung:'negotiating', gekauft:'bought', gelistet:'listed', verkauft:'sold' }; const cls = map[s] || 'sourced'; const span = document.createElement('span'); span.className = `badge ${cls}`; span.textContent = s.charAt(0).toUpperCase()+s.slice(1); return span; }
-    function computeProfit(it, feePctFallback=11){ const buy = Number(it.buy || 0); const sell = Number(it.sell || 0); const feePct = Number(typeof it.feePct === 'number' ? it.feePct : feePctFallback); const fees = sell * (feePct/100); const ship = Number(it.ship || 0); return Math.round((sell - fees - ship - buy) * 100) / 100; }
+    function renderList(){const data=readData(currentUser)||defaultData();const q=$('#search').value.trim().toLowerCase();const fStatus=$('#filterStatus').value;const sortBy=$('#sortBy').value;let items=[...(data.items||[])];if(q){items=items.filter(i=>(i.title||'').toLowerCase().includes(q)||(i.url||'').toLowerCase().includes(q)||(i.tags||'').toLowerCase().includes(q))}if(fStatus){items=items.filter(i=>i.status===fStatus)}items.sort((a,b)=>{switch(sortBy){case'profitDesc':return computeProfit(b,data.settings.feePct)-computeProfit(a,data.settings.feePct);case'dueAsc':return (a.due||'9999-12-31').localeCompare(b.due||'9999-12-31');case'titleAsc':return (a.title||'').localeCompare(b.title||'');default:return (b.created||0)-(a.created||0)}});const list=$('#list');list.innerHTML='';const tmpl=$('#itemTmpl');for(const it of items){const row=tmpl.content.firstElementChild.cloneNode(true);$('.title',row).textContent=it.title||'(ohne Titel)';$('.url',row).textContent=it.url;$('.platform',row).innerHTML=`<span class="pill">${it.platform}</span>`;const st=$('.status',row);st.innerHTML='';st.appendChild(statusBadge(it.status||'gesichtet'));$('.profit',row).textContent=fmtMoney(computeProfit(it,(readData(currentUser)?.settings?.feePct)||11));$('.due',row).innerHTML=it.due?(it.due<=todayISO()?`<span style="color:var(--warn)">${it.due}</span>`:it.due):'–';const t=$('.thumbs',row);(it.images||[]).slice(0,4).forEach(img=>{const d=document.createElement('div');d.className='thumb';d.innerHTML=`<img alt="Bild" src="${img.data}"/>`;d.title=img.name||'Bild';d.addEventListener('click',()=>window.open(img.data,'_blank'));t.appendChild(d)});$('.open',row).addEventListener('click',()=>window.open(it.url,'_blank'));$('.del',row).addEventListener('click',()=>onDelete(it.id));$('.edit',row).addEventListener('click',()=>openDealModal(it.id));$('.calc',row).addEventListener('click',()=>openProfit(it.id));list.appendChild(row)}recalcStats()}
 
-    function recalcStats(){ const data = readData(currentUser) || defaultData(); const items = data.items || []; $('#statTotal').textContent = items.length; $('#statActive').textContent = items.filter(i=>['kontaktiert','verhandlung','gelistet'].includes(i.status)).length; const profit = items.reduce((sum,i)=> sum + (i.status==='verkauft' || i.sell ? computeProfit(i, data.settings.feePct) : 0), 0); $('#statProfit').textContent = fmtMoney(profit); const due = items.filter(i=> i.due && i.due <= todayISO()).length; $('#statDue').textContent = due; $('#modeInfoText').textContent = CLOUD ? 'Cloud' : 'Lokal'; }
+    // === Profit modal ===
+    let profitContextId=null;function openProfit(id){const data=readData(currentUser)||defaultData();const it=data.items.find(x=>x.id===id);profitContextId=id;$('#pmBuy').value=it?.buy||'';$('#pmSell').value=it?.sell||'';$('#pmFeePct').value=typeof it?.feePct==='number'?it.feePct:(data.settings.feePct||11);$('#pmShip').value=it?.ship||0;updateProfitResult();$('#profitModal').classList.add('show')}
+    function updateProfitResult(){const buy=Number($('#pmBuy').value||0),sell=Number($('#pmSell').value||0),feePct=Number($('#pmFeePct').value||0),ship=Number($('#pmShip').value||0),fees=sell*(feePct/100),p=Math.round((sell-fees-ship-buy)*100)/100;$('#pmResult').textContent=fmtMoney(p)}
+    ;['pmBuy','pmSell','pmFeePct','pmShip'].forEach(id=>$('#'+id).addEventListener('input',updateProfitResult));
+    $('#profitClose').addEventListener('click',()=>$('#profitModal').classList.remove('show'));
+    $('#pmApply').addEventListener('click',async()=>{const data=readData(currentUser)||defaultData();const it=data.items.find(x=>x.id===profitContextId);if(!it)return;it.buy=Number($('#pmBuy').value||0);it.sell=Number($('#pmSell').value||0);it.feePct=Number($('#pmFeePct').value||0);it.ship=Number($('#pmShip').value||0);writeData(currentUser,data);await syncUpOne(it).catch(()=>{});$('#profitModal').classList.remove('show');renderList()});
 
-    function renderList(){ const data = readData(currentUser) || defaultData(); const q = $('#search').value.trim().toLowerCase(); const fStatus = $('#filterStatus').value; const sortBy = $('#sortBy').value; let items = [...(data.items||[])]; if(q){ items = items.filter(i=> (i.title||'').toLowerCase().includes(q) || (i.url||'').toLowerCase().includes(q) || (i.tags||'').toLowerCase().includes(q)) } if(fStatus){ items = items.filter(i=> i.status === fStatus) } items.sort((a,b)=>{ switch(sortBy){ case 'profitDesc': return computeProfit(b, data.settings.feePct) - computeProfit(a, data.settings.feePct); case 'dueAsc': return (a.due||'9999-12-31').localeCompare(b.due||'9999-12-31'); case 'titleAsc': return (a.title||'').localeCompare(b.title||''); default: return (b.created||0) - (a.created||0); } }); const list = $('#list'); list.innerHTML = ''; const tmpl = $('#itemTmpl'); for(const it of items){ const row = tmpl.content.firstElementChild.cloneNode(true); $('.title', row).textContent = it.title || '(ohne Titel)'; $('.url', row).textContent = it.url; const plat = $('.platform', row); plat.innerHTML = `<span class="pill">${it.platform}</span>`; const st = $('.status', row); st.innerHTML = ''; st.appendChild(statusBadge(it.status || 'gesichtet')); $('.profit', row).textContent = fmtMoney(computeProfit(it, data.settings.feePct)); $('.due', row).innerHTML = it.due ? (it.due <= todayISO() ? `<span style="color:var(--warn)">${it.due}</span>` : it.due) : '–'; const t = $('.thumbs', row); (it.images||[]).slice(0,4).forEach(img=>{ const d=document.createElement('div'); d.className='thumb'; d.innerHTML=`<img alt="Bild" src="${img.data}"/>`; d.title=img.name||'Bild'; d.addEventListener('click', ()=> window.open(img.data, '_blank')); t.appendChild(d); }); $('.open', row).addEventListener('click', ()=> window.open(it.url, '_blank')); $('.del', row).addEventListener('click', ()=> onDelete(it.id)); $('.edit', row).addEventListener('click', ()=> openDealModal(it.id)); $('.calc', row).addEventListener('click', ()=> openProfit(it.id)); list.appendChild(row); } recalcStats(); }
+    // === Deal Modal ===
+    let editingId=null;let pendingImages=[];
+    function resetDealForm(){editingId=null;pendingImages=[];$('#dealForm').reset();$('#dPreview').innerHTML='';$('#dealModalTitle').textContent='Neuer Deal'}
+    function openDealModal(id=null){resetDealForm();if(id){const data=readData(currentUser)||defaultData();const it=data.items.find(x=>x.id===id);if(it){editingId=id;$('#dealModalTitle').textContent='Deal bearbeiten';$('#dUrl').value=it.url||'';$('#dTitle').value=it.title||'';$('#dPlatform').value=['eBay','Kleinanzeigen','Sonstiges'].includes(it.platform)?it.platform:'Automatisch';$('#dBuy').value=it.buy||'';$('#dSell').value=it.sell||'';$('#dStatus').value=it.status||'gesichtet';$('#dDue').value=it.due||'';$('#dTags').value=it.tags||'';$('#dNote').value=it.note||'';(it.images||[]).forEach(img=>addPreview(img));pendingImages=[...(it.images||[])]}}
+      $('#dealModal').classList.add('show');setTimeout(()=>$('#dUrl').focus(),0)}
+    function addPreview(img){const wrap=document.createElement('div');wrap.className='thumb';wrap.style.position='relative';wrap.innerHTML=`<img alt="Bild" src="${img.data}"/><button title="Entfernen" style="position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.45);color:#fff;cursor:pointer"><i class="ti ti-x" style="font-size:12px"></i></button>`;wrap.querySelector('button').addEventListener('click',()=>{pendingImages=pendingImages.filter(x=>x.id!==img.id);wrap.remove()});$('#dPreview').appendChild(wrap)}
+    async function fileToDataUrl(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)})}
+    $('#dImages').addEventListener('change',async e=>{const files=[...e.target.files];for(const f of files){const data=await fileToDataUrl(f);const img={id:'img_'+randHex(6),name:f.name,data};pendingImages.push(img);addPreview(img)}e.target.value=''});
+    $('#dealCalc').addEventListener('click',()=>{$('#profitModal').classList.add('show');$('#pmBuy').value=$('#dBuy').value||0;$('#pmSell').value=$('#dSell').value||0;updateProfitResult()});
+    $('#dealClose').addEventListener('click',()=>$('#dealModal').classList.remove('show'));
+    $('#dealForm').addEventListener('submit',async e=>{e.preventDefault();const data=readData(currentUser)||defaultData();let platform=$('#dPlatform').value;const url=$('#dUrl').value.trim();if(platform==='Automatisch')platform=platformFromUrl(url);const payload={url,title:$('#dTitle').value.trim(),platform,buy:Number($('#dBuy').value||0),sell:Number($('#dSell').value||0),status:$('#dStatus').value,due:$('#dDue').value||'',tags:$('#dTags').value.trim(),note:$('#dNote').value.trim(),images:pendingImages,ship:0};if(editingId){const it=data.items.find(x=>x.id===editingId);if(it){Object.assign(it,payload);await syncUpOne(it)}}else{const it={id:'i_'+randHex(8),created:Date.now(),...payload};data.items.unshift(it);await syncUpOne(it)}writeData(currentUser,data);$('#dealModal').classList.remove('show');renderList()});
 
-    // ===== Profit modal =====
-    let profitContextId = null;
-    function openProfit(id){ const data = readData(currentUser) || defaultData(); const it = data.items.find(x=>x.id===id); profitContextId = id; $('#pmBuy').value = it?.buy || ''; $('#pmSell').value = it?.sell || ''; $('#pmFeePct').value = typeof it?.feePct === 'number' ? it.feePct : (data.settings.feePct||11); $('#pmShip').value = it?.ship || 0; updateProfitResult(); $('#profitModal').classList.add('show'); }
-    function updateProfitResult(){ const buy = Number($('#pmBuy').value||0); const sell = Number($('#pmSell').value||0); const feePct = Number($('#pmFeePct').value||0); const ship = Number($('#pmShip').value||0); const fees = sell * (feePct/100); const p = Math.round((sell - fees - ship - buy) * 100) / 100; $('#pmResult').textContent = fmtMoney(p); }
-    ['pmBuy','pmSell','pmFeePct','pmShip'].forEach(id=> $('#'+id).addEventListener('input', updateProfitResult));
-    $('#profitClose').addEventListener('click', ()=> $('#profitModal').classList.remove('show'));
-    $('#pmApply').addEventListener('click', async ()=>{ const data = readData(currentUser) || defaultData(); const it = data.items.find(x=>x.id===profitContextId); if(!it) return; it.buy = Number($('#pmBuy').value||0); it.sell = Number($('#pmSell').value||0); it.feePct = Number($('#pmFeePct').value||0); it.ship = Number($('#pmShip').value||0); writeData(currentUser, data); await syncUpOne(it).catch(()=>{}); $('#profitModal').classList.remove('show'); renderList(); });
-
-    // ===== Deal Modal (Add/Edit) =====
-    let editingId = null; let pendingImages = [];
-    function resetDealForm(){ editingId=null; pendingImages=[]; $('#dealForm').reset(); $('#dPreview').innerHTML=''; $('#dealModalTitle').textContent='Neuer Deal'; }
-    function openDealModal(id=null){ resetDealForm(); if(id){ const data = readData(currentUser)||defaultData(); const it = data.items.find(x=>x.id===id); if(it){ editingId=id; $('#dealModalTitle').textContent='Deal bearbeiten'; $('#dUrl').value=it.url||''; $('#dTitle').value=it.title||''; $('#dPlatform').value=['eBay','Kleinanzeigen','Sonstiges'].includes(it.platform)?it.platform:'Automatisch'; $('#dBuy').value=it.buy||''; $('#dSell').value=it.sell||''; $('#dStatus').value=it.status||'gesichtet'; $('#dDue').value=it.due||''; $('#dTags').value=it.tags||''; $('#dNote').value=it.note||''; (it.images||[]).forEach(img=> addPreview(img)); pendingImages = [...(it.images||[])]; } }
-      $('#dealModal').classList.add('show'); setTimeout(()=>$('#dUrl').focus(), 0); }
-    function addPreview(img){ const wrap=document.createElement('div'); wrap.className='thumb'; wrap.style.position='relative'; wrap.innerHTML=`<img alt="Bild" src="${img.data}"/><button title="Entfernen" style="position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.45);color:#fff;cursor:pointer"><i class="ti ti-x" style="font-size:12px"></i></button>`; wrap.querySelector('button').addEventListener('click', ()=>{ pendingImages = pendingImages.filter(x=>x.id!==img.id); wrap.remove(); }); $('#dPreview').appendChild(wrap); }
-    async function fileToDataUrl(file){ return new Promise((res, rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
-    $('#dImages').addEventListener('change', async (e)=>{ const files=[...e.target.files]; for(const f of files){ const data=await fileToDataUrl(f); const img={ id:'img_'+randHex(6), name:f.name, data }; pendingImages.push(img); addPreview(img); } e.target.value=''; });
-    $('#dealCalc').addEventListener('click', ()=>{ $('#profitModal').classList.add('show'); $('#pmBuy').value = $('#dBuy').value||0; $('#pmSell').value=$('#dSell').value||0; updateProfitResult(); });
-    $('#dealClose').addEventListener('click', ()=> $('#dealModal').classList.remove('show'));
-
-    $('#dealForm').addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const data = readData(currentUser) || defaultData();
-      let platform = $('#dPlatform').value; const url=$('#dUrl').value.trim(); if(platform==='Automatisch') platform = platformFromUrl(url);
-      const payload = { url, title: $('#dTitle').value.trim(), platform, buy: Number($('#dBuy').value||0), sell: Number($('#dSell').value||0), status: $('#dStatus').value, due: $('#dDue').value||'', tags: $('#dTags').value.trim(), note: $('#dNote').value.trim(), images: pendingImages, ship: 0 };
-      if(editingId){ const it = data.items.find(x=>x.id===editingId); if(it){ Object.assign(it, payload); } await syncUpOne(it); }
-      else { const it = { id: 'i_'+randHex(8), created: Date.now(), ...payload }; data.items.unshift(it); await syncUpOne(it); }
-      writeData(currentUser, data);
-      $('#dealModal').classList.remove('show'); renderList();
-    });
-
-    // ===== Tiles actions =====
-    $('#tileAdd').addEventListener('click', ()=> openDealModal());
-    $('#tileTemplates').addEventListener('click', ()=> $('#tplModal').classList.add('show'));
-    $('#tplClose').addEventListener('click', ()=> $('#tplModal').classList.remove('show'));
-    $('#tileImportExport').addEventListener('click', ()=>{
-      const data = readData(currentUser)||defaultData();
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `reselldeck_${currentUser?.replace(/[^a-z0-9]/gi,'_')||'export'}.json`; a.click(); URL.revokeObjectURL(a.href);
-    });
-    $('#tileSettings').addEventListener('click', ()=> alert('Settings (soon): Gebühren-Default, Storage, E-Mail‑Bridge…'));
+    // === Tiles & FAB ===
+    $('#tileAdd').addEventListener('click',()=>openDealModal());
+    $('#fabAdd').addEventListener('click',()=>openDealModal());
+    $('#tileTemplates').addEventListener('click',()=>$('#tplModal').classList.add('show'));
+    $('#tplClose').addEventListener('click',()=>$('#tplModal').classList.remove('show'));
+    $('#tileImportExport').addEventListener('click',()=>{const data=readData(currentUser)||defaultData();const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`reselldeck_${currentUser?.replace(/[^a-z0-9]/gi,'_')||'export'}.json`;a.click();URL.revokeObjectURL(a.href)});
+    $('#tileSettings').addEventListener('click',()=>alert('Settings (soon): Gebühren-Default, Storage, E-Mail‑Bridge…'));
 
     // Copy templates
-    async function copyText(t){ try { await navigator.clipboard.writeText(t); alert('Vorlage kopiert!') } catch { prompt('Kopiere manuell:', t) } }
-    $('#copyTpl1').addEventListener('click', ()=> copyText($('#tpl1').textContent));
-    $('#copyTpl2').addEventListener('click', ()=> copyText($('#tpl2').textContent));
+    async function copyText(t){try{await navigator.clipboard.writeText(t);alert('Vorlage kopiert!')}catch{prompt('Kopiere manuell:',t)}}
+    $('#copyTpl1').addEventListener('click',()=>copyText($('#tpl1').textContent));
+    $('#copyTpl2').addEventListener('click',()=>copyText($('#tpl2').textContent));
 
-    // ===== Auth switching =====
-    const loginForm = $('#loginForm');
-    const registerForm = $('#registerForm');
-    $('#tabLogin').addEventListener('click', ()=>{ registerForm.classList.add('hidden'); loginForm.classList.remove('hidden'); });
-    $('#tabRegister').addEventListener('click', ()=>{ loginForm.classList.add('hidden'); registerForm.classList.remove('hidden'); });
+    // Search & filters
+    $('#search').addEventListener('input',renderList);$('#filterStatus').addEventListener('change',renderList);$('#sortBy').addEventListener('change',renderList);window.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='/'){e.preventDefault();$('#search').focus()}});
 
-    // ===== Local Auth (nur wenn kein CLOUD) =====
+    // === Auth switching buttons ===
+    const loginForm=$('#loginForm'); const registerForm=$('#registerForm');
+    $('#tabLogin').addEventListener('click',()=>{registerForm.classList.add('hidden');loginForm.classList.remove('hidden')});
+    $('#tabRegister').addEventListener('click',()=>{loginForm.classList.add('hidden');registerForm.classList.remove('hidden')});
+
+    // === Local Auth (nur ohne Cloud) ===
     async function attachLocalAuth(){
-      registerForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const email=$('#regEmail').value.trim().toLowerCase(); const pw=$('#regPassword').value; const pw2=$('#regPassword2').value; if(pw.length<8) return alert('Passwort zu kurz (min. 8 Zeichen).'); if(pw!==pw2) return alert('Passwörter stimmen nicht überein.'); const users=readUsers(); if(users[email]) return alert('E-Mail bereits registriert.'); const salt=randHex(16); const hash=await sha256Hex(pw+':'+salt); users[email]={salt,hash,created:Date.now()}; writeUsers(users); writeData(email, defaultData()); alert('Account erstellt! Du kannst dich jetzt einloggen.'); $('#tabLogin').click(); });
-      loginForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const email=$('#loginEmail').value.trim().toLowerCase(); const pw=$('#loginPassword').value; const users=readUsers(); const u=users[email]; if(!u) return alert('Unbekannte E-Mail. Bitte registrieren.'); const hash=await sha256Hex(pw+':'+u.salt); if(hash!==u.hash) return alert('Falsches Passwort.'); currentUser=email; setSession(email); $('#userEmail').textContent=email; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent='Lokal'; if(!(readData(email)?.items?.length)) seedSamples(); renderList(); recalcStats(); });
-      $('#logoutBtn').addEventListener('click', ()=>{ currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#appHeader').classList.add('hidden'); $('#loginEmail').focus(); });
+      loginForm.addEventListener('submit',async e=>{e.preventDefault();const email=$('#loginEmail').value.trim().toLowerCase();const pw=$('#loginPassword').value;const users=readUsers();const u=users[email];if(!u)return alert('Unbekannte E-Mail. Bitte registrieren.');const hash=await sha256Hex(pw+':'+u.salt);if(hash!==u.hash)return alert('Falsches Passwort.');currentUser=email;setSession(email);$('#userEmail').textContent=email;showApp('Lokal');if(!(readData(email)?.items?.length))seedSamples();renderList();recalcStats()});
+      registerForm.addEventListener('submit',async e=>{e.preventDefault();const email=$('#regEmail').value.trim().toLowerCase();const pw=$('#regPassword').value;const pw2=$('#regPassword2').value;if(pw.length<8)return alert('Passwort zu kurz (min. 8 Zeichen).');if(pw!==pw2)return alert('Passwörter stimmen nicht überein.');const users=readUsers();if(users[email])return alert('E-Mail bereits registriert.');const salt=randHex(16);const hash=await sha256Hex(pw+':'+salt);users[email]={salt,hash,created:Date.now()};writeUsers(users);writeData(email,defaultData());alert('Account erstellt! Du kannst dich jetzt einloggen.');$('#tabLogin').click()});
+      $('#logoutBtn').addEventListener('click',()=>{currentUser=null;setSession(null);showAuth()})
     }
 
-    // ===== Cloud Auth (Supabase) =====
+    // === Cloud Auth (Supabase) ===
     async function attachCloudAuth(){
-      registerForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const email=$('#regEmail').value.trim().toLowerCase(); const password=$('#regPassword').value; const pw2=$('#regPassword2').value; if(password.length<8) return alert('Passwort zu kurz (min. 8 Zeichen).'); if(password!==pw2) return alert('Passwörter stimmen nicht überein.'); const { error } = await sb.auth.signUp({ email, password }); if(error) return alert(error.message); alert('Account erstellt! Prüfe ggf. dein Postfach (Bestätigung).'); $('#tabLogin').click(); });
-      loginForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const email=$('#loginEmail').value.trim().toLowerCase(); const password=$('#loginPassword').value; const { data, error } = await sb.auth.signInWithPassword({ email, password }); if(error) return alert(error.message); currentUser=data.user.email; setSession(currentUser); $('#userEmail').textContent=currentUser; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent='Cloud'; await syncDown(); renderList(); recalcStats(); });
-      $('#logoutBtn').addEventListener('click', async ()=>{ await sb.auth.signOut(); currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#appHeader').classList.add('hidden'); $('#loginEmail').focus(); });
+      loginForm.addEventListener('submit',async e=>{e.preventDefault();const email=$('#loginEmail').value.trim().toLowerCase();const password=$('#loginPassword').value;const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)return alert(error.message);currentUser=data.user.email;setSession(currentUser);$('#userEmail').textContent=currentUser;await syncDown();showApp('Cloud');renderList();recalcStats()});
+      registerForm.addEventListener('submit',async e=>{e.preventDefault();const email=$('#regEmail').value.trim().toLowerCase();const password=$('#regPassword').value;const pw2=$('#regPassword2').value;if(password.length<8)return alert('Passwort zu kurz (min. 8 Zeichen).');if(password!==pw2)return alert('Passwörter stimmen nicht überein.');const {error}=await sb.auth.signUp({email,password});if(error)return alert(error.message);alert('Account erstellt! Prüfe ggf. dein Postfach (Bestätigung).');$('#tabLogin').click()});
+      $('#logoutBtn').addEventListener('click',async()=>{await sb.auth.signOut();currentUser=null;setSession(null);showAuth()})
     }
 
-    // ===== Cloud sync helpers =====
-    async function syncUpOne(it){ if(!CLOUD) return; try { const { data: u } = await sb.auth.getUser(); const row = toRow(it, u?.user?.id); await sb.from('deals').upsert(row); } catch(e){ console.warn(e); } }
-    async function syncDown(){ if(!CLOUD) return; const { data: rows, error } = await sb.from('deals').select('*').order('created', { ascending: false }); if(error){ console.warn(error); return; } const email = (await sb.auth.getUser()).data.user.email; currentUser = email; setSession(email); $('#userEmail').textContent = email; const data = readData(email) || defaultData(); data.items = (rows||[]).map(fromRow); writeData(email, data); }
-    function toRow(it, userId){ return { id: it.id, user_id: userId, created: it.created || Date.now(), url: it.url || null, title: it.title || null, platform: it.platform || null, buy: it.buy ?? null, sell: it.sell ?? null, fee_pct: (typeof it.feePct==='number'? it.feePct : null), ship: it.ship ?? null, status: it.status || null, due: it.due || null, tags: it.tags || null, note: it.note || null }; }
-    function fromRow(r){ return { id: r.id, created: r.created, url: r.url, title: r.title, platform: r.platform||'Sonstiges', buy: Number(r.buy ?? 0), sell: Number(r.sell ?? 0), feePct: typeof r.fee_pct==='number'? r.fee_pct : undefined, ship: Number(r.ship ?? 0), status: r.status||'gesichtet', due: r.due || '', tags: r.tags || '', note: r.note || '', images: [] }; }
+    // === Cloud sync ===
+    async function syncUpOne(it){if(!CLOUD)return;try{const {data:u}=await sb.auth.getUser();const row=toRow(it,u?.user?.id);await sb.from('deals').upsert(row)}catch(e){console.warn(e)}}
+    async function syncDown(){if(!CLOUD)return;const {data:rows,error}=await sb.from('deals').select('*').order('created',{ascending:false});if(error){console.warn(error);return}const email=(await sb.auth.getUser()).data.user.email;currentUser=email;setSession(email);$('#userEmail').textContent=email;const data=readData(email)||defaultData();data.items=(rows||[]).map(fromRow);writeData(email,data)}
+    const toRow=(it,user_id)=>({id:it.id,user_id,created:it.created||Date.now(),url:it.url||null,title:it.title||null,platform:it.platform||null,buy:it.buy??null,sell:it.sell??null,fee_pct:(typeof it.feePct==='number'?it.feePct:null),ship:it.ship??null,status:it.status||null,due:it.due||null,tags:it.tags||null,note:it.note||null});
+    const fromRow=r=>({id:r.id,created:r.created,url:r.url,title:r.title,platform:r.platform||'Sonstiges',buy:Number(r.buy??0),sell:Number(r.sell??0),feePct:typeof r.fee_pct==='number'?r.fee_pct:undefined,ship:Number(r.ship??0),status:r.status||'gesichtet',due:r.due||'',tags:r.tags||'',note:r.note||'',images:[]});
 
-    // Export/Import via footer tile handled oben
+    // === Seed (nur lokal) ===
+    function seedSamples(){const email=currentUser;const data=readData(email)||defaultData();if((data.items||[]).length)return;const now=Date.now();data.items=[{id:'i_'+randHex(6),created:now-300000,url:'https://www.kleinanzeigen.de/s-anzeige/sony-a7-iii-kit/1234567890',title:'Sony A7 III (Kit) – Top Zustand',platform:'Kleinanzeigen',buy:750,sell:1050,feePct:0,ship:0,status:'verhandlung',due:todayISO(),tags:'kamera, sony, vollformat',note:'Mit 2 Akkus, 24-70mm. Angebot 780€ abgegeben.',images:[]},{id:'i_'+randHex(6),created:now-7200000,url:'https://www.ebay.de/itm/Apple-iPhone-13/10000001',title:'iPhone 13 128GB Midnight – OVP',platform:'eBay',buy:380,sell:520,feePct:11,ship:5.49,status:'kontaktiert',due:'',tags:'iphone, 128gb',note:'Leichte Kratzer, Akku 87%.',images:[]},{id:'i_'+randHex(6),created:now-17200000,url:'https://www.kleinanzeigen.de/s-anzeige/dyson-v11/2222222',title:'Dyson V11 – Zubehör komplett',platform:'Kleinanzeigen',buy:120,sell:230,feePct:0,ship:0,status:'verkauft',due:'',tags:'haushalt',note:'Schon verkauft an Max. Abholung erledigt.',images:[]}];writeData(email,data)}
 
-    // Seed sample data (nur lokal)
-    function seedSamples(){ const email = currentUser; const data = readData(email) || defaultData(); if((data.items||[]).length) return; const now = Date.now(); data.items = [ { id:'i_'+randHex(6), created: now-300000, url:'https://www.kleinanzeigen.de/s-anzeige/sony-a7-iii-kit/1234567890', title:'Sony A7 III (Kit) – Top Zustand', platform:'Kleinanzeigen', buy:750, sell:1050, feePct:0, ship:0, status:'verhandlung', due: todayISO(), tags:'kamera, sony, vollformat', note:'Mit 2 Akkus, 24-70mm. Angebot 780€ abgegeben.', images: [] }, { id:'i_'+randHex(6), created: now-7200000, url:'https://www.ebay.de/itm/Apple-iPhone-13/10000001', title:'iPhone 13 128GB Midnight – OVP', platform:'eBay', buy:380, sell:520, feePct:11, ship:5.49, status:'kontaktiert', due:'', tags:'iphone, 128gb', note:'Leichte Kratzer, Akku 87%.', images: [] }, { id:'i_'+randHex(6), created: now-17200000, url:'https://www.kleinanzeigen.de/s-anzeige/dyson-v11/2222222', title:'Dyson V11 – Zubehör komplett', platform:'Kleinanzeigen', buy:120, sell:230, feePct:0, ship:0, status:'verkauft', due:'', tags:'haushalt', note:'Schon verkauft an Max. Abholung erledigt.', images: [] } ]; writeData(email, data); }
+    // === View helpers ===
+    function showApp(mode){$('#authView').classList.add('hidden');$('#appView').classList.remove('hidden');$('#appHeader').classList.remove('hidden');$('#modeText').textContent=mode;$('#modeInfoText').textContent=mode}
+    function showAuth(){$('#authView').classList.remove('hidden');$('#appView').classList.add('hidden');$('#appHeader').classList.add('hidden')}
 
-    // ===== Global UI =====
-    $('#search').addEventListener('input', renderList);
-    $('#filterStatus').addEventListener('change', renderList);
-    $('#sortBy').addEventListener('change', renderList);
-    window.addEventListener('keydown', (e)=>{ if(e.ctrlKey && e.key === '/') { e.preventDefault(); $('#search').focus() } });
-
-    // ===== Init (Cloud ODER Lokal) =====
+    // === Init ===
     (async function init(){
-      if(CLOUD){ await attachCloudAuth(); const { data } = await sb.auth.getSession(); if(data?.session){ const email = data.session.user.email; currentUser = email; setSession(email); $('#userEmail').textContent = email; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent = 'Cloud'; await syncDown(); renderList(); recalcStats(); } return; }
-      await attachLocalAuth(); const sess = getSession(); if(sess && readUsers()[sess]){ currentUser = sess; $('#userEmail').textContent = sess; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent = 'Lokal'; if(!(readData(sess)?.items?.length)) seedSamples(); renderList(); }
+      // Immer als Start: Auth sichtbar, App/Head ausgeblendet
+      showAuth();
+      if(CLOUD){
+        await attachCloudAuth();
+        const { data } = await sb.auth.getSession();
+        if(data?.session){ await syncDown(); showApp('Cloud'); renderList(); recalcStats(); }
+        return; // Cloud-Modus → kein lokaler Fallback
+      }
+      await attachLocalAuth();
+      const sess=getSession();
+      if(sess && readUsers()[sess]){ currentUser=sess; $('#userEmail').textContent=sess; showApp('Lokal'); if(!(readData(sess)?.items?.length)) seedSamples(); renderList(); recalcStats(); }
     })();
   </script>
 </body>
