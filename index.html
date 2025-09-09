@@ -11,7 +11,7 @@
   <style>
     :root {
       --bg: #0b0f1a;
-      --card: rgba(16, 20, 35, 0.72);
+      --surface: rgba(16, 20, 35, 0.72);
       --muted: #9aa4bf;
       --text: #e8edff;
       --accent: #7c4dff;
@@ -30,8 +30,7 @@
     html, body { height: 100% }
     body {
       margin: 0; background: var(--bg); color: var(--text); font-family: 'Space Grotesk', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
-      background-image: var(--gradient);
-      background-attachment: fixed; 
+      background-image: var(--gradient); background-attachment: fixed; 
     }
 
     a { color: var(--accent2); text-decoration: none }
@@ -39,62 +38,40 @@
 
     .container { max-width: 1200px; margin: 0 auto; padding: 28px; }
 
+    /* Clean Header */
+    header.app { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(10px); background: rgba(11,15,26,.65); border-bottom: 1px solid rgba(255,255,255,.06); }
+    header.app .bar { display:flex; align-items:center; justify-content:space-between; gap:16px; padding: 16px 24px; }
     .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:.5px; }
-    .brand .logo { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--accent2)); position: relative; box-shadow: 0 8px 28px rgba(124,77,255,.35), 0 8px 28px rgba(0,229,255,.25); }
-    .brand .logo::after { content: ""; position: absolute; inset: 8px; border-radius: 9px; background: rgba(255,255,255,.2); filter: blur(6px); }
-
-    .card { background: var(--card); backdrop-filter: var(--glass); border-radius: var(--radius); box-shadow: var(--shadow); }
-    .card.pad { padding: 18px; }
-    .row { display:flex; gap: 18px; flex-wrap: wrap }
-
-    header.app { display:flex; align-items:center; justify-content:space-between; gap: 16px; padding: 18px 24px; position: sticky; top: 0; z-index: 5; background: linear-gradient(180deg, rgba(11,15,26,.88), rgba(11,15,26,.55) 60%, rgba(11,15,26,0)); border-bottom: 1px solid rgba(255,255,255,.06); }
-
-    .chip { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--muted); font-size: 12px; }
-
-    input, select, textarea, button { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: var(--text); border-radius: 12px; padding: 12px 12px; outline: none; width: 100%; font: inherit; }
-    input::placeholder, textarea::placeholder { color: #b9c3e4aa }
-    label { font-size: 12px; color: var(--muted); margin-bottom: 8px; display:block }
-
-    .btn { cursor: pointer; user-select: none; transition: .25s ease; border-radius: 12px; }
-    .btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; color: #0a0e18; font-weight: 700; }
-    .btn.ghost { background: transparent; border: 1px dashed rgba(255,255,255,.18); }
+    .brand .logo { width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--accent2)); box-shadow: 0 8px 28px rgba(124,77,255,.35), 0 8px 28px rgba(0,229,255,.25); }
+    .searchbar { display:flex; align-items:center; gap:10px; flex:1; max-width: 520px }
+    .searchbar input { width: 100%; padding: 12px 12px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: var(--text); border-radius: 12px; outline: none; }
+    .pill { border-radius: 999px; padding: 6px 10px; background: rgba(255,255,255,.06); font-size:12px; color: var(--muted) }
+    .btn { cursor: pointer; user-select: none; transition: .22s ease; border-radius: 12px; padding: 10px 12px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); color: var(--text) }
+    .btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; color:#0a0e18; font-weight:700 }
     .btn:hover { transform: translateY(-1px); filter: brightness(1.05) }
 
-    .auth-wrap { min-height: 100vh; display:grid; place-items:center; padding: 28px }
-    .auth { max-width: 880px; width: 100%; display:grid; grid-template-columns: 1.2fr 1fr; overflow: hidden }
-    .auth .left { padding: 28px; position:relative }
-    .auth .right { padding: 28px; background: linear-gradient(160deg, rgba(124,77,255,.2), rgba(0,229,255,.12)); }
-    .auth h1 { margin: 0 0 8px 0; }
-    .auth p { margin: 0; color: var(--muted) }
-    .auth .tabbar { display:flex; gap:8px; margin: 18px 0 12px }
-    .auth .tabbar button { flex:1; padding: 10px 12px }
-
-    form.grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px }
-    form.grid .span2 { grid-column: 1 / -1 }
-
-    .hidden { display:none !important }
-
-    /* Dashboard */
-    .layout { display:grid; grid-template-columns: 300px 1fr; gap: 18px; }
-    @media (max-width: 960px) { .layout { grid-template-columns: 1fr } }
-
-    .searchbar { display:flex; align-items:center; gap:12px; flex:1 }
-    .searchbar input { width: 100% }
-
-    .stats { display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px }
+    /* Cards & layout */
+    .card { background: var(--surface); backdrop-filter: var(--glass); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .pad { padding: 20px }
+    .stats { display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px }
     @media (max-width: 960px) { .stats { grid-template-columns: repeat(2, 1fr) } }
-    .stat { padding:16px; position:relative; overflow:hidden }
+    .stat { position:relative; overflow:hidden }
     .stat .label { color: var(--muted); font-size: 12px }
-    .stat .value { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 22px; margin-top:6px }
-    .stat .glow { position:absolute; inset: -1px; border-radius: var(--radius); pointer-events:none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+    .stat .value { font-family: 'JetBrains Mono', ui-monospace; font-size: 24px; margin-top:6px }
 
-    .list { display:grid; gap: 12px }
+    /* Quick actions */
+    .qa { display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px }
+    @media (max-width: 960px) { .qa { grid-template-columns: repeat(2, 1fr) } }
+    .qa .tile { display:flex; flex-direction:column; gap:8px; justify-content:center; align-items:flex-start; padding: 18px; min-height: 120px; border: 1px dashed rgba(255,255,255,.12) }
+    .qa .tile h4 { margin:0 }
+    .qa .tile .muted { color: var(--muted); font-size: 12px }
 
-    .item { display:grid; grid-template-columns: 1fr 160px 140px 110px 90px 40px; gap: 10px; align-items:center; padding: 10px 12px; }
+    /* Deals list */
+    .list { display:grid; gap: 10px; margin-top: 16px }
+    .item { display:grid; grid-template-columns: 1fr 160px 140px 110px 120px 40px; gap: 10px; align-items:center; padding: 12px }
     .item .title { font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
     .item .url { font-size:12px; color: var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
-    .item .platform { font-size:12px; }
-    .item .badge { padding:6px 10px; border-radius: 999px; font-size:12px; display:inline-flex; align-items:center; gap:6px }
+    .badge { padding:6px 10px; border-radius: 999px; font-size:12px; display:inline-flex; align-items:center; gap:6px }
     .badge.sourced { background: rgba(124,77,255,.18); color: #cbb6ff }
     .badge.contacted { background: rgba(0,229,255,.18); color: #a9f6ff }
     .badge.negotiating { background: rgba(255,176,32,.18); color: #ffd391 }
@@ -104,288 +81,261 @@
 
     .actions { display:flex; gap:8px; justify-content:flex-end }
     .iconbtn { width:36px; height:36px; display:grid; place-items:center; border-radius: 10px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); cursor: pointer }
-    .iconbtn:hover { filter: brightness(1.1) }
+
+    .thumbs { display:flex; gap:6px; flex-wrap: wrap }
+    .thumb { width: 34px; height: 34px; border-radius: 8px; overflow:hidden; border: 1px solid rgba(255,255,255,.1) }
+    .thumb img { width:100%; height:100%; object-fit: cover }
 
     .subtle { color: var(--muted); font-size: 12px }
+    .divider { height:1px; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.12), rgba(255,255,255,0)); margin: 14px 0 }
+
+    /* Modal */
+    .modal { position: fixed; inset: 0; display:none; place-items:center; background: rgba(3,6,10,.6); z-index: 50 }
+    .modal.show { display:grid }
+    .dialog { max-width: 820px; width: calc(100% - 36px); }
+
+    /* Forms */
+    input, select, textarea { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: var(--text); border-radius: 12px; padding: 12px 12px; outline: none; width: 100%; font: inherit; }
+    input::placeholder, textarea::placeholder { color: #b9c3e4aa }
+    label { font-size: 12px; color: var(--muted); margin-bottom: 8px; display:block }
+    form.grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px }
+    form.grid .span2 { grid-column: 1 / -1 }
 
     .footer { margin-top: 24px; display:flex; gap:12px; flex-wrap:wrap; justify-content: space-between; align-items:center }
 
-    .divider { height:1px; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.12), rgba(255,255,255,0)); margin: 14px 0 }
-
-    .template { background: rgba(255,255,255,.05); padding: 12px; border-radius: 12px; border: 1px dashed rgba(255,255,255,.12) }
-    .template .row { align-items:center }
-
-    .modal { position: fixed; inset: 0; display:none; place-items:center; background: rgba(3,6,10,.6); z-index: 20 }
-    .modal .dialog { max-width: 520px; width: calc(100% - 36px); }
-    .modal.show { display:grid }
-
-    .kicker { font-size:12px; color: var(--muted); text-transform: uppercase; letter-spacing: .14em }
-
-    .taglist { display:flex; gap:8px; flex-wrap: wrap }
-    .tag { background: rgba(255,255,255,.08); padding: 6px 10px; border-radius: 999px; font-size: 12px }
-
-    .pill { border-radius: 999px; padding: 6px 10px; background: rgba(255,255,255,.06); font-size:12px }
-
-    .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap: 12px }
-    @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr } }
-
-    .note { font-size: 12px; color: var(--muted) }
-
-    .comingsoon { opacity: .75; pointer-events: none }
+    .hidden { display:none !important }
   </style>
 </head>
 <body>
+  <!-- Header (versteckt bis Login) -->
   <header id="appHeader" class="app hidden">
-    <div class="brand">
-      <div class="logo"></div>
-      <div>
+    <div class="bar">
+      <div class="brand">
+        <div class="logo"></div>
         <div>ResellDeck</div>
-        <div class="subtle">Kleinanzeigen & eBay Workflow, aber hübsch ✨</div>
       </div>
+      <div class="searchbar">
+        <i class="ti ti-search"></i>
+        <input id="search" placeholder="Suche Links, Titel, Tags… (Strg+/)" />
+      </div>
+      <span class="pill" id="modeText">Lokal</span>
+      <span class="pill" id="userEmail">Gast</span>
+      <button class="btn" id="logoutBtn"><i class="ti ti-logout"></i>&nbsp;Logout</button>
     </div>
-    <div class="searchbar">
-      <i class="ti ti-search"></i>
-      <input id="search" placeholder="Suche Links, Titel, Tags… (Strg+/)" />
-    </div>
-    <div class="chip" id="modeChip"><i class="ti ti-cloud"></i><span id="modeText">Lokal</span></div>
-    <div class="chip" id="userChip"><i class="ti ti-user"></i><span id="userEmail">Gast</span></div>
-    <button class="btn ghost" id="logoutBtn"><i class="ti ti-logout"></i>&nbsp;Logout</button>
   </header>
 
-  <div id="authView" class="auth-wrap">
-    <div class="auth card">
-      <div class="left">
-        <div class="brand" style="margin-bottom:12px">
-          <div class="logo" style="width:32px;height:32px"></div>
-          <div>ResellDeck</div>
-        </div>
-        <h1>Dein futuristisches Reseller-Dashboard</h1>
-        <p>
-          Speichere Links, behalte Deals im Blick, nutze Vorlagen – alles im Browser. <strong>Demo-Login</strong> ohne Server, Daten liegen nur in <em>deinem</em> Browser.
-          <br><span class="note">Optionaler Cloud‑Sync via Supabase ist im Code vorbereitet (siehe Hinweis rechts).</span>
-        </p>
-        <div class="divider"></div>
-        <div class="tabbar">
-          <button id="tabLogin" class="btn">Login</button>
-          <button id="tabRegister" class="btn ghost">Account erstellen</button>
-        </div>
-        <form id="loginForm" class="grid">
-          <div class="span2">
-            <label>E-Mail</label>
-            <input required type="email" id="loginEmail" placeholder="du@beispiel.de" autocomplete="username" />
-          </div>
-          <div class="span2">
-            <label>Passwort</label>
-            <input required type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" />
-          </div>
-          <div class="span2">
-            <button class="btn primary" type="submit">Einloggen</button>
-          </div>
-        </form>
-
-        <form id="registerForm" class="grid hidden">
-          <div class="span2">
-            <label>E-Mail</label>
-            <input required type="email" id="regEmail" placeholder="du@beispiel.de" autocomplete="username" />
-          </div>
-          <div>
-            <label>Passwort</label>
-            <input required type="password" id="regPassword" placeholder="mind. 8 Zeichen" autocomplete="new-password" />
-          </div>
-          <div>
-            <label>Passwort (Wiederholen)</label>
-            <input required type="password" id="regPassword2" placeholder="nochmal" autocomplete="new-password" />
-          </div>
-          <div class="span2">
-            <button class="btn primary" type="submit">Account erstellen</button>
-          </div>
-          <p class="note span2">Hinweis: Client-Login (LocalStorage) oder 
-            <span class="pill">Supabase‑Auth</span> wenn konfiguriert.</p>
-        </form>
+  <!-- Auth View -->
+  <div id="authView" class="container" style="min-height:100vh; display:grid; place-items:center">
+    <div class="card pad" style="max-width:880px; width:100%">
+      <div class="brand" style="margin-bottom:12px">
+        <div class="logo" style="width:32px;height:32px"></div>
+        <div>ResellDeck</div>
       </div>
-      <div class="right">
-        <div class="kicker">Features</div>
-        <ul>
-          <li>🔗 Link-Speicher mit Status-Workflow</li>
-          <li>💬 Verhandlungs-Vorlagen & Copy-Buttons</li>
-          <li>📈 Profit-Rechner & Mini-Statistiken</li>
-          <li>⏰ Erinnerungen/Deadlines pro Deal</li>
-          <li>⬇️ Export/⬆️ Import als JSON</li>
-          <li>🤖 <em>Coming Soon:</em> AI-Listing-Optimierer</li>
-        </ul>
-        <div class="divider"></div>
-        <div class="kicker">Cloud‑Sync (optional)</div>
-        <p class="note">
-          Trage in der <code>&lt;script type="module"&gt;</code>-Sektion deine 
-          <strong>SUPABASE_URL</strong> &amp; <strong>SUPABASE_ANON_KEY</strong> ein.
-          Danach ist Login/Sync automatisch online.
-        </p>
-        <div class="divider"></div>
-        <div class="kicker">Demo-Zugang</div>
-        <p class="note">Du kannst dir einfach selbst einen Account anlegen. Alternativ: <code class="pill">demo@deck.dev</code> / <code class="pill">demo1234</code> (lokal).</p>
+      <h1 style="margin:0 0 6px">Dein cleanes Reseller-Dashboard</h1>
+      <p class="subtle">Login lokal (ohne Server) oder mit Supabase-Auth – je nach Konfiguration.</p>
+      <div class="divider"></div>
+      <div class="row" style="gap:10px">
+        <button id="tabLogin" class="btn primary" style="flex:1">Login</button>
+        <button id="tabRegister" class="btn" style="flex:1">Account erstellen</button>
+      </div>
+
+      <form id="loginForm" class="grid" style="margin-top:12px">
+        <div class="span2"><label>E-Mail</label><input required type="email" id="loginEmail" placeholder="du@beispiel.de" autocomplete="username" /></div>
+        <div class="span2"><label>Passwort</label><input required type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" /></div>
+        <div class="span2"><button class="btn primary" type="submit">Einloggen</button></div>
+      </form>
+
+      <form id="registerForm" class="grid hidden" style="margin-top:12px">
+        <div class="span2"><label>E-Mail</label><input required type="email" id="regEmail" placeholder="du@beispiel.de" autocomplete="username" /></div>
+        <div><label>Passwort</label><input required type="password" id="regPassword" placeholder="mind. 8 Zeichen" autocomplete="new-password" /></div>
+        <div><label>Passwort (Wiederholen)</label><input required type="password" id="regPassword2" placeholder="nochmal" autocomplete="new-password" /></div>
+        <div class="span2"><button class="btn primary" type="submit">Account erstellen</button></div>
+        <p class="subtle span2">Hinweis: Client-Login (LocalStorage) oder Supabase‑Auth – je nach Konfiguration. Kein doppelter Modus gleichzeitig → sauber & stabil.</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- App View -->
+  <main id="appView" class="container hidden">
+    <!-- Dashboard Cards -->
+    <div class="stats">
+      <div class="card pad stat"><div class="label">Gespeicherte Links</div><div id="statTotal" class="value">0</div></div>
+      <div class="card pad stat"><div class="label">Aktiv (Kontakt/Laufend)</div><div id="statActive" class="value">0</div></div>
+      <div class="card pad stat"><div class="label">Gewinn (prognostiziert)</div><div id="statProfit" class="value">€0</div></div>
+      <div class="card pad stat"><div class="label">Fällige Erinnerungen</div><div id="statDue" class="value">0</div></div>
+    </div>
+
+    <!-- Quick actions as tiles -->
+    <div class="qa">
+      <div class="card tile" id="tileAdd">
+        <i class="ti ti-square-rounded-plus" style="font-size:22px"></i>
+        <h4>Neuen Deal anlegen</h4>
+        <div class="muted">URL, Preisziele, Status & Bilder</div>
+      </div>
+      <div class="card tile" id="tileTemplates">
+        <i class="ti ti-message-2" style="font-size:22px"></i>
+        <h4>Erstkontakt & Antworten</h4>
+        <div class="muted">Schnell kopieren & personalisieren</div>
+      </div>
+      <div class="card tile" id="tileImportExport">
+        <i class="ti ti-arrows-left-right" style="font-size:22px"></i>
+        <h4>Import / Export</h4>
+        <div class="muted">JSON sichern oder wiederherstellen</div>
+      </div>
+      <div class="card tile" id="tileSettings">
+        <i class="ti ti-settings" style="font-size:22px"></i>
+        <h4>Einstellungen</h4>
+        <div class="muted">Gebühren, Sync, Account</div>
+      </div>
+    </div>
+
+    <!-- Deals Section -->
+    <div class="card pad" style="margin-top:16px">
+      <div class="row" style="align-items:center; justify-content:space-between">
+        <h3 style="margin:0">Deine Deals</h3>
+        <div class="row" style="align-items:center">
+          <select id="filterStatus">
+            <option value="">Alle Status</option>
+            <option value="gesichtet">Gesichtet</option>
+            <option value="kontaktiert">Kontaktiert</option>
+            <option value="verhandlung">Verhandlung</option>
+            <option value="gekauft">Gekauft</option>
+            <option value="gelistet">Gelistet</option>
+            <option value="verkauft">Verkauft</option>
+          </select>
+          <select id="sortBy">
+            <option value="createdDesc">Neueste zuerst</option>
+            <option value="profitDesc">Höchster Profit</option>
+            <option value="dueAsc">Nächste Fälligkeit</option>
+            <option value="titleAsc">Titel A→Z</option>
+          </select>
+        </div>
+      </div>
+      <div class="list" id="list"></div>
+    </div>
+
+    <div class="footer">
+      <div class="subtle">💡 Tipp: Mit <strong>Strg+/</strong> öffnest du die Suche. In der Deal-Karte siehst du Mini-Thumbnails deiner Bilder.</div>
+      <div class="pill" id="modeInfo">Modus: <span id="modeInfoText">Lokal</span></div>
+    </div>
+  </main>
+
+  <!-- Deal Modal (Add/Edit) -->
+  <div id="dealModal" class="modal">
+    <div class="dialog card pad">
+      <div class="row" style="align-items:center; justify-content:space-between">
+        <h3 id="dealModalTitle" style="margin:0">Neuer Deal</h3>
+        <button class="btn" id="dealClose"><i class="ti ti-x"></i></button>
+      </div>
+      <form id="dealForm" class="grid" style="margin-top:8px">
+        <div class="span2">
+          <label>URL</label>
+          <input id="dUrl" type="url" placeholder="https://www.kleinanzeigen.de/... oder https://www.ebay.de/..." required />
+        </div>
+        <div>
+          <label>Titel</label>
+          <input id="dTitle" placeholder="z.B. iPhone 13, sehr guter Zustand" />
+        </div>
+        <div>
+          <label>Plattform</label>
+          <select id="dPlatform">
+            <option>Automatisch</option>
+            <option>eBay</option>
+            <option>Kleinanzeigen</option>
+            <option>Sonstiges</option>
+          </select>
+        </div>
+        <div>
+          <label>Einkaufspreis (Ziel)</label>
+          <input id="dBuy" type="number" inputmode="decimal" placeholder="€" />
+        </div>
+        <div>
+          <label>Verkaufspreis (Ziel)</label>
+          <input id="dSell" type="number" inputmode="decimal" placeholder="€" />
+        </div>
+        <div>
+          <label>Status</label>
+          <select id="dStatus">
+            <option>gesichtet</option>
+            <option>kontaktiert</option>
+            <option>verhandlung</option>
+            <option>gekauft</option>
+            <option>gelistet</option>
+            <option>verkauft</option>
+          </select>
+        </div>
+        <div>
+          <label>Erinnerung</label>
+          <input id="dDue" type="date" />
+        </div>
+        <div class="span2">
+          <label>Tags (Komma-getrennt)</label>
+          <input id="dTags" placeholder="iphone, 128gb, spacegray" />
+        </div>
+        <div class="span2">
+          <label>Notiz</label>
+          <textarea id="dNote" rows="3" placeholder="Zustand, Standort, Argumente…"></textarea>
+        </div>
+        <div class="span2">
+          <label>Bilder hinzufügen</label>
+          <input id="dImages" type="file" accept="image/*" multiple />
+          <div id="dPreview" class="thumbs" style="margin-top:8px"></div>
+          <p class="subtle">Hinweis: Bilder werden lokal gespeichert (Data‑URL). Viele große Bilder können Speicher fressen. (Cloud‑Upload optional später)</p>
+        </div>
+        <div class="span2" style="display:flex; gap:10px; justify-content:flex-end; margin-top:6px">
+          <button type="button" class="btn" id="dealCalc"><i class="ti ti-calculator"></i>&nbsp;Profit-Rechner</button>
+          <button type="submit" class="btn primary" id="dealSave"><i class="ti ti-device-floppy"></i>&nbsp;Speichern</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Templates Modal -->
+  <div id="tplModal" class="modal">
+    <div class="dialog card pad">
+      <div class="row" style="align-items:center; justify-content:space-between">
+        <h3 style="margin:0">Vorlagen</h3>
+        <button class="btn" id="tplClose"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="divider"></div>
+      <div class="card pad" style="margin-bottom:10px">
+        <div class="row" style="align-items:center; justify-content:space-between">
+          <div>
+            <div class="subtle">Erstkontakt</div>
+            <div style="margin-top:6px" id="tpl1">Hi! 😊 Ist der Artikel noch verfügbar? Würde heute abholen/zzgl. Versand nehmen. Wenn  <Zielpreis>  für dich passt, bin ich sofort dabei. Danke dir!</div>
+          </div>
+          <button class="btn" id="copyTpl1"><i class="ti ti-copy"></i>&nbsp;Kopieren</button>
+        </div>
+      </div>
+      <div class="card pad">
+        <div class="row" style="align-items:center; justify-content:space-between">
+          <div>
+            <div class="subtle">Gegenangebot</div>
+            <div style="margin-top:6px" id="tpl2">Danke fürs schnelle Feedback! Ich könnte  <MeinPreis>  anbieten und heute/sofort zahlen. Deal?</div>
+          </div>
+          <button class="btn" id="copyTpl2"><i class="ti ti-copy"></i>&nbsp;Kopieren</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <main id="appView" class="container hidden">
-    <div class="stats">
-      <div class="card stat"><div class="glow"></div><div class="label">Gespeicherte Links</div><div id="statTotal" class="value">0</div></div>
-      <div class="card stat"><div class="glow"></div><div class="label">Aktiv (Kontakt/Laufend)</div><div id="statActive" class="value">0</div></div>
-      <div class="card stat"><div class="glow"></div><div class="label">Gewinn (prognostiziert)</div><div id="statProfit" class="value">€0</div></div>
-      <div class="card stat"><div class="glow"></div><div class="label">Fällige Erinnerungen</div><div id="statDue" class="value">0</div></div>
-    </div>
-
-    <div class="layout" style="margin-top:18px">
-      <aside class="card pad">
-        <h3 style="margin-top:0">Link speichern</h3>
-        <form id="addForm">
-          <label>URL</label>
-          <input id="fUrl" type="url" placeholder="https://www.kleinanzeigen.de/... oder https://www.ebay.de/..." required />
-          <div class="grid-2" style="margin-top:12px">
-            <div>
-              <label>Titel</label>
-              <input id="fTitle" placeholder="z.B. iPhone 13, sehr guter Zustand" />
-            </div>
-            <div>
-              <label>Plattform</label>
-              <select id="fPlatform">
-                <option>Automatisch</option>
-                <option>eBay</option>
-                <option>Kleinanzeigen</option>
-                <option>Sonstiges</option>
-              </select>
-            </div>
-          </div>
-          <div class="grid-2" style="margin-top:12px">
-            <div>
-              <label>Einkaufspreis (Ziel)</label>
-              <input id="fBuy" type="number" inputmode="decimal" placeholder="€" />
-            </div>
-            <div>
-              <label>Verkaufspreis (Ziel)</label>
-              <input id="fSell" type="number" inputmode="decimal" placeholder="€" />
-            </div>
-          </div>
-          <div class="grid-2" style="margin-top:12px">
-            <div>
-              <label>Status</label>
-              <select id="fStatus">
-                <option>gesichtet</option>
-                <option>kontaktiert</option>
-                <option>verhandlung</option>
-                <option>gekauft</option>
-                <option>gelistet</option>
-                <option>verkauft</option>
-              </select>
-            </div>
-            <div>
-              <label>Erinnerung</label>
-              <input id="fDue" type="date" />
-            </div>
-          </div>
-          <label style="margin-top:12px">Tags (Komma-getrennt)</label>
-          <input id="fTags" placeholder="iphone, 128gb, spacegray" />
-          <label style="margin-top:12px">Notiz</label>
-          <textarea id="fNote" rows="3" placeholder="Zustand, Standort, Argumente…"></textarea>
-          <button class="btn primary" style="margin-top:14px" type="submit"><i class="ti ti-bookmark-plus"></i>&nbsp;Speichern</button>
-        </form>
-
-        <div class="divider"></div>
-        <div>
-          <h3 style="margin:0 0 8px 0">Vorlagen (Copy & Paste)</h3>
-          <div class="template">
-            <div class="row">
-              <div style="flex:1">
-                <div class="kicker">Erstkontakt</div>
-                <p class="note" style="margin:4px 0 8px">Höfliche Anfrage mit Preisanker</p>
-              </div>
-              <button class="btn ghost" id="copyTpl1"><i class="ti ti-copy"></i>&nbsp;Kopieren</button>
-            </div>
-            <pre id="tpl1" class="subtle" style="white-space:pre-wrap; user-select:all;">Hi! 😊 Ist der Artikel noch verfügbar? Würde heute abholen/zzgl. Versand nehmen. Wenn  <Zielpreis>  für dich passt, bin ich sofort dabei. Danke dir!</pre>
-          </div>
-          <div class="template" style="margin-top:10px">
-            <div class="row">
-              <div style="flex:1">
-                <div class="kicker">Gegenangebot</div>
-                <p class="note" style="margin:4px 0 8px">Kurz & freundlich</p>
-              </div>
-              <button class="btn ghost" id="copyTpl2"><i class="ti ti-copy"></i>&nbsp;Kopieren</button>
-            </div>
-            <pre id="tpl2" class="subtle" style="white-space:pre-wrap; user-select:all;">Danke fürs schnelle Feedback! Ich könnte  <MeinPreis>  anbieten und heute/sofort zahlen. Deal?</pre>
-          </div>
-
-          <div class="divider"></div>
-          <h3 style="margin:0 0 8px 0">Export & Import</h3>
-          <div class="row">
-            <button class="btn ghost" id="exportBtn"><i class="ti ti-download"></i>&nbsp;Daten exportieren (JSON)</button>
-            <label class="btn ghost" style="cursor:pointer"><i class="ti ti-upload"></i>&nbsp;Importieren<input id="importFile" type="file" accept="application/json" style="display:none"></label>
-          </div>
-          <p class="note" style="margin-top:8px">Sichert deine Links in eine Datei oder importiert sie später wieder.</p>
-
-          <div class="divider"></div>
-          <button class="btn" id="wipeBtn" style="width:100%; background: rgba(255,77,103,.1); border:1px solid rgba(255,77,103,.35); color:#ffcfda"><i class="ti ti-alert-triangle"></i>&nbsp;Lokale Daten löschen</button>
-        </div>
-      </aside>
-
-      <section class="card pad">
-        <div class="row" style="align-items:center; justify-content:space-between">
-          <h3 style="margin:0">Deine Deals</h3>
-          <div class="row" style="align-items:center">
-            <select id="filterStatus">
-              <option value="">Alle Status</option>
-              <option value="gesichtet">Gesichtet</option>
-              <option value="kontaktiert">Kontaktiert</option>
-              <option value="verhandlung">Verhandlung</option>
-              <option value="gekauft">Gekauft</option>
-              <option value="gelistet">Gelistet</option>
-              <option value="verkauft">Verkauft</option>
-            </select>
-            <select id="sortBy">
-              <option value="createdDesc">Neueste zuerst</option>
-              <option value="profitDesc">Höchster Profit</option>
-              <option value="dueAsc">Nächste Fälligkeit</option>
-              <option value="titleAsc">Titel A→Z</option>
-            </select>
-          </div>
-        </div>
-        <div class="list" id="list"></div>
-      </section>
-    </div>
-
-    <div class="footer">
-      <div class="subtle">💡 Tipp: Zieh die URL per Copy/Paste rein. Mit <strong>Strg+/</strong> öffnest du die Suche.</div>
-      <div class="chip comingsoon"><i class="ti ti-sparkles"></i> AI-Listing-Optimierer – bald™️</div>
-    </div>
-  </main>
-
+  <!-- Profit Modal (bereits vorhanden) -->
   <div id="profitModal" class="modal">
     <div class="dialog card pad">
       <div class="row" style="justify-content:space-between; align-items:center; margin-bottom:8px">
         <h3 style="margin:0">Profit-Rechner</h3>
-        <button class="iconbtn" id="profitClose"><i class="ti ti-x"></i></button>
+        <button class="btn" id="profitClose"><i class="ti ti-x"></i></button>
       </div>
-      <div class="grid-2">
-        <div>
-          <label>Einkaufspreis</label>
-          <input id="pmBuy" type="number" inputmode="decimal" />
-        </div>
-        <div>
-          <label>Verkaufspreis</label>
-          <input id="pmSell" type="number" inputmode="decimal" />
-        </div>
-        <div>
-          <label>Plattformgebühren (%)</label>
-          <input id="pmFeePct" type="number" inputmode="decimal" value="11" />
-        </div>
-        <div>
-          <label>Versandkosten</label>
-          <input id="pmShip" type="number" inputmode="decimal" value="0" />
-        </div>
-      </div>
+      <form class="grid">
+        <div><label>Einkaufspreis</label><input id="pmBuy" type="number" inputmode="decimal" /></div>
+        <div><label>Verkaufspreis</label><input id="pmSell" type="number" inputmode="decimal" /></div>
+        <div><label>Plattformgebühren (%)</label><input id="pmFeePct" type="number" inputmode="decimal" value="11" /></div>
+        <div><label>Versandkosten</label><input id="pmShip" type="number" inputmode="decimal" value="0" /></div>
+      </form>
       <div class="divider"></div>
       <div class="row" style="align-items:center; justify-content:space-between">
         <div>
-          <div class="kicker">Prognose</div>
+          <div class="subtle">Prognose</div>
           <div id="pmResult" style="font-family:'JetBrains Mono', ui-monospace; font-size:20px">€0</div>
         </div>
         <button class="btn primary" id="pmApply"><i class="ti ti-check"></i>&nbsp;In Deal übernehmen</button>
@@ -398,15 +348,16 @@
       <div>
         <div class="title"></div>
         <div class="url"></div>
+        <div class="thumbs"></div>
       </div>
       <div class="platform"></div>
       <div class="status"></div>
       <div class="profit" style="font-family:'JetBrains Mono', ui-monospace">€0</div>
       <div class="due subtle">–</div>
       <div class="actions">
-        <button class="iconbtn open"><i class="ti ti-external-link"></i></button>
-        <button class="iconbtn edit"><i class="ti ti-pencil"></i></button>
-        <button class="iconbtn calc"><i class="ti ti-calculator"></i></button>
+        <button class="iconbtn open" title="Öffnen"><i class="ti ti-external-link"></i></button>
+        <button class="iconbtn edit" title="Bearbeiten"><i class="ti ti-pencil"></i></button>
+        <button class="iconbtn calc" title="Profit-Rechner"><i class="ti ti-calculator"></i></button>
         <button class="iconbtn del" title="Löschen" style="border-color: rgba(255,77,103,.35)"><i class="ti ti-trash"></i></button>
       </div>
     </div>
@@ -415,7 +366,7 @@
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-    // ===== Supabase Config (optional – für Cloud‑Sync) =====
+    // ===== Supabase Config =====
     const SUPABASE_URL = 'https://okycsoofgaddpxbircit.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9reWNzb29mZ2FkZHB4YmlyY2l0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0NTM0NjUsImV4cCI6MjA3MzAyOTQ2NX0.3DTX4GzHRoSSpqsqXQ4v04UVreUHIthukk223uFwxTM';
     const CLOUD = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
@@ -427,11 +378,7 @@
     const fmtMoney = (n) => `€${Number(n||0).toLocaleString('de-DE', {maximumFractionDigits: 2})}`;
     const todayISO = () => new Date().toISOString().slice(0,10);
 
-    async function sha256Hex(str){
-      const enc = new TextEncoder();
-      const buf = await crypto.subtle.digest('SHA-256', enc.encode(str));
-      return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
-    }
+    async function sha256Hex(str){ const enc = new TextEncoder(); const buf = await crypto.subtle.digest('SHA-256', enc.encode(str)); return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join(''); }
     const randHex = (len=16) => [...crypto.getRandomValues(new Uint8Array(len))].map(x=>x.toString(16).padStart(2,'0')).join('');
 
     // Storage (Local Mode)
@@ -439,386 +386,112 @@
     const SESSION_KEY = 'rd_session_v1';
     function readUsers(){ try { return JSON.parse(localStorage.getItem(USERS_KEY) || '{}') } catch { return {} } }
     function writeUsers(obj){ localStorage.setItem(USERS_KEY, JSON.stringify(obj)) }
-
     function dataKey(email){ return `rd_data_${email}` }
     function readData(email){ try { return JSON.parse(localStorage.getItem(dataKey(email)) || '{}') } catch { return {} } }
     function writeData(email, obj){ localStorage.setItem(dataKey(email), JSON.stringify(obj)) }
-
-    function defaultData(){
-      return {
-        items: [],
-        templates: { first: $('#tpl1').textContent.trim(), counter: $('#tpl2').textContent.trim() },
-        settings: { feePct: 11 }
-      }
-    }
+    function defaultData(){ return { items: [], templates: { first: $('#tpl1')?.textContent?.trim() || '', counter: $('#tpl2')?.textContent?.trim() || '' }, settings: { feePct: 11 } } }
 
     // Auth State
     let currentUser = null;
     function setSession(email){ if(email){ localStorage.setItem(SESSION_KEY, email); } else { localStorage.removeItem(SESSION_KEY) } }
     function getSession(){ return localStorage.getItem(SESSION_KEY) }
 
-    function platformFromUrl(u){
-      try {
-        const h = new URL(u).hostname;
-        if(/kleinanzeigen\.de|ebay-kleinanzeigen\.de/i.test(h)) return 'Kleinanzeigen';
-        if(/ebay\./i.test(h)) return 'eBay';
-      } catch {}
-      return 'Sonstiges';
-    }
+    // Helpers
+    function platformFromUrl(u){ try { const h = new URL(u).hostname; if(/kleinanzeigen\.de|ebay-kleinanzeigen\.de/i.test(h)) return 'Kleinanzeigen'; if(/ebay\./i.test(h)) return 'eBay'; } catch {} return 'Sonstiges'; }
+    function statusBadge(s){ const map = { gesichtet:'sourced', kontaktiert:'contacted', verhandlung:'negotiating', gekauft:'bought', gelistet:'listed', verkauft:'sold' }; const cls = map[s] || 'sourced'; const span = document.createElement('span'); span.className = `badge ${cls}`; span.textContent = s.charAt(0).toUpperCase()+s.slice(1); return span; }
+    function computeProfit(it, feePctFallback=11){ const buy = Number(it.buy || 0); const sell = Number(it.sell || 0); const feePct = Number(typeof it.feePct === 'number' ? it.feePct : feePctFallback); const fees = sell * (feePct/100); const ship = Number(it.ship || 0); return Math.round((sell - fees - ship - buy) * 100) / 100; }
 
-    function statusBadge(s){
-      const map = { gesichtet:'sourced', kontaktiert:'contacted', verhandlung:'negotiating', gekauft:'bought', gelistet:'listed', verkauft:'sold' };
-      const cls = map[s] || 'sourced';
-      const span = document.createElement('span');
-      span.className = `badge ${cls}`;
-      span.textContent = s.charAt(0).toUpperCase()+s.slice(1);
-      return span;
-    }
+    function recalcStats(){ const data = readData(currentUser) || defaultData(); const items = data.items || []; $('#statTotal').textContent = items.length; $('#statActive').textContent = items.filter(i=>['kontaktiert','verhandlung','gelistet'].includes(i.status)).length; const profit = items.reduce((sum,i)=> sum + (i.status==='verkauft' || i.sell ? computeProfit(i, data.settings.feePct) : 0), 0); $('#statProfit').textContent = fmtMoney(profit); const due = items.filter(i=> i.due && i.due <= todayISO()).length; $('#statDue').textContent = due; $('#modeInfoText').textContent = CLOUD ? 'Cloud' : 'Lokal'; }
 
-    function computeProfit(it, feePctFallback=11){
-      const buy = Number(it.buy || 0);
-      const sell = Number(it.sell || 0);
-      const feePct = Number(typeof it.feePct === 'number' ? it.feePct : feePctFallback);
-      const fees = sell * (feePct/100);
-      const ship = Number(it.ship || 0);
-      return Math.round((sell - fees - ship - buy) * 100) / 100;
-    }
+    function renderList(){ const data = readData(currentUser) || defaultData(); const q = $('#search').value.trim().toLowerCase(); const fStatus = $('#filterStatus').value; const sortBy = $('#sortBy').value; let items = [...(data.items||[])]; if(q){ items = items.filter(i=> (i.title||'').toLowerCase().includes(q) || (i.url||'').toLowerCase().includes(q) || (i.tags||'').toLowerCase().includes(q)) } if(fStatus){ items = items.filter(i=> i.status === fStatus) } items.sort((a,b)=>{ switch(sortBy){ case 'profitDesc': return computeProfit(b, data.settings.feePct) - computeProfit(a, data.settings.feePct); case 'dueAsc': return (a.due||'9999-12-31').localeCompare(b.due||'9999-12-31'); case 'titleAsc': return (a.title||'').localeCompare(b.title||''); default: return (b.created||0) - (a.created||0); } }); const list = $('#list'); list.innerHTML = ''; const tmpl = $('#itemTmpl'); for(const it of items){ const row = tmpl.content.firstElementChild.cloneNode(true); $('.title', row).textContent = it.title || '(ohne Titel)'; $('.url', row).textContent = it.url; const plat = $('.platform', row); plat.innerHTML = `<span class="pill">${it.platform}</span>`; const st = $('.status', row); st.innerHTML = ''; st.appendChild(statusBadge(it.status || 'gesichtet')); $('.profit', row).textContent = fmtMoney(computeProfit(it, data.settings.feePct)); $('.due', row).innerHTML = it.due ? (it.due <= todayISO() ? `<span style="color:var(--warn)">${it.due}</span>` : it.due) : '–'; const t = $('.thumbs', row); (it.images||[]).slice(0,4).forEach(img=>{ const d=document.createElement('div'); d.className='thumb'; d.innerHTML=`<img alt="Bild" src="${img.data}"/>`; d.title=img.name||'Bild'; d.addEventListener('click', ()=> window.open(img.data, '_blank')); t.appendChild(d); }); $('.open', row).addEventListener('click', ()=> window.open(it.url, '_blank')); $('.del', row).addEventListener('click', ()=> onDelete(it.id)); $('.edit', row).addEventListener('click', ()=> openDealModal(it.id)); $('.calc', row).addEventListener('click', ()=> openProfit(it.id)); list.appendChild(row); } recalcStats(); }
 
-    function recalcStats(){
-      const data = readData(currentUser) || defaultData();
-      const items = data.items || [];
-      $('#statTotal').textContent = items.length;
-      $('#statActive').textContent = items.filter(i=>['kontaktiert','verhandlung','gelistet'].includes(i.status)).length;
-      const profit = items.reduce((sum,i)=> sum + (i.status==='verkauft' || i.sell ? computeProfit(i, data.settings.feePct) : 0), 0);
-      $('#statProfit').textContent = fmtMoney(profit);
-      const due = items.filter(i=> i.due && i.due <= todayISO()).length;
-      $('#statDue').textContent = due;
-    }
-
-    function renderList(){
-      const data = readData(currentUser) || defaultData();
-      const q = $('#search').value.trim().toLowerCase();
-      const fStatus = $('#filterStatus').value;
-      const sortBy = $('#sortBy').value;
-      let items = [...(data.items||[])];
-      if(q){ items = items.filter(i=> (i.title||'').toLowerCase().includes(q) || (i.url||'').toLowerCase().includes(q) || (i.tags||'').toLowerCase().includes(q)) }
-      if(fStatus){ items = items.filter(i=> i.status === fStatus) }
-      items.sort((a,b)=>{
-        switch(sortBy){
-          case 'profitDesc': return computeProfit(b, data.settings.feePct) - computeProfit(a, data.settings.feePct);
-          case 'dueAsc': return (a.due||'9999-12-31').localeCompare(b.due||'9999-12-31');
-          case 'titleAsc': return (a.title||'').localeCompare(b.title||'');
-          default: return (b.created||0) - (a.created||0);
-        }
-      });
-
-      const list = $('#list');
-      list.innerHTML = '';
-      const tmpl = $('#itemTmpl');
-      for(const it of items){
-        const row = tmpl.content.firstElementChild.cloneNode(true);
-        $('.title', row).textContent = it.title || '(ohne Titel)';
-        $('.url', row).textContent = it.url;
-        const plat = $('.platform', row);
-        plat.innerHTML = `<span class="chip"><i class="ti ti-brand-${it.platform==='eBay'?'ebay':'cash'}"></i>${it.platform}</span>`;
-        const st = $('.status', row);
-        st.innerHTML = '';
-        st.appendChild(statusBadge(it.status || 'gesichtet'));
-        $('.profit', row).textContent = fmtMoney(computeProfit(it, data.settings.feePct));
-        $('.due', row).innerHTML = it.due ? (it.due <= todayISO() ? `<span style="color:var(--warn)">${it.due}</span>` : it.due) : '–';
-
-        $('.open', row).addEventListener('click', ()=> window.open(it.url, '_blank'));
-        $('.del', row).addEventListener('click', ()=> onDelete(it.id));
-        $('.edit', row).addEventListener('click', ()=> editItem(it.id));
-        $('.calc', row).addEventListener('click', ()=> openProfit(it.id));
-
-        list.appendChild(row);
-      }
-
-      recalcStats();
-    }
-
-    function editItem(id){
-      const data = readData(currentUser) || defaultData();
-      const it = data.items.find(x=>x.id===id);
-      if(!it) return;
-      $('#fUrl').value = it.url || '';
-      $('#fTitle').value = it.title || '';
-      $('#fPlatform').value = ['eBay','Kleinanzeigen','Sonstiges'].includes(it.platform) ? it.platform : 'Automatisch';
-      $('#fBuy').value = it.buy || '';
-      $('#fSell').value = it.sell || '';
-      $('#fStatus').value = it.status || 'gesichtet';
-      $('#fDue').value = it.due || '';
-      $('#fTags').value = it.tags || '';
-      $('#fNote').value = it.note || '';
-      $('#addForm').dataset.editing = id;
-      $('#addForm').querySelector('button[type="submit"]').innerHTML = '<i class="ti ti-device-floppy"></i>&nbsp;Änderungen speichern';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Profit modal
+    // ===== Profit modal =====
     let profitContextId = null;
-    function openProfit(id){
-      const data = readData(currentUser) || defaultData();
-      const it = data.items.find(x=>x.id===id);
-      profitContextId = id;
-      $('#pmBuy').value = it?.buy || '';
-      $('#pmSell').value = it?.sell || '';
-      $('#pmFeePct').value = typeof it?.feePct === 'number' ? it.feePct : (data.settings.feePct||11);
-      $('#pmShip').value = it?.ship || 0;
-      updateProfitResult();
-      $('#profitModal').classList.add('show');
-    }
-    function updateProfitResult(){
-      const buy = Number($('#pmBuy').value||0);
-      const sell = Number($('#pmSell').value||0);
-      const feePct = Number($('#pmFeePct').value||0);
-      const ship = Number($('#pmShip').value||0);
-      const fees = sell * (feePct/100);
-      const p = Math.round((sell - fees - ship - buy) * 100) / 100;
-      $('#pmResult').textContent = fmtMoney(p);
-    }
-
+    function openProfit(id){ const data = readData(currentUser) || defaultData(); const it = data.items.find(x=>x.id===id); profitContextId = id; $('#pmBuy').value = it?.buy || ''; $('#pmSell').value = it?.sell || ''; $('#pmFeePct').value = typeof it?.feePct === 'number' ? it.feePct : (data.settings.feePct||11); $('#pmShip').value = it?.ship || 0; updateProfitResult(); $('#profitModal').classList.add('show'); }
+    function updateProfitResult(){ const buy = Number($('#pmBuy').value||0); const sell = Number($('#pmSell').value||0); const feePct = Number($('#pmFeePct').value||0); const ship = Number($('#pmShip').value||0); const fees = sell * (feePct/100); const p = Math.round((sell - fees - ship - buy) * 100) / 100; $('#pmResult').textContent = fmtMoney(p); }
     ['pmBuy','pmSell','pmFeePct','pmShip'].forEach(id=> $('#'+id).addEventListener('input', updateProfitResult));
     $('#profitClose').addEventListener('click', ()=> $('#profitModal').classList.remove('show'));
-    $('#pmApply').addEventListener('click', async ()=>{
-      const data = readData(currentUser) || defaultData();
-      const it = data.items.find(x=>x.id===profitContextId);
-      if(!it) return;
-      it.buy = Number($('#pmBuy').value||0);
-      it.sell = Number($('#pmSell').value||0);
-      it.feePct = Number($('#pmFeePct').value||0);
-      it.ship = Number($('#pmShip').value||0);
-      writeData(currentUser, data);
-      await syncUpOne(it).catch(()=>{});
-      $('#profitModal').classList.remove('show');
-      renderList();
-    });
+    $('#pmApply').addEventListener('click', async ()=>{ const data = readData(currentUser) || defaultData(); const it = data.items.find(x=>x.id===profitContextId); if(!it) return; it.buy = Number($('#pmBuy').value||0); it.sell = Number($('#pmSell').value||0); it.feePct = Number($('#pmFeePct').value||0); it.ship = Number($('#pmShip').value||0); writeData(currentUser, data); await syncUpOne(it).catch(()=>{}); $('#profitModal').classList.remove('show'); renderList(); });
 
-    // ===== Auth UI switching =====
-    const loginForm = $('#loginForm');
-    const registerForm = $('#registerForm');
-    const tabLogin = $('#tabLogin');
-    const tabRegister = $('#tabRegister');
+    // ===== Deal Modal (Add/Edit) =====
+    let editingId = null; let pendingImages = [];
+    function resetDealForm(){ editingId=null; pendingImages=[]; $('#dealForm').reset(); $('#dPreview').innerHTML=''; $('#dealModalTitle').textContent='Neuer Deal'; }
+    function openDealModal(id=null){ resetDealForm(); if(id){ const data = readData(currentUser)||defaultData(); const it = data.items.find(x=>x.id===id); if(it){ editingId=id; $('#dealModalTitle').textContent='Deal bearbeiten'; $('#dUrl').value=it.url||''; $('#dTitle').value=it.title||''; $('#dPlatform').value=['eBay','Kleinanzeigen','Sonstiges'].includes(it.platform)?it.platform:'Automatisch'; $('#dBuy').value=it.buy||''; $('#dSell').value=it.sell||''; $('#dStatus').value=it.status||'gesichtet'; $('#dDue').value=it.due||''; $('#dTags').value=it.tags||''; $('#dNote').value=it.note||''; (it.images||[]).forEach(img=> addPreview(img)); pendingImages = [...(it.images||[])]; } }
+      $('#dealModal').classList.add('show'); setTimeout(()=>$('#dUrl').focus(), 0); }
+    function addPreview(img){ const wrap=document.createElement('div'); wrap.className='thumb'; wrap.style.position='relative'; wrap.innerHTML=`<img alt="Bild" src="${img.data}"/><button title="Entfernen" style="position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.45);color:#fff;cursor:pointer"><i class="ti ti-x" style="font-size:12px"></i></button>`; wrap.querySelector('button').addEventListener('click', ()=>{ pendingImages = pendingImages.filter(x=>x.id!==img.id); wrap.remove(); }); $('#dPreview').appendChild(wrap); }
+    async function fileToDataUrl(file){ return new Promise((res, rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
+    $('#dImages').addEventListener('change', async (e)=>{ const files=[...e.target.files]; for(const f of files){ const data=await fileToDataUrl(f); const img={ id:'img_'+randHex(6), name:f.name, data }; pendingImages.push(img); addPreview(img); } e.target.value=''; });
+    $('#dealCalc').addEventListener('click', ()=>{ $('#profitModal').classList.add('show'); $('#pmBuy').value = $('#dBuy').value||0; $('#pmSell').value=$('#dSell').value||0; updateProfitResult(); });
+    $('#dealClose').addEventListener('click', ()=> $('#dealModal').classList.remove('show'));
 
-    tabLogin.addEventListener('click', ()=>{ registerForm.classList.add('hidden'); loginForm.classList.remove('hidden'); tabLogin.classList.remove('ghost'); tabRegister.classList.add('ghost'); });
-    tabRegister.addEventListener('click', ()=>{ loginForm.classList.add('hidden'); registerForm.classList.remove('hidden'); tabRegister.classList.remove('ghost'); tabLogin.classList.add('ghost'); });
-
-    // ===== Local Auth (nur im lokalen Modus) =====
-    async function attachLocalAuth(){
-      registerForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const email = $('#regEmail').value.trim().toLowerCase();
-        const pw = $('#regPassword').value;
-        const pw2 = $('#regPassword2').value;
-        if(pw.length < 8) return alert('Passwort zu kurz (min. 8 Zeichen).');
-        if(pw !== pw2) return alert('Passwörter stimmen nicht überein.');
-        const users = readUsers();
-        if(users[email]) return alert('E-Mail bereits registriert.');
-        const salt = randHex(16);
-        const hash = await sha256Hex(pw + ':' + salt);
-        users[email] = { salt, hash, created: Date.now() };
-        writeUsers(users);
-        writeData(email, defaultData());
-        alert('Account erstellt! Du kannst dich jetzt einloggen.');
-        tabLogin.click();
-      });
-
-      loginForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const email = $('#loginEmail').value.trim().toLowerCase();
-        const pw = $('#loginPassword').value;
-        const users = readUsers();
-        const u = users[email];
-        if(!u) return alert('Unbekannte E-Mail. Bitte registrieren.');
-        const hash = await sha256Hex(pw + ':' + u.salt);
-        if(hash !== u.hash) return alert('Falsches Passwort.');
-        currentUser = email; setSession(email);
-        $('#userEmail').textContent = email;
-        $('#authView').classList.add('hidden');
-        $('#appView').classList.remove('hidden');
-        $('#appHeader').classList.remove('hidden');
-        $('#modeText').textContent = 'Lokal';
-        if(!(readData(email)?.items?.length)) seedSamples();
-        renderList();
-        recalcStats();
-      });
-
-      $('#logoutBtn').addEventListener('click', ()=>{ currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#appHeader').classList.add('hidden'); $('#loginEmail').focus(); });
-      $('#wipeBtn').addEventListener('click', ()=>{ if(!currentUser) return; if(confirm('Wirklich lokale Daten löschen?')){ const users = readUsers(); delete users[currentUser]; writeUsers(users); localStorage.removeItem(dataKey(currentUser)); setSession(null); currentUser=null; location.reload(); }});
-    }
-
-    // ===== Cloud Auth (nur im Cloud-Modus) =====
-    async function attachCloudAuth(){
-      registerForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const email = $('#regEmail').value.trim().toLowerCase();
-        const password = $('#regPassword').value;
-        const pw2 = $('#regPassword2').value;
-        if(password.length < 8) return alert('Passwort zu kurz (min. 8 Zeichen).');
-        if(password !== pw2) return alert('Passwörter stimmen nicht überein.');
-        const { error } = await sb.auth.signUp({ email, password });
-        if(error) return alert(error.message);
-        alert('Account erstellt! Prüfe ggf. dein Postfach (Bestätigung).');
-        tabLogin.click();
-      });
-
-      loginForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const email = $('#loginEmail').value.trim().toLowerCase();
-        const password = $('#loginPassword').value;
-        const { data, error } = await sb.auth.signInWithPassword({ email, password });
-        if(error) return alert(error.message);
-        const user = data.user;
-        currentUser = user.email; setSession(currentUser);
-        $('#userEmail').textContent = currentUser;
-        $('#authView').classList.add('hidden');
-        $('#appView').classList.remove('hidden');
-        $('#appHeader').classList.remove('hidden');
-        $('#modeText').textContent = 'Cloud';
-        await syncDown();
-        renderList();
-        recalcStats();
-      });
-
-      $('#logoutBtn').addEventListener('click', async ()=>{ await sb.auth.signOut(); currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#appHeader').classList.add('hidden'); $('#loginEmail').focus(); });
-      $('#wipeBtn').addEventListener('click', ()=>{ if(!currentUser) return; if(confirm('Nur der lokale Cache wird gelöscht. (Cloud-Daten bleiben bestehen)')){ localStorage.removeItem(dataKey(currentUser)); location.reload(); }});
-    }
-
-    // ===== CRUD Hooks (lokal + optional Cloud-Upserts) =====
-    async function onDelete(id){
-      const data = readData(currentUser) || defaultData();
-      if(confirm('Diesen Eintrag löschen?')){
-        const it = data.items.find(x=>x.id===id);
-        data.items = data.items.filter(x=>x.id!==id);
-        writeData(currentUser, data);
-        renderList();
-        recalcStats();
-        if(CLOUD) { try { await sb.from('deals').delete().eq('id', id); } catch{} }
-      }
-    }
-
-    async function syncUpOne(it){
-      if(!CLOUD) return;
-      try {
-        const { data: u } = await sb.auth.getUser();
-        const row = toRow(it, u?.user?.id);
-        await sb.from('deals').upsert(row);
-      } catch {}
-    }
-
-    async function syncDown(){
-      if(!CLOUD) return;
-      const { data: rows, error } = await sb.from('deals').select('*').order('created', { ascending: false });
-      if(error){ console.warn(error); return; }
-      const email = (await sb.auth.getUser()).data.user.email;
-      currentUser = email; setSession(email); $('#userEmail').textContent = email;
-      const data = readData(email) || defaultData();
-      data.items = (rows||[]).map(fromRow);
-      writeData(email, data);
-    }
-
-    function toRow(it, userId){
-      return { id: it.id, user_id: userId, created: it.created || Date.now(), url: it.url || null, title: it.title || null, platform: it.platform || null, buy: it.buy ?? null, sell: it.sell ?? null, fee_pct: (typeof it.feePct==='number'? it.feePct : null), ship: it.ship ?? null, status: it.status || null, due: it.due || null, tags: it.tags || null, note: it.note || null };
-    }
-    function fromRow(r){
-      return { id: r.id, created: r.created, url: r.url, title: r.title, platform: r.platform||'Sonstiges', buy: Number(r.buy ?? 0), sell: Number(r.sell ?? 0), feePct: typeof r.fee_pct==='number'? r.fee_pct : undefined, ship: Number(r.ship ?? 0), status: r.status||'gesichtet', due: r.due || '', tags: r.tags || '', note: r.note || '' };
-    }
-
-    // ===== Add / Update item =====
-    $('#addForm').addEventListener('submit', async (e)=>{
+    $('#dealForm').addEventListener('submit', async (e)=>{
       e.preventDefault();
       const data = readData(currentUser) || defaultData();
-      const editingId = e.currentTarget.dataset.editing || null;
-
-      const url = $('#fUrl').value.trim();
-      const title = $('#fTitle').value.trim();
-      let platform = $('#fPlatform').value; if(platform === 'Automatisch') platform = platformFromUrl(url);
-      const buy = Number($('#fBuy').value || 0);
-      const sell = Number($('#fSell').value || 0);
-      const status = $('#fStatus').value;
-      const due = $('#fDue').value || '';
-      const tags = $('#fTags').value.trim();
-      const note = $('#fNote').value.trim();
-
-      if(editingId){
-        const it = data.items.find(x=>x.id===editingId); if(!it) return;
-        Object.assign(it, { url, title, platform, buy, sell, status, due, tags, note });
-        e.currentTarget.dataset.editing = '';
-        e.currentTarget.querySelector('button[type="submit"]').innerHTML = '<i class="ti ti-bookmark-plus"></i>&nbsp;Speichern';
-        writeData(currentUser, data);
-        await syncUpOne(it);
-      } else {
-        const it = { id: 'i_'+randHex(8), created: Date.now(), url, title, platform, buy, sell, status, due, tags, note, ship: 0 };
-        data.items.unshift(it);
-        writeData(currentUser, data);
-        await syncUpOne(it);
-      }
-
-      e.currentTarget.reset();
-      renderList();
+      let platform = $('#dPlatform').value; const url=$('#dUrl').value.trim(); if(platform==='Automatisch') platform = platformFromUrl(url);
+      const payload = { url, title: $('#dTitle').value.trim(), platform, buy: Number($('#dBuy').value||0), sell: Number($('#dSell').value||0), status: $('#dStatus').value, due: $('#dDue').value||'', tags: $('#dTags').value.trim(), note: $('#dNote').value.trim(), images: pendingImages, ship: 0 };
+      if(editingId){ const it = data.items.find(x=>x.id===editingId); if(it){ Object.assign(it, payload); } await syncUpOne(it); }
+      else { const it = { id: 'i_'+randHex(8), created: Date.now(), ...payload }; data.items.unshift(it); await syncUpOne(it); }
+      writeData(currentUser, data);
+      $('#dealModal').classList.remove('show'); renderList();
     });
 
-    // Export / Import
-    $('#exportBtn').addEventListener('click', ()=>{
-      if(!currentUser) return; const data = readData(currentUser) || defaultData();
+    // ===== Tiles actions =====
+    $('#tileAdd').addEventListener('click', ()=> openDealModal());
+    $('#tileTemplates').addEventListener('click', ()=> $('#tplModal').classList.add('show'));
+    $('#tplClose').addEventListener('click', ()=> $('#tplModal').classList.remove('show'));
+    $('#tileImportExport').addEventListener('click', ()=>{
+      const data = readData(currentUser)||defaultData();
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `reselldeck_${currentUser.replace(/[^a-z0-9]/gi,'_')}.json`; a.click(); URL.revokeObjectURL(a.href);
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `reselldeck_${currentUser?.replace(/[^a-z0-9]/gi,'_')||'export'}.json`; a.click(); URL.revokeObjectURL(a.href);
     });
-    $('#importFile').addEventListener('change', async (e)=>{
-      const file = e.target.files?.[0]; if(!file) return;
-      const txt = await file.text();
-      try {
-        const obj = JSON.parse(txt);
-        const data = readData(currentUser) || defaultData();
-        data.items = Array.isArray(obj.items) ? obj.items : data.items;
-        data.templates = obj.templates || data.templates;
-        data.settings = obj.settings || data.settings;
-        writeData(currentUser, data);
-        renderList();
-        alert('Import erfolgreich.');
-        if(CLOUD){ for(const it of data.items){ await syncUpOne(it); } }
-      } catch(err){ alert('Import fehlgeschlagen: ' + err.message); }
-      e.target.value = '';
-    });
+    $('#tileSettings').addEventListener('click', ()=> alert('Settings (soon): Gebühren-Default, Storage, E-Mail‑Bridge…'));
 
-    // Seed sample data (nur lokal)
-    function seedSamples(){
-      const email = currentUser; const data = readData(email) || defaultData(); if((data.items||[]).length) return;
-      const now = Date.now();
-      data.items = [
-        { id:'i_'+randHex(6), created: now-300000, url:'https://www.kleinanzeigen.de/s-anzeige/sony-a7-iii-kit/1234567890', title:'Sony A7 III (Kit) – Top Zustand', platform:'Kleinanzeigen', buy:750, sell:1050, feePct:0, ship:0, status:'verhandlung', due: todayISO(), tags:'kamera, sony, vollformat', note:'Mit 2 Akkus, 24-70mm. Angebot 780€ abgegeben.' },
-        { id:'i_'+randHex(6), created: now-7200000, url:'https://www.ebay.de/itm/Apple-iPhone-13/10000001', title:'iPhone 13 128GB Midnight – OVP', platform:'eBay', buy:380, sell:520, feePct:11, ship:5.49, status:'kontaktiert', due:'', tags:'iphone, 128gb', note:'Leichte Kratzer, Akku 87%.' },
-        { id:'i_'+randHex(6), created: now-17200000, url:'https://www.kleinanzeigen.de/s-anzeige/dyson-v11/2222222', title:'Dyson V11 – Zubehör komplett', platform:'Kleinanzeigen', buy:120, sell:230, feePct:0, ship:0, status:'verkauft', due:'', tags:'haushalt', note:'Schon verkauft an Max. Abholung erledigt.' }
-      ];
-      writeData(email, data);
+    // Copy templates
+    async function copyText(t){ try { await navigator.clipboard.writeText(t); alert('Vorlage kopiert!') } catch { prompt('Kopiere manuell:', t) } }
+    $('#copyTpl1').addEventListener('click', ()=> copyText($('#tpl1').textContent));
+    $('#copyTpl2').addEventListener('click', ()=> copyText($('#tpl2').textContent));
+
+    // ===== Auth switching =====
+    const loginForm = $('#loginForm');
+    const registerForm = $('#registerForm');
+    $('#tabLogin').addEventListener('click', ()=>{ registerForm.classList.add('hidden'); loginForm.classList.remove('hidden'); });
+    $('#tabRegister').addEventListener('click', ()=>{ loginForm.classList.add('hidden'); registerForm.classList.remove('hidden'); });
+
+    // ===== Local Auth (nur wenn kein CLOUD) =====
+    async function attachLocalAuth(){
+      registerForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const email=$('#regEmail').value.trim().toLowerCase(); const pw=$('#regPassword').value; const pw2=$('#regPassword2').value; if(pw.length<8) return alert('Passwort zu kurz (min. 8 Zeichen).'); if(pw!==pw2) return alert('Passwörter stimmen nicht überein.'); const users=readUsers(); if(users[email]) return alert('E-Mail bereits registriert.'); const salt=randHex(16); const hash=await sha256Hex(pw+':'+salt); users[email]={salt,hash,created:Date.now()}; writeUsers(users); writeData(email, defaultData()); alert('Account erstellt! Du kannst dich jetzt einloggen.'); $('#tabLogin').click(); });
+      loginForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const email=$('#loginEmail').value.trim().toLowerCase(); const pw=$('#loginPassword').value; const users=readUsers(); const u=users[email]; if(!u) return alert('Unbekannte E-Mail. Bitte registrieren.'); const hash=await sha256Hex(pw+':'+u.salt); if(hash!==u.hash) return alert('Falsches Passwort.'); currentUser=email; setSession(email); $('#userEmail').textContent=email; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent='Lokal'; if(!(readData(email)?.items?.length)) seedSamples(); renderList(); recalcStats(); });
+      $('#logoutBtn').addEventListener('click', ()=>{ currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#appHeader').classList.add('hidden'); $('#loginEmail').focus(); });
     }
 
-    // ===== Init (exklusiv: Cloud ODER Lokal) =====
+    // ===== Cloud Auth (Supabase) =====
+    async function attachCloudAuth(){
+      registerForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const email=$('#regEmail').value.trim().toLowerCase(); const password=$('#regPassword').value; const pw2=$('#regPassword2').value; if(password.length<8) return alert('Passwort zu kurz (min. 8 Zeichen).'); if(password!==pw2) return alert('Passwörter stimmen nicht überein.'); const { error } = await sb.auth.signUp({ email, password }); if(error) return alert(error.message); alert('Account erstellt! Prüfe ggf. dein Postfach (Bestätigung).'); $('#tabLogin').click(); });
+      loginForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const email=$('#loginEmail').value.trim().toLowerCase(); const password=$('#loginPassword').value; const { data, error } = await sb.auth.signInWithPassword({ email, password }); if(error) return alert(error.message); currentUser=data.user.email; setSession(currentUser); $('#userEmail').textContent=currentUser; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent='Cloud'; await syncDown(); renderList(); recalcStats(); });
+      $('#logoutBtn').addEventListener('click', async ()=>{ await sb.auth.signOut(); currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#appHeader').classList.add('hidden'); $('#loginEmail').focus(); });
+    }
+
+    // ===== Cloud sync helpers =====
+    async function syncUpOne(it){ if(!CLOUD) return; try { const { data: u } = await sb.auth.getUser(); const row = toRow(it, u?.user?.id); await sb.from('deals').upsert(row); } catch(e){ console.warn(e); } }
+    async function syncDown(){ if(!CLOUD) return; const { data: rows, error } = await sb.from('deals').select('*').order('created', { ascending: false }); if(error){ console.warn(error); return; } const email = (await sb.auth.getUser()).data.user.email; currentUser = email; setSession(email); $('#userEmail').textContent = email; const data = readData(email) || defaultData(); data.items = (rows||[]).map(fromRow); writeData(email, data); }
+    function toRow(it, userId){ return { id: it.id, user_id: userId, created: it.created || Date.now(), url: it.url || null, title: it.title || null, platform: it.platform || null, buy: it.buy ?? null, sell: it.sell ?? null, fee_pct: (typeof it.feePct==='number'? it.feePct : null), ship: it.ship ?? null, status: it.status || null, due: it.due || null, tags: it.tags || null, note: it.note || null }; }
+    function fromRow(r){ return { id: r.id, created: r.created, url: r.url, title: r.title, platform: r.platform||'Sonstiges', buy: Number(r.buy ?? 0), sell: Number(r.sell ?? 0), feePct: typeof r.fee_pct==='number'? r.fee_pct : undefined, ship: Number(r.ship ?? 0), status: r.status||'gesichtet', due: r.due || '', tags: r.tags || '', note: r.note || '', images: [] }; }
+
+    // Export/Import via footer tile handled oben
+
+    // Seed sample data (nur lokal)
+    function seedSamples(){ const email = currentUser; const data = readData(email) || defaultData(); if((data.items||[]).length) return; const now = Date.now(); data.items = [ { id:'i_'+randHex(6), created: now-300000, url:'https://www.kleinanzeigen.de/s-anzeige/sony-a7-iii-kit/1234567890', title:'Sony A7 III (Kit) – Top Zustand', platform:'Kleinanzeigen', buy:750, sell:1050, feePct:0, ship:0, status:'verhandlung', due: todayISO(), tags:'kamera, sony, vollformat', note:'Mit 2 Akkus, 24-70mm. Angebot 780€ abgegeben.', images: [] }, { id:'i_'+randHex(6), created: now-7200000, url:'https://www.ebay.de/itm/Apple-iPhone-13/10000001', title:'iPhone 13 128GB Midnight – OVP', platform:'eBay', buy:380, sell:520, feePct:11, ship:5.49, status:'kontaktiert', due:'', tags:'iphone, 128gb', note:'Leichte Kratzer, Akku 87%.', images: [] }, { id:'i_'+randHex(6), created: now-17200000, url:'https://www.kleinanzeigen.de/s-anzeige/dyson-v11/2222222', title:'Dyson V11 – Zubehör komplett', platform:'Kleinanzeigen', buy:120, sell:230, feePct:0, ship:0, status:'verkauft', due:'', tags:'haushalt', note:'Schon verkauft an Max. Abholung erledigt.', images: [] } ]; writeData(email, data); }
+
+    // ===== Global UI =====
+    $('#search').addEventListener('input', renderList);
+    $('#filterStatus').addEventListener('change', renderList);
+    $('#sortBy').addEventListener('change', renderList);
+    window.addEventListener('keydown', (e)=>{ if(e.ctrlKey && e.key === '/') { e.preventDefault(); $('#search').focus() } });
+
+    // ===== Init (Cloud ODER Lokal) =====
     (async function init(){
-      if(CLOUD){
-        await attachCloudAuth();
-        const { data } = await sb.auth.getSession();
-        if(data?.session){
-          const email = data.session.user.email;
-          currentUser = email; setSession(email);
-          $('#userEmail').textContent = email;
-          $('#authView').classList.add('hidden');
-          $('#appView').classList.remove('hidden');
-          $('#appHeader').classList.remove('hidden');
-          $('#modeText').textContent = 'Cloud';
-          await syncDown();
-          renderList();
-          recalcStats();
-        }
-        return; // Kein lokaler Fallback
-      }
-      // Lokaler Modus
-      await attachLocalAuth();
-      const sess = getSession();
-      if(sess && readUsers()[sess]){
-        currentUser = sess; $('#userEmail').textContent = sess; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent = 'Lokal'; if(!(readData(sess)?.items?.length)) seedSamples(); renderList();
-      }
+      if(CLOUD){ await attachCloudAuth(); const { data } = await sb.auth.getSession(); if(data?.session){ const email = data.session.user.email; currentUser = email; setSession(email); $('#userEmail').textContent = email; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent = 'Cloud'; await syncDown(); renderList(); recalcStats(); } return; }
+      await attachLocalAuth(); const sess = getSession(); if(sess && readUsers()[sess]){ currentUser = sess; $('#userEmail').textContent = sess; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent = 'Lokal'; if(!(readData(sess)?.items?.length)) seedSamples(); renderList(); }
     })();
   </script>
 </body>
@@ -836,7 +509,7 @@
   <style>
     :root {
       --bg: #0b0f1a;
-      --card: rgba(16, 20, 35, 0.72);
+      --surface: rgba(16, 20, 35, 0.72);
       --muted: #9aa4bf;
       --text: #e8edff;
       --accent: #7c4dff;
@@ -855,8 +528,7 @@
     html, body { height: 100% }
     body {
       margin: 0; background: var(--bg); color: var(--text); font-family: 'Space Grotesk', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
-      background-image: var(--gradient);
-      background-attachment: fixed; 
+      background-image: var(--gradient); background-attachment: fixed; 
     }
 
     a { color: var(--accent2); text-decoration: none }
@@ -864,62 +536,40 @@
 
     .container { max-width: 1200px; margin: 0 auto; padding: 28px; }
 
+    /* Clean Header */
+    header.app { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(10px); background: rgba(11,15,26,.65); border-bottom: 1px solid rgba(255,255,255,.06); }
+    header.app .bar { display:flex; align-items:center; justify-content:space-between; gap:16px; padding: 16px 24px; }
     .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:.5px; }
-    .brand .logo { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--accent2)); position: relative; box-shadow: 0 8px 28px rgba(124,77,255,.35), 0 8px 28px rgba(0,229,255,.25); }
-    .brand .logo::after { content: ""; position: absolute; inset: 8px; border-radius: 9px; background: rgba(255,255,255,.2); filter: blur(6px); }
-
-    .card { background: var(--card); backdrop-filter: var(--glass); border-radius: var(--radius); box-shadow: var(--shadow); }
-    .card.pad { padding: 18px; }
-    .row { display:flex; gap: 18px; flex-wrap: wrap }
-
-    header.app { display:flex; align-items:center; justify-content:space-between; gap: 16px; padding: 18px 24px; position: sticky; top: 0; z-index: 5; background: linear-gradient(180deg, rgba(11,15,26,.88), rgba(11,15,26,.55) 60%, rgba(11,15,26,0)); border-bottom: 1px solid rgba(255,255,255,.06); }
-
-    .chip { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--muted); font-size: 12px; }
-
-    input, select, textarea, button { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: var(--text); border-radius: 12px; padding: 12px 12px; outline: none; width: 100%; font: inherit; }
-    input::placeholder, textarea::placeholder { color: #b9c3e4aa }
-    label { font-size: 12px; color: var(--muted); margin-bottom: 8px; display:block }
-
-    .btn { cursor: pointer; user-select: none; transition: .25s ease; border-radius: 12px; }
-    .btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; color: #0a0e18; font-weight: 700; }
-    .btn.ghost { background: transparent; border: 1px dashed rgba(255,255,255,.18); }
+    .brand .logo { width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--accent2)); box-shadow: 0 8px 28px rgba(124,77,255,.35), 0 8px 28px rgba(0,229,255,.25); }
+    .searchbar { display:flex; align-items:center; gap:10px; flex:1; max-width: 520px }
+    .searchbar input { width: 100%; padding: 12px 12px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: var(--text); border-radius: 12px; outline: none; }
+    .pill { border-radius: 999px; padding: 6px 10px; background: rgba(255,255,255,.06); font-size:12px; color: var(--muted) }
+    .btn { cursor: pointer; user-select: none; transition: .22s ease; border-radius: 12px; padding: 10px 12px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); color: var(--text) }
+    .btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; color:#0a0e18; font-weight:700 }
     .btn:hover { transform: translateY(-1px); filter: brightness(1.05) }
 
-    .auth-wrap { min-height: 100vh; display:grid; place-items:center; padding: 28px }
-    .auth { max-width: 880px; width: 100%; display:grid; grid-template-columns: 1.2fr 1fr; overflow: hidden }
-    .auth .left { padding: 28px; position:relative }
-    .auth .right { padding: 28px; background: linear-gradient(160deg, rgba(124,77,255,.2), rgba(0,229,255,.12)); }
-    .auth h1 { margin: 0 0 8px 0; }
-    .auth p { margin: 0; color: var(--muted) }
-    .auth .tabbar { display:flex; gap:8px; margin: 18px 0 12px }
-    .auth .tabbar button { flex:1; padding: 10px 12px }
-
-    form.grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px }
-    form.grid .span2 { grid-column: 1 / -1 }
-
-    .hidden { display:none !important }
-
-    /* Dashboard */
-    .layout { display:grid; grid-template-columns: 300px 1fr; gap: 18px; }
-    @media (max-width: 960px) { .layout { grid-template-columns: 1fr } }
-
-    .searchbar { display:flex; align-items:center; gap:12px; flex:1 }
-    .searchbar input { width: 100% }
-
-    .stats { display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px }
+    /* Cards & layout */
+    .card { background: var(--surface); backdrop-filter: var(--glass); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .pad { padding: 20px }
+    .stats { display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px }
     @media (max-width: 960px) { .stats { grid-template-columns: repeat(2, 1fr) } }
-    .stat { padding:16px; position:relative; overflow:hidden }
+    .stat { position:relative; overflow:hidden }
     .stat .label { color: var(--muted); font-size: 12px }
-    .stat .value { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 22px; margin-top:6px }
-    .stat .glow { position:absolute; inset: -1px; border-radius: var(--radius); pointer-events:none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+    .stat .value { font-family: 'JetBrains Mono', ui-monospace; font-size: 24px; margin-top:6px }
 
-    .list { display:grid; gap: 12px }
+    /* Quick actions */
+    .qa { display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px }
+    @media (max-width: 960px) { .qa { grid-template-columns: repeat(2, 1fr) } }
+    .qa .tile { display:flex; flex-direction:column; gap:8px; justify-content:center; align-items:flex-start; padding: 18px; min-height: 120px; border: 1px dashed rgba(255,255,255,.12) }
+    .qa .tile h4 { margin:0 }
+    .qa .tile .muted { color: var(--muted); font-size: 12px }
 
-    .item { display:grid; grid-template-columns: 1fr 160px 140px 110px 90px 40px; gap: 10px; align-items:center; padding: 10px 12px; }
+    /* Deals list */
+    .list { display:grid; gap: 10px; margin-top: 16px }
+    .item { display:grid; grid-template-columns: 1fr 160px 140px 110px 120px 40px; gap: 10px; align-items:center; padding: 12px }
     .item .title { font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
     .item .url { font-size:12px; color: var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
-    .item .platform { font-size:12px; }
-    .item .badge { padding:6px 10px; border-radius: 999px; font-size:12px; display:inline-flex; align-items:center; gap:6px }
+    .badge { padding:6px 10px; border-radius: 999px; font-size:12px; display:inline-flex; align-items:center; gap:6px }
     .badge.sourced { background: rgba(124,77,255,.18); color: #cbb6ff }
     .badge.contacted { background: rgba(0,229,255,.18); color: #a9f6ff }
     .badge.negotiating { background: rgba(255,176,32,.18); color: #ffd391 }
@@ -929,288 +579,261 @@
 
     .actions { display:flex; gap:8px; justify-content:flex-end }
     .iconbtn { width:36px; height:36px; display:grid; place-items:center; border-radius: 10px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); cursor: pointer }
-    .iconbtn:hover { filter: brightness(1.1) }
+
+    .thumbs { display:flex; gap:6px; flex-wrap: wrap }
+    .thumb { width: 34px; height: 34px; border-radius: 8px; overflow:hidden; border: 1px solid rgba(255,255,255,.1) }
+    .thumb img { width:100%; height:100%; object-fit: cover }
 
     .subtle { color: var(--muted); font-size: 12px }
+    .divider { height:1px; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.12), rgba(255,255,255,0)); margin: 14px 0 }
+
+    /* Modal */
+    .modal { position: fixed; inset: 0; display:none; place-items:center; background: rgba(3,6,10,.6); z-index: 50 }
+    .modal.show { display:grid }
+    .dialog { max-width: 820px; width: calc(100% - 36px); }
+
+    /* Forms */
+    input, select, textarea { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: var(--text); border-radius: 12px; padding: 12px 12px; outline: none; width: 100%; font: inherit; }
+    input::placeholder, textarea::placeholder { color: #b9c3e4aa }
+    label { font-size: 12px; color: var(--muted); margin-bottom: 8px; display:block }
+    form.grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px }
+    form.grid .span2 { grid-column: 1 / -1 }
 
     .footer { margin-top: 24px; display:flex; gap:12px; flex-wrap:wrap; justify-content: space-between; align-items:center }
 
-    .divider { height:1px; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.12), rgba(255,255,255,0)); margin: 14px 0 }
-
-    .template { background: rgba(255,255,255,.05); padding: 12px; border-radius: 12px; border: 1px dashed rgba(255,255,255,.12) }
-    .template .row { align-items:center }
-
-    .modal { position: fixed; inset: 0; display:none; place-items:center; background: rgba(3,6,10,.6); z-index: 20 }
-    .modal .dialog { max-width: 520px; width: calc(100% - 36px); }
-    .modal.show { display:grid }
-
-    .kicker { font-size:12px; color: var(--muted); text-transform: uppercase; letter-spacing: .14em }
-
-    .taglist { display:flex; gap:8px; flex-wrap: wrap }
-    .tag { background: rgba(255,255,255,.08); padding: 6px 10px; border-radius: 999px; font-size: 12px }
-
-    .pill { border-radius: 999px; padding: 6px 10px; background: rgba(255,255,255,.06); font-size:12px }
-
-    .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap: 12px }
-    @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr } }
-
-    .note { font-size: 12px; color: var(--muted) }
-
-    .comingsoon { opacity: .75; pointer-events: none }
+    .hidden { display:none !important }
   </style>
 </head>
 <body>
+  <!-- Header (versteckt bis Login) -->
   <header id="appHeader" class="app hidden">
-    <div class="brand">
-      <div class="logo"></div>
-      <div>
+    <div class="bar">
+      <div class="brand">
+        <div class="logo"></div>
         <div>ResellDeck</div>
-        <div class="subtle">Kleinanzeigen & eBay Workflow, aber hübsch ✨</div>
       </div>
+      <div class="searchbar">
+        <i class="ti ti-search"></i>
+        <input id="search" placeholder="Suche Links, Titel, Tags… (Strg+/)" />
+      </div>
+      <span class="pill" id="modeText">Lokal</span>
+      <span class="pill" id="userEmail">Gast</span>
+      <button class="btn" id="logoutBtn"><i class="ti ti-logout"></i>&nbsp;Logout</button>
     </div>
-    <div class="searchbar">
-      <i class="ti ti-search"></i>
-      <input id="search" placeholder="Suche Links, Titel, Tags… (Strg+/)" />
-    </div>
-    <div class="chip" id="modeChip"><i class="ti ti-cloud"></i><span id="modeText">Lokal</span></div>
-    <div class="chip" id="userChip"><i class="ti ti-user"></i><span id="userEmail">Gast</span></div>
-    <button class="btn ghost" id="logoutBtn"><i class="ti ti-logout"></i>&nbsp;Logout</button>
   </header>
 
-  <div id="authView" class="auth-wrap">
-    <div class="auth card">
-      <div class="left">
-        <div class="brand" style="margin-bottom:12px">
-          <div class="logo" style="width:32px;height:32px"></div>
-          <div>ResellDeck</div>
-        </div>
-        <h1>Dein futuristisches Reseller-Dashboard</h1>
-        <p>
-          Speichere Links, behalte Deals im Blick, nutze Vorlagen – alles im Browser. <strong>Demo-Login</strong> ohne Server, Daten liegen nur in <em>deinem</em> Browser.
-          <br><span class="note">Optionaler Cloud‑Sync via Supabase ist im Code vorbereitet (siehe Hinweis rechts).</span>
-        </p>
-        <div class="divider"></div>
-        <div class="tabbar">
-          <button id="tabLogin" class="btn">Login</button>
-          <button id="tabRegister" class="btn ghost">Account erstellen</button>
-        </div>
-        <form id="loginForm" class="grid">
-          <div class="span2">
-            <label>E-Mail</label>
-            <input required type="email" id="loginEmail" placeholder="du@beispiel.de" autocomplete="username" />
-          </div>
-          <div class="span2">
-            <label>Passwort</label>
-            <input required type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" />
-          </div>
-          <div class="span2">
-            <button class="btn primary" type="submit">Einloggen</button>
-          </div>
-        </form>
-
-        <form id="registerForm" class="grid hidden">
-          <div class="span2">
-            <label>E-Mail</label>
-            <input required type="email" id="regEmail" placeholder="du@beispiel.de" autocomplete="username" />
-          </div>
-          <div>
-            <label>Passwort</label>
-            <input required type="password" id="regPassword" placeholder="mind. 8 Zeichen" autocomplete="new-password" />
-          </div>
-          <div>
-            <label>Passwort (Wiederholen)</label>
-            <input required type="password" id="regPassword2" placeholder="nochmal" autocomplete="new-password" />
-          </div>
-          <div class="span2">
-            <button class="btn primary" type="submit">Account erstellen</button>
-          </div>
-          <p class="note span2">Hinweis: Client-Login (LocalStorage) oder 
-            <span class="pill">Supabase‑Auth</span> wenn konfiguriert.</p>
-        </form>
+  <!-- Auth View -->
+  <div id="authView" class="container" style="min-height:100vh; display:grid; place-items:center">
+    <div class="card pad" style="max-width:880px; width:100%">
+      <div class="brand" style="margin-bottom:12px">
+        <div class="logo" style="width:32px;height:32px"></div>
+        <div>ResellDeck</div>
       </div>
-      <div class="right">
-        <div class="kicker">Features</div>
-        <ul>
-          <li>🔗 Link-Speicher mit Status-Workflow</li>
-          <li>💬 Verhandlungs-Vorlagen & Copy-Buttons</li>
-          <li>📈 Profit-Rechner & Mini-Statistiken</li>
-          <li>⏰ Erinnerungen/Deadlines pro Deal</li>
-          <li>⬇️ Export/⬆️ Import als JSON</li>
-          <li>🤖 <em>Coming Soon:</em> AI-Listing-Optimierer</li>
-        </ul>
-        <div class="divider"></div>
-        <div class="kicker">Cloud‑Sync (optional)</div>
-        <p class="note">
-          Trage in der <code>&lt;script type="module"&gt;</code>-Sektion deine 
-          <strong>SUPABASE_URL</strong> &amp; <strong>SUPABASE_ANON_KEY</strong> ein.
-          Danach ist Login/Sync automatisch online.
-        </p>
-        <div class="divider"></div>
-        <div class="kicker">Demo-Zugang</div>
-        <p class="note">Du kannst dir einfach selbst einen Account anlegen. Alternativ: <code class="pill">demo@deck.dev</code> / <code class="pill">demo1234</code> (lokal).</p>
+      <h1 style="margin:0 0 6px">Dein cleanes Reseller-Dashboard</h1>
+      <p class="subtle">Login lokal (ohne Server) oder mit Supabase-Auth – je nach Konfiguration.</p>
+      <div class="divider"></div>
+      <div class="row" style="gap:10px">
+        <button id="tabLogin" class="btn primary" style="flex:1">Login</button>
+        <button id="tabRegister" class="btn" style="flex:1">Account erstellen</button>
+      </div>
+
+      <form id="loginForm" class="grid" style="margin-top:12px">
+        <div class="span2"><label>E-Mail</label><input required type="email" id="loginEmail" placeholder="du@beispiel.de" autocomplete="username" /></div>
+        <div class="span2"><label>Passwort</label><input required type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" /></div>
+        <div class="span2"><button class="btn primary" type="submit">Einloggen</button></div>
+      </form>
+
+      <form id="registerForm" class="grid hidden" style="margin-top:12px">
+        <div class="span2"><label>E-Mail</label><input required type="email" id="regEmail" placeholder="du@beispiel.de" autocomplete="username" /></div>
+        <div><label>Passwort</label><input required type="password" id="regPassword" placeholder="mind. 8 Zeichen" autocomplete="new-password" /></div>
+        <div><label>Passwort (Wiederholen)</label><input required type="password" id="regPassword2" placeholder="nochmal" autocomplete="new-password" /></div>
+        <div class="span2"><button class="btn primary" type="submit">Account erstellen</button></div>
+        <p class="subtle span2">Hinweis: Client-Login (LocalStorage) oder Supabase‑Auth – je nach Konfiguration. Kein doppelter Modus gleichzeitig → sauber & stabil.</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- App View -->
+  <main id="appView" class="container hidden">
+    <!-- Dashboard Cards -->
+    <div class="stats">
+      <div class="card pad stat"><div class="label">Gespeicherte Links</div><div id="statTotal" class="value">0</div></div>
+      <div class="card pad stat"><div class="label">Aktiv (Kontakt/Laufend)</div><div id="statActive" class="value">0</div></div>
+      <div class="card pad stat"><div class="label">Gewinn (prognostiziert)</div><div id="statProfit" class="value">€0</div></div>
+      <div class="card pad stat"><div class="label">Fällige Erinnerungen</div><div id="statDue" class="value">0</div></div>
+    </div>
+
+    <!-- Quick actions as tiles -->
+    <div class="qa">
+      <div class="card tile" id="tileAdd">
+        <i class="ti ti-square-rounded-plus" style="font-size:22px"></i>
+        <h4>Neuen Deal anlegen</h4>
+        <div class="muted">URL, Preisziele, Status & Bilder</div>
+      </div>
+      <div class="card tile" id="tileTemplates">
+        <i class="ti ti-message-2" style="font-size:22px"></i>
+        <h4>Erstkontakt & Antworten</h4>
+        <div class="muted">Schnell kopieren & personalisieren</div>
+      </div>
+      <div class="card tile" id="tileImportExport">
+        <i class="ti ti-arrows-left-right" style="font-size:22px"></i>
+        <h4>Import / Export</h4>
+        <div class="muted">JSON sichern oder wiederherstellen</div>
+      </div>
+      <div class="card tile" id="tileSettings">
+        <i class="ti ti-settings" style="font-size:22px"></i>
+        <h4>Einstellungen</h4>
+        <div class="muted">Gebühren, Sync, Account</div>
+      </div>
+    </div>
+
+    <!-- Deals Section -->
+    <div class="card pad" style="margin-top:16px">
+      <div class="row" style="align-items:center; justify-content:space-between">
+        <h3 style="margin:0">Deine Deals</h3>
+        <div class="row" style="align-items:center">
+          <select id="filterStatus">
+            <option value="">Alle Status</option>
+            <option value="gesichtet">Gesichtet</option>
+            <option value="kontaktiert">Kontaktiert</option>
+            <option value="verhandlung">Verhandlung</option>
+            <option value="gekauft">Gekauft</option>
+            <option value="gelistet">Gelistet</option>
+            <option value="verkauft">Verkauft</option>
+          </select>
+          <select id="sortBy">
+            <option value="createdDesc">Neueste zuerst</option>
+            <option value="profitDesc">Höchster Profit</option>
+            <option value="dueAsc">Nächste Fälligkeit</option>
+            <option value="titleAsc">Titel A→Z</option>
+          </select>
+        </div>
+      </div>
+      <div class="list" id="list"></div>
+    </div>
+
+    <div class="footer">
+      <div class="subtle">💡 Tipp: Mit <strong>Strg+/</strong> öffnest du die Suche. In der Deal-Karte siehst du Mini-Thumbnails deiner Bilder.</div>
+      <div class="pill" id="modeInfo">Modus: <span id="modeInfoText">Lokal</span></div>
+    </div>
+  </main>
+
+  <!-- Deal Modal (Add/Edit) -->
+  <div id="dealModal" class="modal">
+    <div class="dialog card pad">
+      <div class="row" style="align-items:center; justify-content:space-between">
+        <h3 id="dealModalTitle" style="margin:0">Neuer Deal</h3>
+        <button class="btn" id="dealClose"><i class="ti ti-x"></i></button>
+      </div>
+      <form id="dealForm" class="grid" style="margin-top:8px">
+        <div class="span2">
+          <label>URL</label>
+          <input id="dUrl" type="url" placeholder="https://www.kleinanzeigen.de/... oder https://www.ebay.de/..." required />
+        </div>
+        <div>
+          <label>Titel</label>
+          <input id="dTitle" placeholder="z.B. iPhone 13, sehr guter Zustand" />
+        </div>
+        <div>
+          <label>Plattform</label>
+          <select id="dPlatform">
+            <option>Automatisch</option>
+            <option>eBay</option>
+            <option>Kleinanzeigen</option>
+            <option>Sonstiges</option>
+          </select>
+        </div>
+        <div>
+          <label>Einkaufspreis (Ziel)</label>
+          <input id="dBuy" type="number" inputmode="decimal" placeholder="€" />
+        </div>
+        <div>
+          <label>Verkaufspreis (Ziel)</label>
+          <input id="dSell" type="number" inputmode="decimal" placeholder="€" />
+        </div>
+        <div>
+          <label>Status</label>
+          <select id="dStatus">
+            <option>gesichtet</option>
+            <option>kontaktiert</option>
+            <option>verhandlung</option>
+            <option>gekauft</option>
+            <option>gelistet</option>
+            <option>verkauft</option>
+          </select>
+        </div>
+        <div>
+          <label>Erinnerung</label>
+          <input id="dDue" type="date" />
+        </div>
+        <div class="span2">
+          <label>Tags (Komma-getrennt)</label>
+          <input id="dTags" placeholder="iphone, 128gb, spacegray" />
+        </div>
+        <div class="span2">
+          <label>Notiz</label>
+          <textarea id="dNote" rows="3" placeholder="Zustand, Standort, Argumente…"></textarea>
+        </div>
+        <div class="span2">
+          <label>Bilder hinzufügen</label>
+          <input id="dImages" type="file" accept="image/*" multiple />
+          <div id="dPreview" class="thumbs" style="margin-top:8px"></div>
+          <p class="subtle">Hinweis: Bilder werden lokal gespeichert (Data‑URL). Viele große Bilder können Speicher fressen. (Cloud‑Upload optional später)</p>
+        </div>
+        <div class="span2" style="display:flex; gap:10px; justify-content:flex-end; margin-top:6px">
+          <button type="button" class="btn" id="dealCalc"><i class="ti ti-calculator"></i>&nbsp;Profit-Rechner</button>
+          <button type="submit" class="btn primary" id="dealSave"><i class="ti ti-device-floppy"></i>&nbsp;Speichern</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Templates Modal -->
+  <div id="tplModal" class="modal">
+    <div class="dialog card pad">
+      <div class="row" style="align-items:center; justify-content:space-between">
+        <h3 style="margin:0">Vorlagen</h3>
+        <button class="btn" id="tplClose"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="divider"></div>
+      <div class="card pad" style="margin-bottom:10px">
+        <div class="row" style="align-items:center; justify-content:space-between">
+          <div>
+            <div class="subtle">Erstkontakt</div>
+            <div style="margin-top:6px" id="tpl1">Hi! 😊 Ist der Artikel noch verfügbar? Würde heute abholen/zzgl. Versand nehmen. Wenn  <Zielpreis>  für dich passt, bin ich sofort dabei. Danke dir!</div>
+          </div>
+          <button class="btn" id="copyTpl1"><i class="ti ti-copy"></i>&nbsp;Kopieren</button>
+        </div>
+      </div>
+      <div class="card pad">
+        <div class="row" style="align-items:center; justify-content:space-between">
+          <div>
+            <div class="subtle">Gegenangebot</div>
+            <div style="margin-top:6px" id="tpl2">Danke fürs schnelle Feedback! Ich könnte  <MeinPreis>  anbieten und heute/sofort zahlen. Deal?</div>
+          </div>
+          <button class="btn" id="copyTpl2"><i class="ti ti-copy"></i>&nbsp;Kopieren</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <main id="appView" class="container hidden">
-    <div class="stats">
-      <div class="card stat"><div class="glow"></div><div class="label">Gespeicherte Links</div><div id="statTotal" class="value">0</div></div>
-      <div class="card stat"><div class="glow"></div><div class="label">Aktiv (Kontakt/Laufend)</div><div id="statActive" class="value">0</div></div>
-      <div class="card stat"><div class="glow"></div><div class="label">Gewinn (prognostiziert)</div><div id="statProfit" class="value">€0</div></div>
-      <div class="card stat"><div class="glow"></div><div class="label">Fällige Erinnerungen</div><div id="statDue" class="value">0</div></div>
-    </div>
-
-    <div class="layout" style="margin-top:18px">
-      <aside class="card pad">
-        <h3 style="margin-top:0">Link speichern</h3>
-        <form id="addForm">
-          <label>URL</label>
-          <input id="fUrl" type="url" placeholder="https://www.kleinanzeigen.de/... oder https://www.ebay.de/..." required />
-          <div class="grid-2" style="margin-top:12px">
-            <div>
-              <label>Titel</label>
-              <input id="fTitle" placeholder="z.B. iPhone 13, sehr guter Zustand" />
-            </div>
-            <div>
-              <label>Plattform</label>
-              <select id="fPlatform">
-                <option>Automatisch</option>
-                <option>eBay</option>
-                <option>Kleinanzeigen</option>
-                <option>Sonstiges</option>
-              </select>
-            </div>
-          </div>
-          <div class="grid-2" style="margin-top:12px">
-            <div>
-              <label>Einkaufspreis (Ziel)</label>
-              <input id="fBuy" type="number" inputmode="decimal" placeholder="€" />
-            </div>
-            <div>
-              <label>Verkaufspreis (Ziel)</label>
-              <input id="fSell" type="number" inputmode="decimal" placeholder="€" />
-            </div>
-          </div>
-          <div class="grid-2" style="margin-top:12px">
-            <div>
-              <label>Status</label>
-              <select id="fStatus">
-                <option>gesichtet</option>
-                <option>kontaktiert</option>
-                <option>verhandlung</option>
-                <option>gekauft</option>
-                <option>gelistet</option>
-                <option>verkauft</option>
-              </select>
-            </div>
-            <div>
-              <label>Erinnerung</label>
-              <input id="fDue" type="date" />
-            </div>
-          </div>
-          <label style="margin-top:12px">Tags (Komma-getrennt)</label>
-          <input id="fTags" placeholder="iphone, 128gb, spacegray" />
-          <label style="margin-top:12px">Notiz</label>
-          <textarea id="fNote" rows="3" placeholder="Zustand, Standort, Argumente…"></textarea>
-          <button class="btn primary" style="margin-top:14px" type="submit"><i class="ti ti-bookmark-plus"></i>&nbsp;Speichern</button>
-        </form>
-
-        <div class="divider"></div>
-        <div>
-          <h3 style="margin:0 0 8px 0">Vorlagen (Copy & Paste)</h3>
-          <div class="template">
-            <div class="row">
-              <div style="flex:1">
-                <div class="kicker">Erstkontakt</div>
-                <p class="note" style="margin:4px 0 8px">Höfliche Anfrage mit Preisanker</p>
-              </div>
-              <button class="btn ghost" id="copyTpl1"><i class="ti ti-copy"></i>&nbsp;Kopieren</button>
-            </div>
-            <pre id="tpl1" class="subtle" style="white-space:pre-wrap; user-select:all;">Hi! 😊 Ist der Artikel noch verfügbar? Würde heute abholen/zzgl. Versand nehmen. Wenn  <Zielpreis>  für dich passt, bin ich sofort dabei. Danke dir!</pre>
-          </div>
-          <div class="template" style="margin-top:10px">
-            <div class="row">
-              <div style="flex:1">
-                <div class="kicker">Gegenangebot</div>
-                <p class="note" style="margin:4px 0 8px">Kurz & freundlich</p>
-              </div>
-              <button class="btn ghost" id="copyTpl2"><i class="ti ti-copy"></i>&nbsp;Kopieren</button>
-            </div>
-            <pre id="tpl2" class="subtle" style="white-space:pre-wrap; user-select:all;">Danke fürs schnelle Feedback! Ich könnte  <MeinPreis>  anbieten und heute/sofort zahlen. Deal?</pre>
-          </div>
-
-          <div class="divider"></div>
-          <h3 style="margin:0 0 8px 0">Export & Import</h3>
-          <div class="row">
-            <button class="btn ghost" id="exportBtn"><i class="ti ti-download"></i>&nbsp;Daten exportieren (JSON)</button>
-            <label class="btn ghost" style="cursor:pointer"><i class="ti ti-upload"></i>&nbsp;Importieren<input id="importFile" type="file" accept="application/json" style="display:none"></label>
-          </div>
-          <p class="note" style="margin-top:8px">Sichert deine Links in eine Datei oder importiert sie später wieder.</p>
-
-          <div class="divider"></div>
-          <button class="btn" id="wipeBtn" style="width:100%; background: rgba(255,77,103,.1); border:1px solid rgba(255,77,103,.35); color:#ffcfda"><i class="ti ti-alert-triangle"></i>&nbsp;Lokale Daten löschen</button>
-        </div>
-      </aside>
-
-      <section class="card pad">
-        <div class="row" style="align-items:center; justify-content:space-between">
-          <h3 style="margin:0">Deine Deals</h3>
-          <div class="row" style="align-items:center">
-            <select id="filterStatus">
-              <option value="">Alle Status</option>
-              <option value="gesichtet">Gesichtet</option>
-              <option value="kontaktiert">Kontaktiert</option>
-              <option value="verhandlung">Verhandlung</option>
-              <option value="gekauft">Gekauft</option>
-              <option value="gelistet">Gelistet</option>
-              <option value="verkauft">Verkauft</option>
-            </select>
-            <select id="sortBy">
-              <option value="createdDesc">Neueste zuerst</option>
-              <option value="profitDesc">Höchster Profit</option>
-              <option value="dueAsc">Nächste Fälligkeit</option>
-              <option value="titleAsc">Titel A→Z</option>
-            </select>
-          </div>
-        </div>
-        <div class="list" id="list"></div>
-      </section>
-    </div>
-
-    <div class="footer">
-      <div class="subtle">💡 Tipp: Zieh die URL per Copy/Paste rein. Mit <strong>Strg+/</strong> öffnest du die Suche.</div>
-      <div class="chip comingsoon"><i class="ti ti-sparkles"></i> AI-Listing-Optimierer – bald™️</div>
-    </div>
-  </main>
-
+  <!-- Profit Modal (bereits vorhanden) -->
   <div id="profitModal" class="modal">
     <div class="dialog card pad">
       <div class="row" style="justify-content:space-between; align-items:center; margin-bottom:8px">
         <h3 style="margin:0">Profit-Rechner</h3>
-        <button class="iconbtn" id="profitClose"><i class="ti ti-x"></i></button>
+        <button class="btn" id="profitClose"><i class="ti ti-x"></i></button>
       </div>
-      <div class="grid-2">
-        <div>
-          <label>Einkaufspreis</label>
-          <input id="pmBuy" type="number" inputmode="decimal" />
-        </div>
-        <div>
-          <label>Verkaufspreis</label>
-          <input id="pmSell" type="number" inputmode="decimal" />
-        </div>
-        <div>
-          <label>Plattformgebühren (%)</label>
-          <input id="pmFeePct" type="number" inputmode="decimal" value="11" />
-        </div>
-        <div>
-          <label>Versandkosten</label>
-          <input id="pmShip" type="number" inputmode="decimal" value="0" />
-        </div>
-      </div>
+      <form class="grid">
+        <div><label>Einkaufspreis</label><input id="pmBuy" type="number" inputmode="decimal" /></div>
+        <div><label>Verkaufspreis</label><input id="pmSell" type="number" inputmode="decimal" /></div>
+        <div><label>Plattformgebühren (%)</label><input id="pmFeePct" type="number" inputmode="decimal" value="11" /></div>
+        <div><label>Versandkosten</label><input id="pmShip" type="number" inputmode="decimal" value="0" /></div>
+      </form>
       <div class="divider"></div>
       <div class="row" style="align-items:center; justify-content:space-between">
         <div>
-          <div class="kicker">Prognose</div>
+          <div class="subtle">Prognose</div>
           <div id="pmResult" style="font-family:'JetBrains Mono', ui-monospace; font-size:20px">€0</div>
         </div>
         <button class="btn primary" id="pmApply"><i class="ti ti-check"></i>&nbsp;In Deal übernehmen</button>
@@ -1223,15 +846,16 @@
       <div>
         <div class="title"></div>
         <div class="url"></div>
+        <div class="thumbs"></div>
       </div>
       <div class="platform"></div>
       <div class="status"></div>
       <div class="profit" style="font-family:'JetBrains Mono', ui-monospace">€0</div>
       <div class="due subtle">–</div>
       <div class="actions">
-        <button class="iconbtn open"><i class="ti ti-external-link"></i></button>
-        <button class="iconbtn edit"><i class="ti ti-pencil"></i></button>
-        <button class="iconbtn calc"><i class="ti ti-calculator"></i></button>
+        <button class="iconbtn open" title="Öffnen"><i class="ti ti-external-link"></i></button>
+        <button class="iconbtn edit" title="Bearbeiten"><i class="ti ti-pencil"></i></button>
+        <button class="iconbtn calc" title="Profit-Rechner"><i class="ti ti-calculator"></i></button>
         <button class="iconbtn del" title="Löschen" style="border-color: rgba(255,77,103,.35)"><i class="ti ti-trash"></i></button>
       </div>
     </div>
@@ -1240,7 +864,7 @@
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-    // ===== Supabase Config (optional – für Cloud‑Sync) =====
+    // ===== Supabase Config =====
     const SUPABASE_URL = 'https://okycsoofgaddpxbircit.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9reWNzb29mZ2FkZHB4YmlyY2l0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0NTM0NjUsImV4cCI6MjA3MzAyOTQ2NX0.3DTX4GzHRoSSpqsqXQ4v04UVreUHIthukk223uFwxTM';
     const CLOUD = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
@@ -1252,11 +876,7 @@
     const fmtMoney = (n) => `€${Number(n||0).toLocaleString('de-DE', {maximumFractionDigits: 2})}`;
     const todayISO = () => new Date().toISOString().slice(0,10);
 
-    async function sha256Hex(str){
-      const enc = new TextEncoder();
-      const buf = await crypto.subtle.digest('SHA-256', enc.encode(str));
-      return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
-    }
+    async function sha256Hex(str){ const enc = new TextEncoder(); const buf = await crypto.subtle.digest('SHA-256', enc.encode(str)); return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join(''); }
     const randHex = (len=16) => [...crypto.getRandomValues(new Uint8Array(len))].map(x=>x.toString(16).padStart(2,'0')).join('');
 
     // Storage (Local Mode)
@@ -1264,386 +884,112 @@
     const SESSION_KEY = 'rd_session_v1';
     function readUsers(){ try { return JSON.parse(localStorage.getItem(USERS_KEY) || '{}') } catch { return {} } }
     function writeUsers(obj){ localStorage.setItem(USERS_KEY, JSON.stringify(obj)) }
-
     function dataKey(email){ return `rd_data_${email}` }
     function readData(email){ try { return JSON.parse(localStorage.getItem(dataKey(email)) || '{}') } catch { return {} } }
     function writeData(email, obj){ localStorage.setItem(dataKey(email), JSON.stringify(obj)) }
-
-    function defaultData(){
-      return {
-        items: [],
-        templates: { first: $('#tpl1').textContent.trim(), counter: $('#tpl2').textContent.trim() },
-        settings: { feePct: 11 }
-      }
-    }
+    function defaultData(){ return { items: [], templates: { first: $('#tpl1')?.textContent?.trim() || '', counter: $('#tpl2')?.textContent?.trim() || '' }, settings: { feePct: 11 } } }
 
     // Auth State
     let currentUser = null;
     function setSession(email){ if(email){ localStorage.setItem(SESSION_KEY, email); } else { localStorage.removeItem(SESSION_KEY) } }
     function getSession(){ return localStorage.getItem(SESSION_KEY) }
 
-    function platformFromUrl(u){
-      try {
-        const h = new URL(u).hostname;
-        if(/kleinanzeigen\.de|ebay-kleinanzeigen\.de/i.test(h)) return 'Kleinanzeigen';
-        if(/ebay\./i.test(h)) return 'eBay';
-      } catch {}
-      return 'Sonstiges';
-    }
+    // Helpers
+    function platformFromUrl(u){ try { const h = new URL(u).hostname; if(/kleinanzeigen\.de|ebay-kleinanzeigen\.de/i.test(h)) return 'Kleinanzeigen'; if(/ebay\./i.test(h)) return 'eBay'; } catch {} return 'Sonstiges'; }
+    function statusBadge(s){ const map = { gesichtet:'sourced', kontaktiert:'contacted', verhandlung:'negotiating', gekauft:'bought', gelistet:'listed', verkauft:'sold' }; const cls = map[s] || 'sourced'; const span = document.createElement('span'); span.className = `badge ${cls}`; span.textContent = s.charAt(0).toUpperCase()+s.slice(1); return span; }
+    function computeProfit(it, feePctFallback=11){ const buy = Number(it.buy || 0); const sell = Number(it.sell || 0); const feePct = Number(typeof it.feePct === 'number' ? it.feePct : feePctFallback); const fees = sell * (feePct/100); const ship = Number(it.ship || 0); return Math.round((sell - fees - ship - buy) * 100) / 100; }
 
-    function statusBadge(s){
-      const map = { gesichtet:'sourced', kontaktiert:'contacted', verhandlung:'negotiating', gekauft:'bought', gelistet:'listed', verkauft:'sold' };
-      const cls = map[s] || 'sourced';
-      const span = document.createElement('span');
-      span.className = `badge ${cls}`;
-      span.textContent = s.charAt(0).toUpperCase()+s.slice(1);
-      return span;
-    }
+    function recalcStats(){ const data = readData(currentUser) || defaultData(); const items = data.items || []; $('#statTotal').textContent = items.length; $('#statActive').textContent = items.filter(i=>['kontaktiert','verhandlung','gelistet'].includes(i.status)).length; const profit = items.reduce((sum,i)=> sum + (i.status==='verkauft' || i.sell ? computeProfit(i, data.settings.feePct) : 0), 0); $('#statProfit').textContent = fmtMoney(profit); const due = items.filter(i=> i.due && i.due <= todayISO()).length; $('#statDue').textContent = due; $('#modeInfoText').textContent = CLOUD ? 'Cloud' : 'Lokal'; }
 
-    function computeProfit(it, feePctFallback=11){
-      const buy = Number(it.buy || 0);
-      const sell = Number(it.sell || 0);
-      const feePct = Number(typeof it.feePct === 'number' ? it.feePct : feePctFallback);
-      const fees = sell * (feePct/100);
-      const ship = Number(it.ship || 0);
-      return Math.round((sell - fees - ship - buy) * 100) / 100;
-    }
+    function renderList(){ const data = readData(currentUser) || defaultData(); const q = $('#search').value.trim().toLowerCase(); const fStatus = $('#filterStatus').value; const sortBy = $('#sortBy').value; let items = [...(data.items||[])]; if(q){ items = items.filter(i=> (i.title||'').toLowerCase().includes(q) || (i.url||'').toLowerCase().includes(q) || (i.tags||'').toLowerCase().includes(q)) } if(fStatus){ items = items.filter(i=> i.status === fStatus) } items.sort((a,b)=>{ switch(sortBy){ case 'profitDesc': return computeProfit(b, data.settings.feePct) - computeProfit(a, data.settings.feePct); case 'dueAsc': return (a.due||'9999-12-31').localeCompare(b.due||'9999-12-31'); case 'titleAsc': return (a.title||'').localeCompare(b.title||''); default: return (b.created||0) - (a.created||0); } }); const list = $('#list'); list.innerHTML = ''; const tmpl = $('#itemTmpl'); for(const it of items){ const row = tmpl.content.firstElementChild.cloneNode(true); $('.title', row).textContent = it.title || '(ohne Titel)'; $('.url', row).textContent = it.url; const plat = $('.platform', row); plat.innerHTML = `<span class="pill">${it.platform}</span>`; const st = $('.status', row); st.innerHTML = ''; st.appendChild(statusBadge(it.status || 'gesichtet')); $('.profit', row).textContent = fmtMoney(computeProfit(it, data.settings.feePct)); $('.due', row).innerHTML = it.due ? (it.due <= todayISO() ? `<span style="color:var(--warn)">${it.due}</span>` : it.due) : '–'; const t = $('.thumbs', row); (it.images||[]).slice(0,4).forEach(img=>{ const d=document.createElement('div'); d.className='thumb'; d.innerHTML=`<img alt="Bild" src="${img.data}"/>`; d.title=img.name||'Bild'; d.addEventListener('click', ()=> window.open(img.data, '_blank')); t.appendChild(d); }); $('.open', row).addEventListener('click', ()=> window.open(it.url, '_blank')); $('.del', row).addEventListener('click', ()=> onDelete(it.id)); $('.edit', row).addEventListener('click', ()=> openDealModal(it.id)); $('.calc', row).addEventListener('click', ()=> openProfit(it.id)); list.appendChild(row); } recalcStats(); }
 
-    function recalcStats(){
-      const data = readData(currentUser) || defaultData();
-      const items = data.items || [];
-      $('#statTotal').textContent = items.length;
-      $('#statActive').textContent = items.filter(i=>['kontaktiert','verhandlung','gelistet'].includes(i.status)).length;
-      const profit = items.reduce((sum,i)=> sum + (i.status==='verkauft' || i.sell ? computeProfit(i, data.settings.feePct) : 0), 0);
-      $('#statProfit').textContent = fmtMoney(profit);
-      const due = items.filter(i=> i.due && i.due <= todayISO()).length;
-      $('#statDue').textContent = due;
-    }
-
-    function renderList(){
-      const data = readData(currentUser) || defaultData();
-      const q = $('#search').value.trim().toLowerCase();
-      const fStatus = $('#filterStatus').value;
-      const sortBy = $('#sortBy').value;
-      let items = [...(data.items||[])];
-      if(q){ items = items.filter(i=> (i.title||'').toLowerCase().includes(q) || (i.url||'').toLowerCase().includes(q) || (i.tags||'').toLowerCase().includes(q)) }
-      if(fStatus){ items = items.filter(i=> i.status === fStatus) }
-      items.sort((a,b)=>{
-        switch(sortBy){
-          case 'profitDesc': return computeProfit(b, data.settings.feePct) - computeProfit(a, data.settings.feePct);
-          case 'dueAsc': return (a.due||'9999-12-31').localeCompare(b.due||'9999-12-31');
-          case 'titleAsc': return (a.title||'').localeCompare(b.title||'');
-          default: return (b.created||0) - (a.created||0);
-        }
-      });
-
-      const list = $('#list');
-      list.innerHTML = '';
-      const tmpl = $('#itemTmpl');
-      for(const it of items){
-        const row = tmpl.content.firstElementChild.cloneNode(true);
-        $('.title', row).textContent = it.title || '(ohne Titel)';
-        $('.url', row).textContent = it.url;
-        const plat = $('.platform', row);
-        plat.innerHTML = `<span class="chip"><i class="ti ti-brand-${it.platform==='eBay'?'ebay':'cash'}"></i>${it.platform}</span>`;
-        const st = $('.status', row);
-        st.innerHTML = '';
-        st.appendChild(statusBadge(it.status || 'gesichtet'));
-        $('.profit', row).textContent = fmtMoney(computeProfit(it, data.settings.feePct));
-        $('.due', row).innerHTML = it.due ? (it.due <= todayISO() ? `<span style="color:var(--warn)">${it.due}</span>` : it.due) : '–';
-
-        $('.open', row).addEventListener('click', ()=> window.open(it.url, '_blank'));
-        $('.del', row).addEventListener('click', ()=> onDelete(it.id));
-        $('.edit', row).addEventListener('click', ()=> editItem(it.id));
-        $('.calc', row).addEventListener('click', ()=> openProfit(it.id));
-
-        list.appendChild(row);
-      }
-
-      recalcStats();
-    }
-
-    function editItem(id){
-      const data = readData(currentUser) || defaultData();
-      const it = data.items.find(x=>x.id===id);
-      if(!it) return;
-      $('#fUrl').value = it.url || '';
-      $('#fTitle').value = it.title || '';
-      $('#fPlatform').value = ['eBay','Kleinanzeigen','Sonstiges'].includes(it.platform) ? it.platform : 'Automatisch';
-      $('#fBuy').value = it.buy || '';
-      $('#fSell').value = it.sell || '';
-      $('#fStatus').value = it.status || 'gesichtet';
-      $('#fDue').value = it.due || '';
-      $('#fTags').value = it.tags || '';
-      $('#fNote').value = it.note || '';
-      $('#addForm').dataset.editing = id;
-      $('#addForm').querySelector('button[type="submit"]').innerHTML = '<i class="ti ti-device-floppy"></i>&nbsp;Änderungen speichern';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Profit modal
+    // ===== Profit modal =====
     let profitContextId = null;
-    function openProfit(id){
-      const data = readData(currentUser) || defaultData();
-      const it = data.items.find(x=>x.id===id);
-      profitContextId = id;
-      $('#pmBuy').value = it?.buy || '';
-      $('#pmSell').value = it?.sell || '';
-      $('#pmFeePct').value = typeof it?.feePct === 'number' ? it.feePct : (data.settings.feePct||11);
-      $('#pmShip').value = it?.ship || 0;
-      updateProfitResult();
-      $('#profitModal').classList.add('show');
-    }
-    function updateProfitResult(){
-      const buy = Number($('#pmBuy').value||0);
-      const sell = Number($('#pmSell').value||0);
-      const feePct = Number($('#pmFeePct').value||0);
-      const ship = Number($('#pmShip').value||0);
-      const fees = sell * (feePct/100);
-      const p = Math.round((sell - fees - ship - buy) * 100) / 100;
-      $('#pmResult').textContent = fmtMoney(p);
-    }
-
+    function openProfit(id){ const data = readData(currentUser) || defaultData(); const it = data.items.find(x=>x.id===id); profitContextId = id; $('#pmBuy').value = it?.buy || ''; $('#pmSell').value = it?.sell || ''; $('#pmFeePct').value = typeof it?.feePct === 'number' ? it.feePct : (data.settings.feePct||11); $('#pmShip').value = it?.ship || 0; updateProfitResult(); $('#profitModal').classList.add('show'); }
+    function updateProfitResult(){ const buy = Number($('#pmBuy').value||0); const sell = Number($('#pmSell').value||0); const feePct = Number($('#pmFeePct').value||0); const ship = Number($('#pmShip').value||0); const fees = sell * (feePct/100); const p = Math.round((sell - fees - ship - buy) * 100) / 100; $('#pmResult').textContent = fmtMoney(p); }
     ['pmBuy','pmSell','pmFeePct','pmShip'].forEach(id=> $('#'+id).addEventListener('input', updateProfitResult));
     $('#profitClose').addEventListener('click', ()=> $('#profitModal').classList.remove('show'));
-    $('#pmApply').addEventListener('click', async ()=>{
-      const data = readData(currentUser) || defaultData();
-      const it = data.items.find(x=>x.id===profitContextId);
-      if(!it) return;
-      it.buy = Number($('#pmBuy').value||0);
-      it.sell = Number($('#pmSell').value||0);
-      it.feePct = Number($('#pmFeePct').value||0);
-      it.ship = Number($('#pmShip').value||0);
-      writeData(currentUser, data);
-      await syncUpOne(it).catch(()=>{});
-      $('#profitModal').classList.remove('show');
-      renderList();
-    });
+    $('#pmApply').addEventListener('click', async ()=>{ const data = readData(currentUser) || defaultData(); const it = data.items.find(x=>x.id===profitContextId); if(!it) return; it.buy = Number($('#pmBuy').value||0); it.sell = Number($('#pmSell').value||0); it.feePct = Number($('#pmFeePct').value||0); it.ship = Number($('#pmShip').value||0); writeData(currentUser, data); await syncUpOne(it).catch(()=>{}); $('#profitModal').classList.remove('show'); renderList(); });
 
-    // ===== Auth UI switching =====
-    const loginForm = $('#loginForm');
-    const registerForm = $('#registerForm');
-    const tabLogin = $('#tabLogin');
-    const tabRegister = $('#tabRegister');
+    // ===== Deal Modal (Add/Edit) =====
+    let editingId = null; let pendingImages = [];
+    function resetDealForm(){ editingId=null; pendingImages=[]; $('#dealForm').reset(); $('#dPreview').innerHTML=''; $('#dealModalTitle').textContent='Neuer Deal'; }
+    function openDealModal(id=null){ resetDealForm(); if(id){ const data = readData(currentUser)||defaultData(); const it = data.items.find(x=>x.id===id); if(it){ editingId=id; $('#dealModalTitle').textContent='Deal bearbeiten'; $('#dUrl').value=it.url||''; $('#dTitle').value=it.title||''; $('#dPlatform').value=['eBay','Kleinanzeigen','Sonstiges'].includes(it.platform)?it.platform:'Automatisch'; $('#dBuy').value=it.buy||''; $('#dSell').value=it.sell||''; $('#dStatus').value=it.status||'gesichtet'; $('#dDue').value=it.due||''; $('#dTags').value=it.tags||''; $('#dNote').value=it.note||''; (it.images||[]).forEach(img=> addPreview(img)); pendingImages = [...(it.images||[])]; } }
+      $('#dealModal').classList.add('show'); setTimeout(()=>$('#dUrl').focus(), 0); }
+    function addPreview(img){ const wrap=document.createElement('div'); wrap.className='thumb'; wrap.style.position='relative'; wrap.innerHTML=`<img alt="Bild" src="${img.data}"/><button title="Entfernen" style="position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.45);color:#fff;cursor:pointer"><i class="ti ti-x" style="font-size:12px"></i></button>`; wrap.querySelector('button').addEventListener('click', ()=>{ pendingImages = pendingImages.filter(x=>x.id!==img.id); wrap.remove(); }); $('#dPreview').appendChild(wrap); }
+    async function fileToDataUrl(file){ return new Promise((res, rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
+    $('#dImages').addEventListener('change', async (e)=>{ const files=[...e.target.files]; for(const f of files){ const data=await fileToDataUrl(f); const img={ id:'img_'+randHex(6), name:f.name, data }; pendingImages.push(img); addPreview(img); } e.target.value=''; });
+    $('#dealCalc').addEventListener('click', ()=>{ $('#profitModal').classList.add('show'); $('#pmBuy').value = $('#dBuy').value||0; $('#pmSell').value=$('#dSell').value||0; updateProfitResult(); });
+    $('#dealClose').addEventListener('click', ()=> $('#dealModal').classList.remove('show'));
 
-    tabLogin.addEventListener('click', ()=>{ registerForm.classList.add('hidden'); loginForm.classList.remove('hidden'); tabLogin.classList.remove('ghost'); tabRegister.classList.add('ghost'); });
-    tabRegister.addEventListener('click', ()=>{ loginForm.classList.add('hidden'); registerForm.classList.remove('hidden'); tabRegister.classList.remove('ghost'); tabLogin.classList.add('ghost'); });
-
-    // ===== Local Auth (nur im lokalen Modus) =====
-    async function attachLocalAuth(){
-      registerForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const email = $('#regEmail').value.trim().toLowerCase();
-        const pw = $('#regPassword').value;
-        const pw2 = $('#regPassword2').value;
-        if(pw.length < 8) return alert('Passwort zu kurz (min. 8 Zeichen).');
-        if(pw !== pw2) return alert('Passwörter stimmen nicht überein.');
-        const users = readUsers();
-        if(users[email]) return alert('E-Mail bereits registriert.');
-        const salt = randHex(16);
-        const hash = await sha256Hex(pw + ':' + salt);
-        users[email] = { salt, hash, created: Date.now() };
-        writeUsers(users);
-        writeData(email, defaultData());
-        alert('Account erstellt! Du kannst dich jetzt einloggen.');
-        tabLogin.click();
-      });
-
-      loginForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const email = $('#loginEmail').value.trim().toLowerCase();
-        const pw = $('#loginPassword').value;
-        const users = readUsers();
-        const u = users[email];
-        if(!u) return alert('Unbekannte E-Mail. Bitte registrieren.');
-        const hash = await sha256Hex(pw + ':' + u.salt);
-        if(hash !== u.hash) return alert('Falsches Passwort.');
-        currentUser = email; setSession(email);
-        $('#userEmail').textContent = email;
-        $('#authView').classList.add('hidden');
-        $('#appView').classList.remove('hidden');
-        $('#appHeader').classList.remove('hidden');
-        $('#modeText').textContent = 'Lokal';
-        if(!(readData(email)?.items?.length)) seedSamples();
-        renderList();
-        recalcStats();
-      });
-
-      $('#logoutBtn').addEventListener('click', ()=>{ currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#appHeader').classList.add('hidden'); $('#loginEmail').focus(); });
-      $('#wipeBtn').addEventListener('click', ()=>{ if(!currentUser) return; if(confirm('Wirklich lokale Daten löschen?')){ const users = readUsers(); delete users[currentUser]; writeUsers(users); localStorage.removeItem(dataKey(currentUser)); setSession(null); currentUser=null; location.reload(); }});
-    }
-
-    // ===== Cloud Auth (nur im Cloud-Modus) =====
-    async function attachCloudAuth(){
-      registerForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const email = $('#regEmail').value.trim().toLowerCase();
-        const password = $('#regPassword').value;
-        const pw2 = $('#regPassword2').value;
-        if(password.length < 8) return alert('Passwort zu kurz (min. 8 Zeichen).');
-        if(password !== pw2) return alert('Passwörter stimmen nicht überein.');
-        const { error } = await sb.auth.signUp({ email, password });
-        if(error) return alert(error.message);
-        alert('Account erstellt! Prüfe ggf. dein Postfach (Bestätigung).');
-        tabLogin.click();
-      });
-
-      loginForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const email = $('#loginEmail').value.trim().toLowerCase();
-        const password = $('#loginPassword').value;
-        const { data, error } = await sb.auth.signInWithPassword({ email, password });
-        if(error) return alert(error.message);
-        const user = data.user;
-        currentUser = user.email; setSession(currentUser);
-        $('#userEmail').textContent = currentUser;
-        $('#authView').classList.add('hidden');
-        $('#appView').classList.remove('hidden');
-        $('#appHeader').classList.remove('hidden');
-        $('#modeText').textContent = 'Cloud';
-        await syncDown();
-        renderList();
-        recalcStats();
-      });
-
-      $('#logoutBtn').addEventListener('click', async ()=>{ await sb.auth.signOut(); currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#appHeader').classList.add('hidden'); $('#loginEmail').focus(); });
-      $('#wipeBtn').addEventListener('click', ()=>{ if(!currentUser) return; if(confirm('Nur der lokale Cache wird gelöscht. (Cloud-Daten bleiben bestehen)')){ localStorage.removeItem(dataKey(currentUser)); location.reload(); }});
-    }
-
-    // ===== CRUD Hooks (lokal + optional Cloud-Upserts) =====
-    async function onDelete(id){
-      const data = readData(currentUser) || defaultData();
-      if(confirm('Diesen Eintrag löschen?')){
-        const it = data.items.find(x=>x.id===id);
-        data.items = data.items.filter(x=>x.id!==id);
-        writeData(currentUser, data);
-        renderList();
-        recalcStats();
-        if(CLOUD) { try { await sb.from('deals').delete().eq('id', id); } catch{} }
-      }
-    }
-
-    async function syncUpOne(it){
-      if(!CLOUD) return;
-      try {
-        const { data: u } = await sb.auth.getUser();
-        const row = toRow(it, u?.user?.id);
-        await sb.from('deals').upsert(row);
-      } catch {}
-    }
-
-    async function syncDown(){
-      if(!CLOUD) return;
-      const { data: rows, error } = await sb.from('deals').select('*').order('created', { ascending: false });
-      if(error){ console.warn(error); return; }
-      const email = (await sb.auth.getUser()).data.user.email;
-      currentUser = email; setSession(email); $('#userEmail').textContent = email;
-      const data = readData(email) || defaultData();
-      data.items = (rows||[]).map(fromRow);
-      writeData(email, data);
-    }
-
-    function toRow(it, userId){
-      return { id: it.id, user_id: userId, created: it.created || Date.now(), url: it.url || null, title: it.title || null, platform: it.platform || null, buy: it.buy ?? null, sell: it.sell ?? null, fee_pct: (typeof it.feePct==='number'? it.feePct : null), ship: it.ship ?? null, status: it.status || null, due: it.due || null, tags: it.tags || null, note: it.note || null };
-    }
-    function fromRow(r){
-      return { id: r.id, created: r.created, url: r.url, title: r.title, platform: r.platform||'Sonstiges', buy: Number(r.buy ?? 0), sell: Number(r.sell ?? 0), feePct: typeof r.fee_pct==='number'? r.fee_pct : undefined, ship: Number(r.ship ?? 0), status: r.status||'gesichtet', due: r.due || '', tags: r.tags || '', note: r.note || '' };
-    }
-
-    // ===== Add / Update item =====
-    $('#addForm').addEventListener('submit', async (e)=>{
+    $('#dealForm').addEventListener('submit', async (e)=>{
       e.preventDefault();
       const data = readData(currentUser) || defaultData();
-      const editingId = e.currentTarget.dataset.editing || null;
-
-      const url = $('#fUrl').value.trim();
-      const title = $('#fTitle').value.trim();
-      let platform = $('#fPlatform').value; if(platform === 'Automatisch') platform = platformFromUrl(url);
-      const buy = Number($('#fBuy').value || 0);
-      const sell = Number($('#fSell').value || 0);
-      const status = $('#fStatus').value;
-      const due = $('#fDue').value || '';
-      const tags = $('#fTags').value.trim();
-      const note = $('#fNote').value.trim();
-
-      if(editingId){
-        const it = data.items.find(x=>x.id===editingId); if(!it) return;
-        Object.assign(it, { url, title, platform, buy, sell, status, due, tags, note });
-        e.currentTarget.dataset.editing = '';
-        e.currentTarget.querySelector('button[type="submit"]').innerHTML = '<i class="ti ti-bookmark-plus"></i>&nbsp;Speichern';
-        writeData(currentUser, data);
-        await syncUpOne(it);
-      } else {
-        const it = { id: 'i_'+randHex(8), created: Date.now(), url, title, platform, buy, sell, status, due, tags, note, ship: 0 };
-        data.items.unshift(it);
-        writeData(currentUser, data);
-        await syncUpOne(it);
-      }
-
-      e.currentTarget.reset();
-      renderList();
+      let platform = $('#dPlatform').value; const url=$('#dUrl').value.trim(); if(platform==='Automatisch') platform = platformFromUrl(url);
+      const payload = { url, title: $('#dTitle').value.trim(), platform, buy: Number($('#dBuy').value||0), sell: Number($('#dSell').value||0), status: $('#dStatus').value, due: $('#dDue').value||'', tags: $('#dTags').value.trim(), note: $('#dNote').value.trim(), images: pendingImages, ship: 0 };
+      if(editingId){ const it = data.items.find(x=>x.id===editingId); if(it){ Object.assign(it, payload); } await syncUpOne(it); }
+      else { const it = { id: 'i_'+randHex(8), created: Date.now(), ...payload }; data.items.unshift(it); await syncUpOne(it); }
+      writeData(currentUser, data);
+      $('#dealModal').classList.remove('show'); renderList();
     });
 
-    // Export / Import
-    $('#exportBtn').addEventListener('click', ()=>{
-      if(!currentUser) return; const data = readData(currentUser) || defaultData();
+    // ===== Tiles actions =====
+    $('#tileAdd').addEventListener('click', ()=> openDealModal());
+    $('#tileTemplates').addEventListener('click', ()=> $('#tplModal').classList.add('show'));
+    $('#tplClose').addEventListener('click', ()=> $('#tplModal').classList.remove('show'));
+    $('#tileImportExport').addEventListener('click', ()=>{
+      const data = readData(currentUser)||defaultData();
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `reselldeck_${currentUser.replace(/[^a-z0-9]/gi,'_')}.json`; a.click(); URL.revokeObjectURL(a.href);
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `reselldeck_${currentUser?.replace(/[^a-z0-9]/gi,'_')||'export'}.json`; a.click(); URL.revokeObjectURL(a.href);
     });
-    $('#importFile').addEventListener('change', async (e)=>{
-      const file = e.target.files?.[0]; if(!file) return;
-      const txt = await file.text();
-      try {
-        const obj = JSON.parse(txt);
-        const data = readData(currentUser) || defaultData();
-        data.items = Array.isArray(obj.items) ? obj.items : data.items;
-        data.templates = obj.templates || data.templates;
-        data.settings = obj.settings || data.settings;
-        writeData(currentUser, data);
-        renderList();
-        alert('Import erfolgreich.');
-        if(CLOUD){ for(const it of data.items){ await syncUpOne(it); } }
-      } catch(err){ alert('Import fehlgeschlagen: ' + err.message); }
-      e.target.value = '';
-    });
+    $('#tileSettings').addEventListener('click', ()=> alert('Settings (soon): Gebühren-Default, Storage, E-Mail‑Bridge…'));
 
-    // Seed sample data (nur lokal)
-    function seedSamples(){
-      const email = currentUser; const data = readData(email) || defaultData(); if((data.items||[]).length) return;
-      const now = Date.now();
-      data.items = [
-        { id:'i_'+randHex(6), created: now-300000, url:'https://www.kleinanzeigen.de/s-anzeige/sony-a7-iii-kit/1234567890', title:'Sony A7 III (Kit) – Top Zustand', platform:'Kleinanzeigen', buy:750, sell:1050, feePct:0, ship:0, status:'verhandlung', due: todayISO(), tags:'kamera, sony, vollformat', note:'Mit 2 Akkus, 24-70mm. Angebot 780€ abgegeben.' },
-        { id:'i_'+randHex(6), created: now-7200000, url:'https://www.ebay.de/itm/Apple-iPhone-13/10000001', title:'iPhone 13 128GB Midnight – OVP', platform:'eBay', buy:380, sell:520, feePct:11, ship:5.49, status:'kontaktiert', due:'', tags:'iphone, 128gb', note:'Leichte Kratzer, Akku 87%.' },
-        { id:'i_'+randHex(6), created: now-17200000, url:'https://www.kleinanzeigen.de/s-anzeige/dyson-v11/2222222', title:'Dyson V11 – Zubehör komplett', platform:'Kleinanzeigen', buy:120, sell:230, feePct:0, ship:0, status:'verkauft', due:'', tags:'haushalt', note:'Schon verkauft an Max. Abholung erledigt.' }
-      ];
-      writeData(email, data);
+    // Copy templates
+    async function copyText(t){ try { await navigator.clipboard.writeText(t); alert('Vorlage kopiert!') } catch { prompt('Kopiere manuell:', t) } }
+    $('#copyTpl1').addEventListener('click', ()=> copyText($('#tpl1').textContent));
+    $('#copyTpl2').addEventListener('click', ()=> copyText($('#tpl2').textContent));
+
+    // ===== Auth switching =====
+    const loginForm = $('#loginForm');
+    const registerForm = $('#registerForm');
+    $('#tabLogin').addEventListener('click', ()=>{ registerForm.classList.add('hidden'); loginForm.classList.remove('hidden'); });
+    $('#tabRegister').addEventListener('click', ()=>{ loginForm.classList.add('hidden'); registerForm.classList.remove('hidden'); });
+
+    // ===== Local Auth (nur wenn kein CLOUD) =====
+    async function attachLocalAuth(){
+      registerForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const email=$('#regEmail').value.trim().toLowerCase(); const pw=$('#regPassword').value; const pw2=$('#regPassword2').value; if(pw.length<8) return alert('Passwort zu kurz (min. 8 Zeichen).'); if(pw!==pw2) return alert('Passwörter stimmen nicht überein.'); const users=readUsers(); if(users[email]) return alert('E-Mail bereits registriert.'); const salt=randHex(16); const hash=await sha256Hex(pw+':'+salt); users[email]={salt,hash,created:Date.now()}; writeUsers(users); writeData(email, defaultData()); alert('Account erstellt! Du kannst dich jetzt einloggen.'); $('#tabLogin').click(); });
+      loginForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const email=$('#loginEmail').value.trim().toLowerCase(); const pw=$('#loginPassword').value; const users=readUsers(); const u=users[email]; if(!u) return alert('Unbekannte E-Mail. Bitte registrieren.'); const hash=await sha256Hex(pw+':'+u.salt); if(hash!==u.hash) return alert('Falsches Passwort.'); currentUser=email; setSession(email); $('#userEmail').textContent=email; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent='Lokal'; if(!(readData(email)?.items?.length)) seedSamples(); renderList(); recalcStats(); });
+      $('#logoutBtn').addEventListener('click', ()=>{ currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#appHeader').classList.add('hidden'); $('#loginEmail').focus(); });
     }
 
-    // ===== Init (exklusiv: Cloud ODER Lokal) =====
+    // ===== Cloud Auth (Supabase) =====
+    async function attachCloudAuth(){
+      registerForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const email=$('#regEmail').value.trim().toLowerCase(); const password=$('#regPassword').value; const pw2=$('#regPassword2').value; if(password.length<8) return alert('Passwort zu kurz (min. 8 Zeichen).'); if(password!==pw2) return alert('Passwörter stimmen nicht überein.'); const { error } = await sb.auth.signUp({ email, password }); if(error) return alert(error.message); alert('Account erstellt! Prüfe ggf. dein Postfach (Bestätigung).'); $('#tabLogin').click(); });
+      loginForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const email=$('#loginEmail').value.trim().toLowerCase(); const password=$('#loginPassword').value; const { data, error } = await sb.auth.signInWithPassword({ email, password }); if(error) return alert(error.message); currentUser=data.user.email; setSession(currentUser); $('#userEmail').textContent=currentUser; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent='Cloud'; await syncDown(); renderList(); recalcStats(); });
+      $('#logoutBtn').addEventListener('click', async ()=>{ await sb.auth.signOut(); currentUser=null; setSession(null); $('#appView').classList.add('hidden'); $('#authView').classList.remove('hidden'); $('#appHeader').classList.add('hidden'); $('#loginEmail').focus(); });
+    }
+
+    // ===== Cloud sync helpers =====
+    async function syncUpOne(it){ if(!CLOUD) return; try { const { data: u } = await sb.auth.getUser(); const row = toRow(it, u?.user?.id); await sb.from('deals').upsert(row); } catch(e){ console.warn(e); } }
+    async function syncDown(){ if(!CLOUD) return; const { data: rows, error } = await sb.from('deals').select('*').order('created', { ascending: false }); if(error){ console.warn(error); return; } const email = (await sb.auth.getUser()).data.user.email; currentUser = email; setSession(email); $('#userEmail').textContent = email; const data = readData(email) || defaultData(); data.items = (rows||[]).map(fromRow); writeData(email, data); }
+    function toRow(it, userId){ return { id: it.id, user_id: userId, created: it.created || Date.now(), url: it.url || null, title: it.title || null, platform: it.platform || null, buy: it.buy ?? null, sell: it.sell ?? null, fee_pct: (typeof it.feePct==='number'? it.feePct : null), ship: it.ship ?? null, status: it.status || null, due: it.due || null, tags: it.tags || null, note: it.note || null }; }
+    function fromRow(r){ return { id: r.id, created: r.created, url: r.url, title: r.title, platform: r.platform||'Sonstiges', buy: Number(r.buy ?? 0), sell: Number(r.sell ?? 0), feePct: typeof r.fee_pct==='number'? r.fee_pct : undefined, ship: Number(r.ship ?? 0), status: r.status||'gesichtet', due: r.due || '', tags: r.tags || '', note: r.note || '', images: [] }; }
+
+    // Export/Import via footer tile handled oben
+
+    // Seed sample data (nur lokal)
+    function seedSamples(){ const email = currentUser; const data = readData(email) || defaultData(); if((data.items||[]).length) return; const now = Date.now(); data.items = [ { id:'i_'+randHex(6), created: now-300000, url:'https://www.kleinanzeigen.de/s-anzeige/sony-a7-iii-kit/1234567890', title:'Sony A7 III (Kit) – Top Zustand', platform:'Kleinanzeigen', buy:750, sell:1050, feePct:0, ship:0, status:'verhandlung', due: todayISO(), tags:'kamera, sony, vollformat', note:'Mit 2 Akkus, 24-70mm. Angebot 780€ abgegeben.', images: [] }, { id:'i_'+randHex(6), created: now-7200000, url:'https://www.ebay.de/itm/Apple-iPhone-13/10000001', title:'iPhone 13 128GB Midnight – OVP', platform:'eBay', buy:380, sell:520, feePct:11, ship:5.49, status:'kontaktiert', due:'', tags:'iphone, 128gb', note:'Leichte Kratzer, Akku 87%.', images: [] }, { id:'i_'+randHex(6), created: now-17200000, url:'https://www.kleinanzeigen.de/s-anzeige/dyson-v11/2222222', title:'Dyson V11 – Zubehör komplett', platform:'Kleinanzeigen', buy:120, sell:230, feePct:0, ship:0, status:'verkauft', due:'', tags:'haushalt', note:'Schon verkauft an Max. Abholung erledigt.', images: [] } ]; writeData(email, data); }
+
+    // ===== Global UI =====
+    $('#search').addEventListener('input', renderList);
+    $('#filterStatus').addEventListener('change', renderList);
+    $('#sortBy').addEventListener('change', renderList);
+    window.addEventListener('keydown', (e)=>{ if(e.ctrlKey && e.key === '/') { e.preventDefault(); $('#search').focus() } });
+
+    // ===== Init (Cloud ODER Lokal) =====
     (async function init(){
-      if(CLOUD){
-        await attachCloudAuth();
-        const { data } = await sb.auth.getSession();
-        if(data?.session){
-          const email = data.session.user.email;
-          currentUser = email; setSession(email);
-          $('#userEmail').textContent = email;
-          $('#authView').classList.add('hidden');
-          $('#appView').classList.remove('hidden');
-          $('#appHeader').classList.remove('hidden');
-          $('#modeText').textContent = 'Cloud';
-          await syncDown();
-          renderList();
-          recalcStats();
-        }
-        return; // Kein lokaler Fallback
-      }
-      // Lokaler Modus
-      await attachLocalAuth();
-      const sess = getSession();
-      if(sess && readUsers()[sess]){
-        currentUser = sess; $('#userEmail').textContent = sess; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent = 'Lokal'; if(!(readData(sess)?.items?.length)) seedSamples(); renderList();
-      }
+      if(CLOUD){ await attachCloudAuth(); const { data } = await sb.auth.getSession(); if(data?.session){ const email = data.session.user.email; currentUser = email; setSession(email); $('#userEmail').textContent = email; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent = 'Cloud'; await syncDown(); renderList(); recalcStats(); } return; }
+      await attachLocalAuth(); const sess = getSession(); if(sess && readUsers()[sess]){ currentUser = sess; $('#userEmail').textContent = sess; $('#authView').classList.add('hidden'); $('#appView').classList.remove('hidden'); $('#appHeader').classList.remove('hidden'); $('#modeText').textContent = 'Lokal'; if(!(readData(sess)?.items?.length)) seedSamples(); renderList(); }
     })();
   </script>
 </body>
